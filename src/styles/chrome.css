@@ -1,0 +1,399 @@
+/* ------------------------------------------------------------------ */
+/* Loader                                                              */
+/* ------------------------------------------------------------------ */
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: #050e34;
+  overflow: hidden;
+}
+.ld-l,
+.ld-r {
+  position: absolute;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  will-change: transform;
+}
+.ld-l {
+  right: calc(50% - 8px);
+  transform-origin: 0% 50%;
+}
+.ld-r {
+  left: calc(50% - 38px);
+  transform-origin: 100% 50%;
+}
+.ld-l .xt,
+.ld-r .xt {
+  width: clamp(150px, 17vw, 250px);
+  flex: none;
+}
+.ld-wire {
+  width: 70vw;
+  flex: none;
+  aspect-ratio: auto;
+  height: calc(clamp(150px, 17vw, 250px) * 0.5455);
+  background:
+    linear-gradient(#ff8a80, #ff8a80) 0 29% / 100% 2% no-repeat,
+    linear-gradient(#4a4f5d, #4a4f5d) 0 59.5% / 100% 2% no-repeat,
+    linear-gradient(#e5322d, #e5322d) 0 32.5% / 100% 14.2% no-repeat,
+    linear-gradient(#191b22, #191b22) 0 67.5% / 100% 14.2% no-repeat;
+}
+.ld-flash {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 150vmax;
+  height: 150vmax;
+  margin: -75vmax;
+  opacity: 0;
+  background: radial-gradient(circle, #fff 0%, #fff3cc 4%, rgba(255, 214, 110, 0.65) 11%, rgba(150, 196, 255, 0.28) 30%, transparent 60%);
+  pointer-events: none;
+}
+.ld-ui {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + clamp(110px, 17vh, 190px));
+  transform: translateX(-50%);
+  text-align: center;
+}
+.ld-volts {
+  font-family: var(--display);
+  font-size: clamp(46px, 6vw, 84px);
+  line-height: 1;
+  color: var(--xt60);
+  font-variant-numeric: tabular-nums;
+}
+.ld-u {
+  font-family: var(--marker);
+  font-size: 0.3em;
+  margin-left: 0.4em;
+  color: #fff;
+  font-weight: 500;
+}
+.ld-bars {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+.ld-bars i {
+  width: 34px;
+  height: 8px;
+  background: var(--xt60);
+  opacity: 0.18;
+}
+
+/* ------------------------------------------------------------------ */
+/* Header                                                              */
+/* ------------------------------------------------------------------ */
+.hd {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px calc(var(--gut) + 64px) 18px var(--gut);
+  color: #fff;
+  pointer-events: none;
+  transition: color 0.35s;
+}
+.hd > * {
+  pointer-events: auto;
+}
+.hd::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 138px;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(rgba(3, 13, 64, 0.86), rgba(3, 13, 64, 0.7) 34%, rgba(3, 13, 64, 0.28) 70%, rgba(3, 13, 64, 0));
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.hd.shade::before {
+  opacity: 1;
+}
+.hd-logo {
+  display: block;
+  padding: 8px;
+  margin: -8px;
+}
+.logo-svg {
+  width: 74px;
+  overflow: visible;
+}
+.logo-svg path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 6.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.logo-svg .lg-dot {
+  fill: var(--xt60);
+  stroke: none;
+  opacity: 0;
+  offset-path: path('M34 8H14.5a8 8 0 0 0 0 16h11a8 8 0 0 1 0 16H6');
+  offset-rotate: 0deg;
+  cx: 0;
+  cy: 0;
+}
+.hd-logo:hover .lg-dot {
+  opacity: 1;
+  animation: lgrun 1.5s linear infinite;
+}
+.hd-logo:hover .lg-a,
+.hd-logo:hover .lg-b {
+  stroke-dasharray: 130;
+  animation: lgdraw 0.9s var(--ease);
+}
+@keyframes lgdraw {
+  from {
+    stroke-dashoffset: 130;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes lgrun {
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: 100%;
+  }
+}
+.hd-nav {
+  display: flex;
+  gap: clamp(14px, 2vw, 32px);
+  font-weight: 500;
+  font-size: 1rem;
+}
+.hd-nav a {
+  position: relative;
+  padding: 8px 2px;
+  overflow: hidden;
+}
+.hd-nav span {
+  position: relative;
+  display: block;
+  transition: transform 0.5s var(--ease);
+}
+.hd-nav span::after {
+  content: attr(data-t);
+  position: absolute;
+  left: 0;
+  top: 140%;
+  color: var(--xt60);
+  white-space: nowrap;
+}
+.hd-nav a:hover span {
+  transform: translateY(-140%);
+}
+.hd-nav i {
+  position: absolute;
+  left: 50%;
+  bottom: 1px;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  border-radius: 50%;
+  background: var(--led);
+  box-shadow: 0 0 10px 2px rgba(70, 255, 138, 0.65);
+  transform: scale(0);
+  transition: transform 0.5s var(--spring);
+}
+.hd-nav a.on i {
+  transform: scale(1);
+}
+.hd-burger {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  padding: 10px;
+  margin: -10px;
+}
+.hd-burger svg {
+  width: 28px;
+  overflow: visible;
+}
+.hd-burger path {
+  stroke: currentColor;
+  stroke-width: 3.4;
+  stroke-linecap: round;
+  transition: transform 0.5s var(--spring);
+  transform-origin: 15px 10px;
+}
+.hd-burger[aria-expanded='true'] path:first-child {
+  transform: translateY(6px) rotate(45deg);
+}
+.hd-burger[aria-expanded='true'] path:last-child {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.cord {
+  position: fixed;
+  right: calc(var(--gut) - 34px);
+  top: 0;
+  z-index: 91;
+  width: 80px;
+  height: 116px;
+  color: #dfe8ff;
+  touch-action: none;
+  cursor: grab;
+}
+.cord svg {
+  width: 80px;
+  height: 170px;
+  overflow: visible;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 6px rgba(3, 8, 36, 0.5));
+}
+
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(8, 20, 74, 0.93);
+  backdrop-filter: blur(10px);
+  clip-path: circle(0% at calc(100% - 60px) 40px);
+  transition: clip-path 0.7s var(--ease);
+  display: grid;
+  place-items: center;
+}
+.menu.open {
+  clip-path: circle(150% at calc(100% - 60px) 40px);
+}
+.menu nav {
+  display: grid;
+  gap: 4px;
+  text-align: center;
+}
+.menu-row {
+  overflow: hidden;
+  display: block;
+}
+.menu a {
+  display: block;
+  font-family: var(--display);
+  font-size: clamp(34px, 10.5vw, 64px);
+  line-height: 1.24;
+}
+.menu a:hover {
+  color: var(--xt60);
+}
+
+@media (max-width: 900px) {
+  .hd-nav {
+    display: none;
+  }
+  .hd-burger {
+    display: flex;
+  }
+  .hd {
+    padding-right: calc(var(--gut) + 54px);
+  }
+  .menu-open .hd {
+    color: #fff;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Cursor                                                              */
+/* ------------------------------------------------------------------ */
+.cursor {
+  position: fixed;
+  inset: 0;
+  z-index: 250;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+html:not(.has-cursor) .cursor {
+  display: none;
+}
+.has-cursor,
+.has-cursor a,
+.has-cursor button,
+.has-cursor [data-cursor],
+.has-cursor .print {
+  cursor: none;
+}
+.cu-dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 1.5px rgba(8, 16, 60, 0.55);
+}
+.cu-box {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.cu-box i {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border: 2.5px solid #fff;
+  filter: drop-shadow(0 0 1px rgba(8, 16, 60, 0.8));
+  transition: border-color 0.2s, width 0.3s, height 0.3s;
+}
+.cu-box.locked i {
+  border-color: var(--xt60);
+  width: 13px;
+  height: 13px;
+}
+.cu-box i:nth-child(1) {
+  left: 0;
+  top: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+.cu-box i:nth-child(2) {
+  right: 0;
+  top: 0;
+  border-left: 0;
+  border-bottom: 0;
+}
+.cu-box i:nth-child(3) {
+  right: 0;
+  bottom: 0;
+  border-left: 0;
+  border-top: 0;
+}
+.cu-box i:nth-child(4) {
+  left: 0;
+  bottom: 0;
+  border-right: 0;
+  border-top: 0;
+}
+.cu-tag {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: var(--tight);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  padding: 6px 9px;
+  background: var(--xt60);
+  color: var(--ink);
+  opacity: 0;
+  scale: 0.7;
+  transition: opacity 0.2s, scale 0.4s var(--spring);
+}
+.cu-tag.on {
+  opacity: 1;
+  scale: 1;
+}

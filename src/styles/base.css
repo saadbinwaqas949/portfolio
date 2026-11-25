@@ -1,0 +1,487 @@
+/* ------------------------------------------------------------------ */
+/* Tokens                                                              */
+/* ------------------------------------------------------------------ */
+:root {
+  /* the bench */
+  --mat-deep: #0a1b55;
+  --mat: #1b45c4;
+  --mat-ink: #cfe0ff;
+  --kraft: #c99a62;
+  --kraft-lit: #e3bd86;
+  --kraft-dark: #7a5429;
+  --xt60: #ffc21a;
+  --red: #e5322d;
+  --led: #46ff8a;
+  --carbon: #14161c;
+  --paper: #f3f6fb;
+  --ink: #0b1433;
+
+  --fg: #f3f6ff;
+  --fg-2: rgba(224, 233, 255, 0.78);
+  --fg-3: rgba(207, 224, 255, 0.56);
+
+  --display: 'Dela Gothic One', 'Arial Black', Impact, sans-serif;
+  --text: 'Barlow', 'Segoe UI', system-ui, sans-serif;
+  --tight: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --marker: 'Shantell Sans Variable', 'Comic Sans MS', cursive;
+  --pixel: 'Jersey 10', 'Courier New', monospace;
+
+  --gut: clamp(18px, 4.4vw, 72px);
+  --page: 1320px;
+
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --spring: linear(0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%, 0.938 16.7%, 1.017, 1.077, 1.121, 1.149 24.3%, 1.159, 1.163, 1.161, 1.154 29.9%, 1.129 32.8%, 1.051 39.6%, 1.017 43.1%, 0.991, 0.977 51%, 0.974 53.8%, 0.975 57.1%, 0.997 69.8%, 1.003 76.9%, 1.004 83.8%, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--mat-deep);
+  color: var(--fg);
+  font-family: var(--text);
+  font-size: clamp(16px, 0.35vw + 14.2px, 20px);
+  line-height: 1.55;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  scrollbar-color: #3c63d8 #0a1b55;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  position: relative;
+  overflow-x: clip;
+  min-height: 100vh;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+::selection {
+  background: var(--xt60);
+  color: var(--ink);
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+ul,
+ol {
+  list-style: none;
+}
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+:focus-visible {
+  outline: 3px solid var(--xt60);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.skip {
+  position: fixed;
+  left: 16px;
+  top: -80px;
+  z-index: 300;
+  background: var(--xt60);
+  color: var(--ink);
+  padding: 12px 18px;
+  font-weight: 600;
+  border-radius: 6px;
+}
+.skip:focus {
+  top: 16px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Bench canvas                                                        */
+/* ------------------------------------------------------------------ */
+.bench {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  pointer-events: none;
+  z-index: 0;
+}
+.bench canvas {
+  position: fixed;
+  left: 0;
+  top: 0;
+  max-width: none;
+}
+main {
+  position: relative;
+  z-index: 1;
+}
+
+/* flat version when WebGL is missing */
+.no-webgl body {
+  background-color: #14349f;
+  background-image: linear-gradient(rgba(207, 224, 255, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(207, 224, 255, 0.22) 1px, transparent 1px),
+    linear-gradient(rgba(207, 224, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(207, 224, 255, 0.08) 1px, transparent 1px);
+  background-size: 200px 200px, 200px 200px, 40px 40px, 40px 40px;
+}
+
+/* ------------------------------------------------------------------ */
+/* 3D letters: the DOM text only does layout                           */
+/* ------------------------------------------------------------------ */
+.l3d {
+  font-family: var(--display);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--kraft-lit);
+  user-select: none;
+  position: relative;
+}
+.webgl .l3d {
+  color: transparent;
+}
+.l3d-w {
+  display: inline-block;
+  white-space: nowrap;
+}
+.l3d-c {
+  display: inline-block;
+  line-height: 1;
+}
+.l3d-s {
+  display: inline-block;
+  width: 0.28em;
+}
+
+/* ------------------------------------------------------------------ */
+/* Sections                                                            */
+/* ------------------------------------------------------------------ */
+.section {
+  position: relative;
+  padding: clamp(110px, 17vh, 220px) var(--gut);
+}
+.wrap {
+  max-width: var(--page);
+  margin-inline: auto;
+  position: relative;
+}
+[data-pin] {
+  position: relative;
+}
+.pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: clip;
+}
+
+.title3d {
+  font-size: clamp(68px, 15.5vw, 250px);
+  margin-left: -0.04em;
+}
+.title3d.long {
+  font-size: clamp(50px, 9.6vw, 158px);
+  line-height: 1.02;
+}
+.lede {
+  font-size: clamp(1.15rem, 1.5vw, 1.5rem);
+  line-height: 1.4;
+  max-width: 32ch;
+  color: var(--fg);
+  text-wrap: balance;
+}
+.body {
+  max-width: 58ch;
+  color: var(--fg-2);
+}
+
+/* ------------------------------------------------------------------ */
+/* Label-maker tape                                                    */
+/* ------------------------------------------------------------------ */
+.dymo {
+  --tape: #15171d;
+  --emboss: #f6f7fb;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--tight);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  font-size: 0.86rem;
+  line-height: 1;
+  padding: 0.62em 0.85em 0.6em 0.95em;
+  color: var(--emboss);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 22%, transparent 74%, rgba(0, 0, 0, 0.35)), var(--tape);
+  text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.5), 0 1px 1px rgba(0, 0, 0, 0.6), 0 0 3px rgba(255, 255, 255, 0.22);
+  border-radius: 2px;
+  box-shadow: 0 2px 5px rgba(3, 8, 36, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  /* guillotine-cut ends */
+  clip-path: polygon(0 0, 100% 0, calc(100% - 2px) 18%, 100% 38%, calc(100% - 2px) 60%, 100% 80%, calc(100% - 2px) 100%, 0 100%, 2px 80%, 0 58%, 2px 36%, 0 16%);
+  white-space: nowrap;
+}
+.dymo.red {
+  --tape: #b5121b;
+}
+.dymo.blue {
+  --tape: #0f2f93;
+}
+.dymo.green {
+  --tape: #0c6b43;
+}
+.dymo.yellow {
+  --tape: #f2b705;
+  --emboss: #fffdf2;
+  text-shadow: 0 -1px 0 #fff, 0 1px 1px rgba(110, 70, 0, 0.8), 0 0 2px rgba(255, 255, 255, 0.6);
+}
+
+/* paint-marker note */
+.note {
+  font-family: var(--marker);
+  font-variation-settings: 'BNCE' 8, 'INFM' 40;
+  font-weight: 500;
+  line-height: 1.25;
+  color: #fff;
+}
+
+/* ------------------------------------------------------------------ */
+/* Buttons: a connector that plugs in                                  */
+/* ------------------------------------------------------------------ */
+.plug {
+  --c: var(--xt60);
+  --ci: var(--ink);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  font-family: var(--text);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--ci);
+  padding: 1.02em 1.5em 1.02em 1.25em;
+  isolation: isolate;
+}
+.plug::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.34), transparent 34%, rgba(0, 0, 0, 0.14)), var(--c);
+  clip-path: polygon(0 0, calc(100% - 13px) 0, 100% 13px, 100% calc(100% - 13px), calc(100% - 13px) 100%, 0 100%);
+  transition: transform 0.5s var(--spring);
+}
+.plug::after {
+  content: '';
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  width: 18px;
+  height: 22px;
+  translate: 0 -50%;
+  z-index: -2;
+  background: linear-gradient(90deg, #d8a021, #fff0b8 40%, #b87e0c) 0 0 / 100% 7px no-repeat, linear-gradient(90deg, #d8a021, #fff0b8 40%, #b87e0c) 0 100% / 100% 7px no-repeat;
+  transition: transform 0.45s var(--spring);
+}
+.plug:hover::after,
+.plug:focus-visible::after {
+  transform: translateX(13px);
+}
+.plug:active::before {
+  transform: scale(0.97);
+}
+.plug .wire {
+  position: absolute;
+  right: 100%;
+  top: 50%;
+}
+.plug.ghost {
+  --c: rgba(12, 30, 100, 0.65);
+  --ci: #fff;
+}
+.plug.ghost::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), transparent 40%), #16265f;
+}
+
+.tlink {
+  position: relative;
+  font-weight: 600;
+  color: var(--xt60);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4em;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% 2px no-repeat;
+  padding-bottom: 3px;
+  transition: background-size 0.5s var(--ease);
+}
+.tlink:hover {
+  animation: relink 0.7s var(--ease);
+}
+@keyframes relink {
+  0% {
+    background-size: 100% 2px;
+    background-position: 100% 100%;
+  }
+  45% {
+    background-size: 0% 2px;
+    background-position: 100% 100%;
+  }
+  46% {
+    background-size: 0% 2px;
+    background-position: 0 100%;
+  }
+  100% {
+    background-size: 100% 2px;
+    background-position: 0 100%;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Photo prints                                                        */
+/* ------------------------------------------------------------------ */
+.print {
+  position: relative;
+  display: inline-block;
+  padding: 10px 10px 12px;
+  color: var(--ink);
+  border-radius: 2px;
+  --sx: 0px;
+  --sy: 10px;
+  isolation: isolate;
+  touch-action: pan-y;
+}
+.print > .sh {
+  position: absolute;
+  inset: 2px;
+  background: rgba(2, 7, 36, 0.62);
+  filter: blur(13px);
+  z-index: -2;
+  border-radius: 4px;
+  transform: translate3d(var(--sx), var(--sy), 0);
+}
+.print > .pp {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #fbfcff;
+  border-radius: 2px;
+}
+.print .im {
+  position: relative;
+  overflow: hidden;
+  background: #0b1433;
+}
+.print img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.print .gl {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle 260px at var(--gx, -300px) var(--gy, -300px), rgba(255, 246, 224, 0.34), rgba(255, 240, 210, 0.08) 45%, transparent 70%);
+  mix-blend-mode: soft-light;
+}
+.print figcaption {
+  font-family: var(--marker);
+  font-variation-settings: 'BNCE' 6, 'INFM' 50;
+  font-weight: 500;
+  font-size: 0.98rem;
+  line-height: 1.2;
+  padding: 9px 2px 0;
+  color: #16265f;
+}
+.print .tape {
+  position: absolute;
+  width: 92px;
+  height: 27px;
+  top: -14px;
+  left: 50%;
+  margin-left: -46px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.25), transparent 12%, transparent 88%, rgba(255, 255, 255, 0.25)), rgba(236, 214, 158, 0.82);
+  clip-path: polygon(0 0, 3% 20%, 0 40%, 3% 60%, 0 80%, 3% 100%, 97% 100%, 100% 80%, 97% 60%, 100% 40%, 97% 20%, 100% 0);
+  transform-origin: 50% 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.print.play .pb {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 66px;
+  height: 66px;
+  margin: -33px;
+  border-radius: 50%;
+  background: var(--xt60);
+  display: grid;
+  place-items: center;
+  transition: transform 0.5s var(--spring);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+.print.play:hover .pb,
+.print.play:focus-visible .pb {
+  transform: scale(1.16) rotate(-6deg);
+}
+.pb svg {
+  width: 24px;
+  margin-left: 5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    /* not a tiny duration: that would make GSAP read stale transforms */
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

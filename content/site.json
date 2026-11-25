@@ -1,0 +1,962 @@
+{
+  "meta": {
+    "title": "Saad Bin Waqas, builder of drones, robots and games",
+    "description": "Saad Bin Waqas builds drones, sumo robots, Unity games and software in Lahore, Pakistan. NERC sumo semi-finalist, RobotMEA sumo and soccer winner, youngest participant at SOFTEC'23.",
+    "url": "",
+    "ogImage": "og.jpg"
+  },
+  "person": {
+    "first": "Saad",
+    "last": "Bin Waqas",
+    "location": "Lahore, Pakistan",
+    "email": "a.saadbinwaqas@gmail.com",
+    "phone": "",
+    "resume": "",
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/saadbinwaqas949",
+        "icon": "github"
+      },
+      {
+        "label": "YouTube",
+        "url": "https://www.youtube.com/channel/UCiMLQDlMWLxuFxfzzGmWuSA",
+        "icon": "youtube"
+      },
+      {
+        "label": "itch.io",
+        "url": "https://saad-bin-waqas.itch.io/",
+        "icon": "itch"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/hafiz-saad-bin-waqas-b37884260/",
+        "icon": "linkedin"
+      }
+    ]
+  },
+  "layout": [
+    {
+      "id": "about",
+      "nav": "About",
+      "visible": true,
+      "inNav": false
+    },
+    {
+      "id": "fly",
+      "nav": "Drones",
+      "visible": true,
+      "inNav": true
+    },
+    {
+      "id": "fight",
+      "nav": "NERC",
+      "visible": true,
+      "inNav": true
+    },
+    {
+      "id": "follow",
+      "nav": "Robots",
+      "visible": true,
+      "inNav": true
+    },
+    {
+      "id": "play",
+      "nav": "Games",
+      "visible": true,
+      "inNav": true
+    },
+    {
+      "id": "ship",
+      "nav": "Code",
+      "visible": true,
+      "inNav": true
+    },
+    {
+      "id": "chimera",
+      "nav": "Chimera",
+      "visible": true,
+      "inNav": false
+    },
+    {
+      "id": "log",
+      "nav": "Events",
+      "visible": true,
+      "inNav": true
+    },
+    {
+      "id": "toolbox",
+      "nav": "Toolbox",
+      "visible": true,
+      "inNav": false
+    }
+  ],
+  "hero": {
+    "line": "I build things that {fly}, {fight} and {follow lines}.",
+    "sub": "Drones, sumo robots, Unity games and the code in between, from a workbench in Lahore.",
+    "badges": [
+      {
+        "text": "NERC sumo semi-finalist",
+        "color": "red"
+      },
+      {
+        "text": "RobotMEA sumo winner",
+        "color": "black"
+      },
+      {
+        "text": "Youngest participant, SOFTEC'23",
+        "color": "blue"
+      },
+      {
+        "text": "Emerging Star Award",
+        "color": "green"
+      }
+    ],
+    "scrollHint": "Scroll to throttle up"
+  },
+  "about": {
+    "title": "From cardboard to carbon fibre",
+    "left": {
+      "label": "Where it started",
+      "title": "Cardboard",
+      "text": "My first competition robots were popsicle sticks, layers of corrugated cardboard and an Arduino. One of them won a soccer final.",
+      "image": {
+        "src": "media/photos/soccer-bot-top.webp",
+        "alt": "Top view of a small four-wheeled robot built from popsicle sticks and cardboard, with an Arduino Uno, a red motor driver and a LiPo battery, on a blue table"
+      }
+    },
+    "right": {
+      "label": "Where it is now",
+      "title": "Carbon fibre",
+      "text": "The newest build is a 5-inch FPV quad, soldered from bare parts, tuned in Betaflight and flown by me. In between I picked up Unity, Blender, CAD, Python and TypeScript."
+    },
+    "statement": "RobotMEA gave me its Emerging Star Award for doing every project on my own, without a teacher's help. That is still how I work: pick something I can't build yet, then build it.",
+    "disciplines": [
+      {
+        "name": "Drones",
+        "text": "FPV, PX4 and Naze32 builds",
+        "link": "fly"
+      },
+      {
+        "name": "Robots",
+        "text": "Sumo, soccer and line following",
+        "link": "follow"
+      },
+      {
+        "name": "Arduino and hardware",
+        "text": "Soldering, motor drivers, sensors",
+        "link": "follow"
+      },
+      {
+        "name": "CAD and 3D modelling",
+        "text": "CAD parts and Blender",
+        "link": "toolbox"
+      },
+      {
+        "name": "Games",
+        "text": "Six Unity games on itch.io",
+        "link": "play"
+      },
+      {
+        "name": "Code",
+        "text": "Python, TypeScript, AI back ends",
+        "link": "ship"
+      }
+    ]
+  },
+  "fly": {
+    "title": "Fly",
+    "intro": "Quads on three different flight controllers, and one RC plane.",
+    "build": {
+      "name": "5-inch FPV quad",
+      "tag": "SpeedyBee F405 on a Mark4 frame",
+      "text": "Fully soldered and assembled from scratch. Betaflight configured for modes, rates, OSD and RPM filters, motors calibrated, BLHeli_32 tuned, failsafe verified.",
+      "link": {
+        "label": "Build log on GitHub",
+        "url": "https://github.com/saadbinwaqas949/5-inch_FPV_SpeedyBee-F405"
+      },
+      "stats": [
+        {
+          "value": "3:30–5:00",
+          "label": "flight time"
+        },
+        {
+          "value": "4S",
+          "label": "1500 mAh, 100C"
+        },
+        {
+          "value": "$347.43",
+          "label": "all in"
+        }
+      ],
+      "parts": [
+        {
+          "name": "Mark4 5-inch frame",
+          "note": "225 mm carbon fibre",
+          "anchor": "frame",
+          "side": "left"
+        },
+        {
+          "name": "T-Motor Velox V2306.5",
+          "note": "1950 KV, royal blue",
+          "anchor": "motors",
+          "side": "left"
+        },
+        {
+          "name": "SpeedyBee F405 stack",
+          "note": "FC plus BLHeli_32 ESC",
+          "anchor": "fc",
+          "side": "right"
+        },
+        {
+          "name": "Caddx Ratel 2",
+          "note": "FPV camera",
+          "anchor": "camera",
+          "side": "left"
+        },
+        {
+          "name": "FlySky FS-iA6B",
+          "note": "Receiver",
+          "anchor": "receiver",
+          "side": "left"
+        },
+        {
+          "name": "CNHL 4S 1500 mAh",
+          "note": "100C LiPo",
+          "anchor": "battery",
+          "side": "right"
+        },
+        {
+          "name": "Gemfan Freestyle 3S",
+          "note": "5.1 inch tri-blades",
+          "anchor": "props",
+          "side": "right"
+        },
+        {
+          "name": "Ultra FPV VTX",
+          "note": "Video transmitter",
+          "anchor": "vtx",
+          "side": "right"
+        },
+        {
+          "name": "Lollipop 3 antenna",
+          "note": "5.8 GHz, 3 dBi RHCP",
+          "anchor": "antenna",
+          "side": "right"
+        }
+      ]
+    },
+    "notebook": {
+      "image": {
+        "src": "media/drones/wiring.webp",
+        "alt": "Hand-drawn wiring diagram in blue pen on ruled paper: flight controller in the middle, camera, receiver, battery and video transmitter around it"
+      },
+      "caption": "The wiring plan, before any solder."
+    },
+    "sim": {
+      "title": "Sim hours",
+      "text": "Crashing is free in the simulator. Steer through the gates.",
+      "video": "",
+      "poster": ""
+    },
+    "aircraft": [
+      {
+        "name": "PX4 drone",
+        "text": "An autopilot build running PX4.",
+        "model": "px4",
+        "status": "",
+        "images": [],
+        "video": "",
+        "link": ""
+      },
+      {
+        "name": "Naze32 drone",
+        "text": "An earlier quad on a Naze32 flight controller.",
+        "model": "naze",
+        "status": "",
+        "images": [],
+        "video": "",
+        "link": ""
+      },
+      {
+        "name": "Commissioned drone",
+        "text": "Built to order for a client.",
+        "model": "commission",
+        "status": "Commission",
+        "images": [],
+        "video": "",
+        "link": ""
+      },
+      {
+        "name": "RC plane",
+        "text": "My first plane, a trainer. The first flight is on video.",
+        "model": "plane",
+        "status": "",
+        "images": [
+          {
+            "src": "media/drones/rc-plane.webp",
+            "alt": "Silhouette of a small RC plane high in a hazy evening sky above a line of trees"
+          }
+        ],
+        "video": "https://www.youtube.com/watch?v=9CpYiXKf_z8",
+        "link": ""
+      }
+    ]
+  },
+  "fight": {
+    "title": "Fight",
+    "event": "NERC",
+    "eventLong": "National Engineering Robotics Contest, NUST, Islamabad",
+    "lead": "Semi-finals",
+    "text": "Two robots, one ring, first one out loses. The second time I entered, I made it to the semi-finals, against university students.",
+    "rounds": [
+      {
+        "when": "July 2023",
+        "title": "First try",
+        "text": "Entered sumo and aero. Out in both.",
+        "result": "out"
+      },
+      {
+        "when": "The next time",
+        "title": "Second try",
+        "text": "Back for sumo and aero. All the way to the sumo semi-finals, against university students.",
+        "result": "semi"
+      }
+    ],
+    "game": {
+      "title": "Your turn",
+      "text": "Move to drive. Push the other robot out of the ring.",
+      "start": "Start the bout"
+    }
+  },
+  "follow": {
+    "title": "Follow lines",
+    "intro": "Small robots with one job each. They are all live: move your cursor near them.",
+    "robots": [
+      {
+        "name": "Line follower",
+        "text": "Reads a black line with infrared sensors and steers to stay on it.",
+        "model": "line",
+        "note": "Entered at both RobotMEA conferences"
+      },
+      {
+        "name": "Obstacle avoider",
+        "text": "Looks ahead, finds the wall, turns away. Try to get in front of it.",
+        "model": "avoid",
+        "note": ""
+      },
+      {
+        "name": "Soccer bot",
+        "text": "Popsicle sticks, cardboard arms and a ball. Driven from a phone.",
+        "model": "soccer",
+        "note": "Won RoboSoccer, RobotMEA"
+      },
+      {
+        "name": "Bluetooth car",
+        "text": "Remote control over Bluetooth. Press and hold to drive it.",
+        "model": "bluetooth",
+        "note": ""
+      },
+      {
+        "name": "Sumo robot, v1",
+        "text": "The first attempt.",
+        "model": "sumo1",
+        "note": ""
+      },
+      {
+        "name": "Sumo robot, v2",
+        "text": "The rebuild.",
+        "model": "sumo2",
+        "note": ""
+      }
+    ],
+    "photos": [
+      {
+        "src": "media/photos/soccer-bot-hands.webp",
+        "alt": "Hands holding a four-wheeled robot made of wood sticks and cardboard",
+        "caption": "Popsicle sticks and cardboard"
+      },
+      {
+        "src": "media/events/soccer-match.webp",
+        "alt": "Saad driving a robot on a green soccer pitch in front of a crowd",
+        "caption": "RoboSoccer, RobotMEA"
+      },
+      {
+        "src": "media/events/project-table.webp",
+        "alt": "Exhibition table with a quadcopter, a soccer bot and other robots",
+        "caption": "Project exhibition table"
+      }
+    ]
+  },
+  "play": {
+    "title": "Play",
+    "intro": "Six Unity games, all published. Pick a cartridge.",
+    "profile": "https://saad-bin-waqas.itch.io/",
+    "games": [
+      {
+        "name": "Duo Jumpers",
+        "text": "One space bar, two characters. Both jump at once while you dodge what is coming.",
+        "tag": "Kenney Jam 2024",
+        "platform": "browser",
+        "url": "https://saad-bin-waqas.itch.io/duo-jumpers",
+        "color": "#1fb58f",
+        "images": [
+          {
+            "src": "media/games/duo-jumpers-1.webp",
+            "alt": "Duo Jumpers: two characters running above and below a strip of ground"
+          },
+          {
+            "src": "media/games/duo-jumpers-2.webp",
+            "alt": "Duo Jumpers title screen"
+          },
+          {
+            "src": "media/games/duo-jumpers-3.webp",
+            "alt": "Duo Jumpers gameplay"
+          }
+        ]
+      },
+      {
+        "name": "Space Shooter",
+        "text": "Enemy ships keep coming. Shoot them down and collect the coins.",
+        "tag": "",
+        "platform": "browser",
+        "url": "https://saad-bin-waqas.itch.io/space-shooter",
+        "color": "#6b4dff",
+        "images": [
+          {
+            "src": "media/games/space-shooter-1.webp",
+            "alt": "Space Shooter: a blue ship firing at a wave of enemies, one exploding"
+          },
+          {
+            "src": "media/games/space-shooter-2.webp",
+            "alt": "Space Shooter gameplay with laser fire"
+          },
+          {
+            "src": "media/games/space-shooter-3.webp",
+            "alt": "Space Shooter gameplay with a large enemy fleet"
+          }
+        ]
+      },
+      {
+        "name": "Dungeon Escape",
+        "text": "A 2D adventure through dungeons, spikes, floating islands and the sea floor.",
+        "tag": "",
+        "platform": "browser",
+        "url": "https://saad-bin-waqas.itch.io/dungeon-escape",
+        "color": "#ff7a1a",
+        "images": [
+          {
+            "src": "media/games/dungeon-escape-1.webp",
+            "alt": "Dungeon Escape: ruins in front of a haunted house at night"
+          },
+          {
+            "src": "media/games/dungeon-escape-2.webp",
+            "alt": "Dungeon Escape: stone dungeon level"
+          },
+          {
+            "src": "media/games/dungeon-escape-3.webp",
+            "alt": "Dungeon Escape: underwater level"
+          },
+          {
+            "src": "media/games/dungeon-escape-4.webp",
+            "alt": "Dungeon Escape: floating islands level"
+          },
+          {
+            "src": "media/games/dungeon-escape-5.webp",
+            "alt": "Dungeon Escape: spike corridor level"
+          }
+        ]
+      },
+      {
+        "name": "Ocean Cleaner",
+        "text": "Two players, one minute. Carry four pieces of trash at most and bank them before a fish makes you drop the lot.",
+        "tag": "Two players",
+        "platform": "windows",
+        "url": "https://saad-bin-waqas.itch.io/ocean-cleaner",
+        "color": "#1180d8",
+        "images": [
+          {
+            "src": "media/games/ocean-cleaner-1.webp",
+            "alt": "Ocean Cleaner: split-screen ocean with falling trash and two bins"
+          },
+          {
+            "src": "media/games/ocean-cleaner-2.webp",
+            "alt": "Ocean Cleaner title screen"
+          },
+          {
+            "src": "media/games/ocean-cleaner-3.webp",
+            "alt": "Ocean Cleaner level select"
+          },
+          {
+            "src": "media/games/ocean-cleaner-4.webp",
+            "alt": "Ocean Cleaner win screen"
+          }
+        ]
+      },
+      {
+        "name": "Wave Riders",
+        "text": "Steer the boat with the arrow keys and keep it off the rocks.",
+        "tag": "",
+        "platform": "browser",
+        "url": "https://saad-bin-waqas.itch.io/wave-riders",
+        "color": "#0bb4e0",
+        "images": [
+          {
+            "src": "media/games/wave-riders-1.webp",
+            "alt": "Wave Riders: a boat steering around rocks and an island"
+          },
+          {
+            "src": "media/games/wave-riders-2.webp",
+            "alt": "Wave Riders title screen"
+          }
+        ]
+      },
+      {
+        "name": "Flappy Bird",
+        "text": "My version of the classic, with an angrier bird.",
+        "tag": "",
+        "platform": "windows",
+        "url": "https://saad-bin-waqas.itch.io/flappy-bird",
+        "color": "#f2385a",
+        "images": [
+          {
+            "src": "media/games/flappy-bird-1.webp",
+            "alt": "Flappy Bird: a round red bird flying between dark pipes"
+          },
+          {
+            "src": "media/games/flappy-bird-2.webp",
+            "alt": "Flappy Bird gameplay"
+          },
+          {
+            "src": "media/games/flappy-bird-3.webp",
+            "alt": "Flappy Bird game over screen"
+          }
+        ]
+      }
+    ]
+  },
+  "ship": {
+    "title": "Ship",
+    "intro": "Software for people in Pakistan who sell things and need them to arrive.",
+    "codshield": {
+      "name": "CODShield",
+      "status": "In progress, with a team",
+      "text": "Most online orders here are paid in cash at the door. When nobody opens it, the seller pays the courier both ways and gets nothing. CODShield is a back office that spots those orders before the parcel leaves.",
+      "points": [
+        {
+          "title": "Chat that takes the order",
+          "text": "In English, Urdu or Roman Urdu. Prices and stock come from the database, never from the AI or the customer."
+        },
+        {
+          "title": "Address cleaning",
+          "text": "Tidies Pakistani addresses using a list of local areas and spellings."
+        },
+        {
+          "title": "Risk score with reasons",
+          "text": "Simple, readable rules. Every score is saved with why."
+        },
+        {
+          "title": "A human when it matters",
+          "text": "Shaky orders get a confirmation call. If the AI is stuck, staff take over the chat."
+        }
+      ],
+      "working": [
+        "Browser chat orders",
+        "Address cleaning",
+        "Risk scoring",
+        "Staff inbox",
+        "Event worker with retries"
+      ],
+      "next": [
+        "WhatsApp",
+        "Real courier tracking",
+        "Cross-seller fraud graph"
+      ],
+      "stack": [
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "Gemini",
+        "Twilio"
+      ],
+      "link": {
+        "label": "CODShield on GitHub",
+        "url": "https://github.com/saadbinwaqas949/CODShield"
+      },
+      "demo": {
+        "chat": [
+          {
+            "from": "customer",
+            "text": "1 shirt chahiye"
+          },
+          {
+            "from": "shop",
+            "text": "Ji zaroor! Kaunsa size, aur delivery kahan karni hai?"
+          },
+          {
+            "from": "customer",
+            "text": "medium. hous 12 st 4 dha ph 5 lhr"
+          },
+          {
+            "from": "shop",
+            "text": "1 shirt, medium, cash on delivery. Confirm kar doon?"
+          },
+          {
+            "from": "customer",
+            "text": "haan"
+          }
+        ],
+        "addressBefore": "hous 12 st 4 dha ph 5 lhr",
+        "addressAfter": "House 12, Street 4, DHA Phase 5, Lahore",
+        "risk": 58,
+        "riskLabel": "Medium risk",
+        "reasons": [
+          "First order from this number",
+          "Address needed cleaning",
+          "Area has had refusals"
+        ],
+        "note": "Illustration. Numbers are made up."
+      }
+    },
+    "ragnready": {
+      "name": "ragNready",
+      "status": "Building now",
+      "text": "A storefront for baby clothes and newborn gifts in Pakistan, with cash on delivery, order alerts on WhatsApp and an admin the shop owner can run alone.",
+      "stack": [
+        "Next.js",
+        "TypeScript",
+        "Supabase",
+        "PostgreSQL"
+      ],
+      "link": {
+        "label": "ragNready on GitHub",
+        "url": "https://github.com/saadbinwaqas949/ragNready"
+      },
+      "images": []
+    },
+    "projects": []
+  },
+  "chimera": {
+    "title": "Chimera",
+    "teaser": "Still taped shut. The story and the photos come out soon.",
+    "open": false,
+    "story": "",
+    "images": [],
+    "link": {
+      "label": "",
+      "url": ""
+    }
+  },
+  "log": {
+    "title": "Won some, lost some",
+    "intro": "Every competition, conference and science fair so far, including the ones that went badly.",
+    "events": [
+      {
+        "title": "NERC, second try",
+        "host": "NUST, Islamabad",
+        "date": "",
+        "importance": 3,
+        "kind": "semi",
+        "result": "Sumo semi-finals",
+        "text": "Sumo and aero again. Reached the sumo semi-finals against university students.",
+        "entries": [
+          {
+            "name": "Sumo",
+            "result": "Semi-finals",
+            "kind": "semi"
+          },
+          {
+            "name": "Aero",
+            "result": "Took part",
+            "kind": "part"
+          }
+        ],
+        "photos": [],
+        "video": ""
+      },
+      {
+        "title": "2nd EdTech Conference 4.0",
+        "host": "RobotMEA, Islamabad",
+        "date": "9–10 June 2023",
+        "importance": 3,
+        "kind": "won",
+        "result": "Won sumo, Emerging Star Award",
+        "text": "Won the sumo competition. Took the Emerging Star Award, a gold medal and a cash prize for doing every project on my own, without a teacher's help. The line follower lost.",
+        "entries": [
+          {
+            "name": "Sumo",
+            "result": "Won",
+            "kind": "won"
+          },
+          {
+            "name": "Emerging Star",
+            "result": "Award",
+            "kind": "award"
+          },
+          {
+            "name": "Line follower",
+            "result": "Out",
+            "kind": "out"
+          }
+        ],
+        "photos": [
+          {
+            "src": "media/events/emerging-star.webp",
+            "alt": "Saad receiving the Emerging Star Award on stage",
+            "caption": "Emerging Star Award"
+          },
+          {
+            "src": "media/events/gold-medal.webp",
+            "alt": "Saad smiling, wearing a gold medal",
+            "caption": "Gold medal",
+            "focus": "top"
+          }
+        ],
+        "video": "https://www.youtube.com/watch?v=m9tk_-sLkLY"
+      },
+      {
+        "title": "1st EdTech Conference 4.0",
+        "host": "RobotMEA",
+        "date": "9–11 February 2023",
+        "importance": 3,
+        "kind": "won",
+        "result": "Won RoboSoccer",
+        "text": "Entered four categories with robots built from popsicle sticks and cardboard. Won RoboSoccer, a gold medal and a cash prize.",
+        "entries": [
+          {
+            "name": "RoboSoccer",
+            "result": "Won",
+            "kind": "won"
+          },
+          {
+            "name": "Line follower",
+            "result": "Took part",
+            "kind": "part"
+          },
+          {
+            "name": "Project exhibition",
+            "result": "Took part",
+            "kind": "part"
+          },
+          {
+            "name": "Theme solver",
+            "result": "Took part",
+            "kind": "part"
+          }
+        ],
+        "photos": [
+          {
+            "src": "media/events/soccer-final.webp",
+            "alt": "Two small robots facing off on a green soccer pitch",
+            "caption": "The final"
+          },
+          {
+            "src": "media/events/soccer-match.webp",
+            "alt": "Saad driving his robot on the pitch",
+            "caption": "Match day"
+          }
+        ],
+        "video": "https://www.youtube.com/watch?v=VzVq7XrDFXI"
+      },
+      {
+        "title": "SOFTEC'23",
+        "host": "FAST NUCES, Lahore",
+        "date": "5–7 May 2023",
+        "importance": 2,
+        "kind": "award",
+        "result": "Youngest Participant Award",
+        "text": "Showed a drone at the Electronic Project Competition, a university event.",
+        "entries": [
+          {
+            "name": "Electronic Project Competition",
+            "result": "Youngest participant",
+            "kind": "award"
+          }
+        ],
+        "photos": [
+          {
+            "src": "media/events/softec.webp",
+            "alt": "Saad presenting a drone to a judge",
+            "caption": "Electronic Project Competition",
+            "focus": "top"
+          }
+        ],
+        "video": "https://www.youtube.com/watch?v=AqFxCebpFJY"
+      },
+      {
+        "title": "LGS",
+        "host": "With CETC",
+        "date": "",
+        "importance": 2,
+        "kind": "won",
+        "result": "Won aero",
+        "text": "Second time at LGS with CETC.",
+        "entries": [
+          {
+            "name": "Aero",
+            "result": "Won",
+            "kind": "won"
+          }
+        ],
+        "photos": [],
+        "video": ""
+      },
+      {
+        "title": "Italian delegation",
+        "host": "School visit, Lahore",
+        "date": "2023",
+        "importance": 2,
+        "kind": "demo",
+        "result": "Flew my drone for them",
+        "text": "An Italian delegation came to my school. I presented the drone, then flew it.",
+        "entries": [],
+        "photos": [
+          {
+            "src": "media/events/italian-flight.webp",
+            "alt": "Saad with a transmitter watching his drone while a visitor films it",
+            "caption": "In the air"
+          }
+        ],
+        "video": "https://www.youtube.com/watch?v=xbyuHm1sTJ4"
+      },
+      {
+        "title": "NERC, first try",
+        "host": "NUST, Islamabad",
+        "date": "9–13 July 2023",
+        "importance": 1,
+        "kind": "out",
+        "result": "Out in sumo and aero",
+        "text": "Sumo robot, and the quadcopter build-and-fly competition.",
+        "entries": [],
+        "photos": [],
+        "video": ""
+      },
+      {
+        "title": "LGS",
+        "host": "With CETC",
+        "date": "",
+        "importance": 1,
+        "kind": "part",
+        "result": "Took part",
+        "text": "",
+        "entries": [],
+        "photos": [],
+        "video": ""
+      },
+      {
+        "title": "Lahore Science Mela",
+        "host": "Crescent Model School, Shadman",
+        "date": "2023",
+        "importance": 1,
+        "kind": "part",
+        "result": "Exhibited projects",
+        "text": "",
+        "entries": [],
+        "photos": [],
+        "video": ""
+      },
+      {
+        "title": "Children Library Complex",
+        "host": "Lahore",
+        "date": "2023",
+        "importance": 1,
+        "kind": "part",
+        "result": "Exhibited projects",
+        "text": "",
+        "entries": [],
+        "photos": [],
+        "video": ""
+      },
+      {
+        "title": "Al-Khawarizmi Science Mela",
+        "host": "Divisional Public School, Model Town, Lahore",
+        "date": "29–30 October 2022",
+        "importance": 1,
+        "kind": "part",
+        "result": "Exhibited projects",
+        "text": "",
+        "entries": [],
+        "photos": [],
+        "video": ""
+      }
+    ]
+  },
+  "toolbox": {
+    "title": "Toolbox",
+    "intro": "What I reach for. Sweep the parts around.",
+    "groups": [
+      {
+        "name": "Flight",
+        "items": [
+          "Drone building",
+          "Drone piloting",
+          "Betaflight",
+          "PX4",
+          "Naze32",
+          "BLHeli_32"
+        ]
+      },
+      {
+        "name": "Hardware",
+        "items": [
+          "Arduino",
+          "Soldering",
+          "L298N",
+          "CAD",
+          "Blender"
+        ]
+      },
+      {
+        "name": "Games",
+        "items": [
+          "Unity"
+        ]
+      },
+      {
+        "name": "Software",
+        "items": [
+          "Python",
+          "FastAPI",
+          "PostgreSQL",
+          "TypeScript",
+          "Next.js",
+          "Supabase"
+        ]
+      }
+    ],
+    "courses": [
+      {
+        "name": "Scout training, Ghora Gali",
+        "date": "2022 and 2023"
+      },
+      {
+        "name": "Exploring identity and inner voice through movement",
+        "date": "26–27 December 2022"
+      },
+      {
+        "name": "Essentials of Dialogue",
+        "date": "7 November 2022"
+      }
+    ]
+  },
+  "extra": {
+    "lipo": {
+      "show": true,
+      "title": "The battery incident",
+      "text": "A 3S 5000 mAh LiPo was already dead, so I overcharged it outside to see what would happen. This happened. Not a recommended way to retire a battery.",
+      "image": {
+        "src": "media/photos/lipo.webp",
+        "alt": "A LiPo battery burning on a rooftop"
+      },
+      "video": "https://www.youtube.com/watch?v=FQHk3KlbsUY"
+    }
+  },
+  "contact": {
+    "title": "Say hi",
+    "text": "Need a drone built, a robot fixed or a game made? Write to me.",
+    "button": "Copy email",
+    "copied": "Copied. Talk soon.",
+    "footer": "Built on a cutting mat in Lahore."
+  },
+  "custom": []
+}
