@@ -1,7 +1,10 @@
 # Portfolio of Saad Bin Waqas
 
-One-page site. The concept: the page is a cutting mat, the cursor is the lamp,
-objects on the mat are live 3D. Keep to that world when adding things.
+One-page site with two benches, switched by the pull cord. Dark: a workbench at
+night, everything a line drawing until the lamp (the cursor) finds it. Light: the
+blue cutting mat with cardboard letters and the ceiling light on. They are two
+looks, not inverted colours. One line (the robot's track) ties the page together,
+and cats are everywhere. Keep to that world.
 
 ## Content first
 
@@ -14,12 +17,13 @@ file. `src/content.ts` has the types, defaults and blank entries.
 - First person, plain sentences, sentence case, no hype. Losses are stated as
   losses; that is part of the voice.
 - `log.events[].importance`: 3 headline pass, 2 card, 1 one line.
-- `chimera.open: false` shows the sealed crate; set it to true once there is a
-  story and photos.
+- No faces in photos or clips: crop them out. Crop certificates to the heading.
+- Clips: silent, under ten seconds, mp4 plus a WebP cover with the same name in
+  `public/media/clips`; in content, an image with `video` set plays instead.
+- `chimera.open: false` shows the sealed crate instead of the story.
 - Extra sections: add to `custom` and put the same `id` in `layout`.
 - New photos: resize to 1600 px max, WebP, strip EXIF (the Studio does this).
-- Do not publish the phone number, the `.docx` CVs or `Portfolio.txt`; they are
-  git-ignored on purpose.
+- `Recources/` (raw material) is git-ignored on purpose.
 
 ## Code
 
@@ -31,6 +35,15 @@ file. `src/content.ts` has the types, defaults and blank entries.
   while it is pinned. `data-track` / `data-track-s` hold the line follower's
   waypoints (wide / narrow screens).
 - Letters: `<Letters text style depth />` puts extruded glyphs on real DOM text.
+- Drawings: `bake()` in `src/world/kit.ts` adds each model's edges as glowing
+  strokes that fade where the lamp falls. Use `strokes` / `outline` for the rest.
+- Themes: `src/lib/theme.ts` (`onTheme`, `isLight`). Dark is the default CSS,
+  `light.css` holds the blue values, `theme.css` the rest. Check both.
+- Cats: `<Kitty pose coat />`, `<CatPilot />`, 3D `makeKitten` in
+  `src/world/models/kitten.ts`. Styles in `cats.css`.
+- Barlow 500/600 are unhinted copies in `src/fonts`: hinting hid the dot of the i.
+- New machines are in `src/world/models/extra.ts`; styles for the dark theme's
+  newer sections are in `src/styles/night.css`.
 - One-shot entrances use `onceInView`, not ScrollTrigger (layout cost).
 - Never toggle `castShadow` at runtime: it recompiles every shader.
 - Prints follow the photo's own shape (sizes come from `virtual:media-sizes`,

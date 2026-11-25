@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { clamp, damp, mesh, smooth } from '../kit';
 import { M } from '../materials';
 import { makeBox, makeCar, makeChip, makeMedal } from '../models/robots';
+import { makeKitten } from '../models/kitten';
 import * as tex from '../textures';
 import type { Stage } from '../World';
 
@@ -27,7 +28,7 @@ export function crateStage(el: HTMLElement, label: string): CrateStage {
   );
   light.position.z = 190;
   box.add(light);
-  const inner = new THREE.Mesh(new THREE.PlaneGeometry(310, 250), new THREE.MeshBasicMaterial({ color: 0xffb02e, transparent: true, opacity: 0, toneMapped: false }));
+  const inner = new THREE.Mesh(new THREE.PlaneGeometry(310, 250), new THREE.MeshBasicMaterial({ map: tex.glow(), color: 0xff9a1f, transparent: true, opacity: 0, toneMapped: false }));
   inner.position.z = 120;
   box.add(inner);
   // motes that escape when it opens
@@ -40,6 +41,11 @@ export function crateStage(el: HTMLElement, label: string): CrateStage {
   const pts = new THREE.Points(pg, pm);
   pts.frustumCulled = false;
   box.add(pts);
+
+  // of course there is a cat in the box
+  const cat = makeKitten('cream');
+  cat.group.scale.setScalar(3.1);
+  box.add(cat.group);
 
   let open = 0;
   let want = 0;
@@ -74,9 +80,15 @@ export function crateStage(el: HTMLElement, label: string): CrateStage {
       box.position.set(Math.sin(t * 53) * 0.02 * shake, Math.cos(t * 47) * 0.02 * shake, 0.02 + knock * near * 0.12);
       box.rotation.z = -0.1 + Math.sin(t * 41) * 0.014 * shake;
       const glow = clamp(open * 2.6) * (0.8 + Math.sin(t * 19) * 0.12 + Math.sin(t * 7) * 0.08);
-      (light.material as THREE.MeshBasicMaterial).opacity = glow * 0.75;
-      (inner.material as THREE.MeshBasicMaterial).opacity = Math.min(1, glow * 1.4);
+      (light.material as THREE.MeshBasicMaterial).opacity = glow * 0.34;
+      (inner.material as THREE.MeshBasicMaterial).opacity = Math.min(0.8, glow * 0.95);
       pm.opacity = glow;
+      const out = smooth(0.35, 0.9, open);
+      cat.group.visible = out > 0.02;
+      cat.group.position.set(0, 4, 20 + out * 62 + Math.sin(t * 2) * 2 + (pokeT > 0 ? Math.abs(Math.sin(t * 9)) * 26 : 0));
+      cat.group.rotation.z = Math.PI + Math.sin(t * 0.8) * 0.05;
+      const far = d || 1;
+      cat.update(t, dt, -(world.lampPos.x - cx) / far, -(world.lampPos.y - cy) / far);
       for (let i = 0; i < N; i++) {
         const q = seed[i];
         const f = (q.o + t * 0.22 * q.v) % 1;

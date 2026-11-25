@@ -1,0 +1,156 @@
+/* Light mode: the blue cutting mat. Generated from the first version of the
+   site, then extended by hand at the end. */
+html.light {
+  --mat-deep: #0a1b55;
+  --mat: #1b45c4;
+  --mat-ink: #cfe0ff;
+  --paper: #f3f6fb;
+  --ink: #0b1433;
+  --fg: #f3f6ff;
+  --fg-2: rgba(224, 233, 255, 0.78);
+  --fg-3: rgba(207, 224, 255, 0.56);
+}
+html.light {
+  scrollbar-color: #3c63d8 #0a1b55;
+}
+html.light.no-webgl body {
+  background-color: #14349f;
+  background-image: linear-gradient(rgba(207, 224, 255, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(207, 224, 255, 0.22) 1px, transparent 1px),
+    linear-gradient(rgba(207, 224, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(207, 224, 255, 0.08) 1px, transparent 1px);
+}
+html.light .dymo {
+  box-shadow: 0 2px 5px rgba(3, 8, 36, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+html.light .plug.ghost {
+  --c: rgba(12, 30, 100, 0.65);
+}
+html.light .plug.ghost::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), transparent 40%), #16265f;
+}
+html.light .print > .sh {
+  background: rgba(2, 7, 36, 0.62);
+}
+html.light .print > .pp {
+  background: #fbfcff;
+  box-shadow: none;
+}
+html.light .print .im {
+  background: #0b1433;
+}
+html.light .print figcaption {
+  color: #16265f;
+}
+html.light .loader {
+  background: #050e34;
+}
+html.light .hd::before {
+  background: linear-gradient(rgba(3, 13, 64, 0.86), rgba(3, 13, 64, 0.7) 34%, rgba(3, 13, 64, 0.28) 70%, rgba(3, 13, 64, 0));
+}
+html.light .cord svg {
+  filter: drop-shadow(0 4px 6px rgba(3, 8, 36, 0.5));
+}
+html.light .menu {
+  background: rgba(8, 20, 74, 0.93);
+}
+html.light .cu-dot {
+  box-shadow: 0 0 0 1.5px rgba(8, 16, 60, 0.55);
+}
+html.light .cu-box i {
+  filter: drop-shadow(0 0 1px rgba(8, 16, 60, 0.8));
+}
+html.light .hero-copy > *:not(.l3d) {
+  text-shadow: 0 0 22px rgba(6, 18, 78, 0.75), 0 1px 2px rgba(6, 18, 78, 0.5);
+}
+html.light.no-webgl .sheet-paper > .sheet-bg {
+  background: #f4f7fc;
+}
+html.light.no-webgl .sheet-kraft > .sheet-bg {
+  background: #c99a62;
+}
+html.light .sheet-paper,
+html.light .sheet-kraft {
+  color: var(--ink);
+}
+html.light .ab-from {
+  color: var(--ink);
+}
+html.light .lb::backdrop {
+  background: rgba(4, 11, 44, 0.86);
+}
+html.light .lb-cap {
+  color: #16265f;
+}
+html.light .fly-lines path {
+  stroke: #16265f;
+}
+html.light .fly-info p {
+  color: #1d2b63;
+}
+html.light .fly-tools button {
+  border: 2px solid #16265f;
+  color: #16265f;
+  background: linear-gradient(#16265f, #16265f) 0 100% / 100% 0 no-repeat;
+}
+html.light .tblock {
+  color: #16265f;
+}
+html.light .tblock dt {
+  color: #35457f;
+}
+html.light .goggles {
+  box-shadow: 0 26px 60px rgba(2, 7, 36, 0.55), inset 0 2px 0 rgba(255, 255, 255, 0.16);
+}
+html.light.no-webgl .pen-floor {
+  background: #f3f6fb;
+}
+html.light .phone {
+  box-shadow: 0 30px 70px rgba(2, 7, 36, 0.6), inset 0 0 0 2px #2a3148;
+}
+html.light .gauge {
+  background: #f4f7fc;
+  box-shadow: none;
+}
+html.light .gauge text {
+  fill: #0b1433;
+}
+html.light .clothes {
+  filter: drop-shadow(0 12px 14px rgba(2, 7, 36, 0.4));
+}
+html.light .pass-strap {
+  box-shadow: 0 6px 18px rgba(2, 7, 36, 0.45);
+}
+html.light .pass-clip {
+  box-shadow: 0 4px 10px rgba(2, 7, 36, 0.5);
+}
+html.light .pass-card {
+  background: #f6f8fd;
+  color: var(--ink);
+  box-shadow: 0 26px 60px rgba(2, 7, 36, 0.55), inset 0 0 0 2px #fff;
+}
+html.light .pass-card::before {
+  background: #16265f;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+html.light .pass-host {
+  color: #35457f;
+}
+html.light .pass-date {
+  color: #35457f;
+}
+html.light .pass-result {
+  color: #c4160f;
+}
+html.light .pass-text {
+  color: #1d2b63;
+}
+html.light .pass-card .tlink {
+  color: #0b1433;
+}
+html.light .cat svg {
+  filter: drop-shadow(0 10px 14px rgba(2, 7, 36, 0.5));
+}
+html.light.no-webgl .l3d-ink {
+  color: #1b120a;
+}

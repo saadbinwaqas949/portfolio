@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { onTheme } from '../lib/theme';
 import * as tex from './textures';
 
 const std = (p: THREE.MeshStandardMaterialParameters) => new THREE.MeshStandardMaterial(p);
@@ -32,6 +33,12 @@ export const M = {
   kraftEdge: () => once('kraftEdge', () => matte({ map: tiled(tex.kraftEdge(), 1 / 0.3, 1 / 0.17), roughness: 0.95 })),
   kraftEdgeMM: () => once('kraftEdgeMM', () => matte({ map: tiled(tex.kraftEdge(), 1 / 14, 1 / 6), roughness: 0.95 })),
 
+  // ---- night: gunmetal letters, black card --------------------------------
+  gun: () => once('gun', () => std({ color: 0x3a424e, roughness: 0.46, metalness: 0.62 })),
+  gunEdge: () => once('gunEdge', () => std({ color: 0x161a21, roughness: 0.6, metalness: 0.4 })),
+  kraftNight: () => once('kraftNight', () => matte({ map: tiled(tex.kraft(), 1 / 6, 1 / 6), color: 0x4a433d, roughness: 0.94 })),
+  kraftNightEdge: () => once('kraftNightEdge', () => matte({ map: tiled(tex.kraftEdge(), 1 / 0.3, 1 / 0.17), color: 0x7a6a58, roughness: 0.95 })),
+
   // ---- carbon ----------------------------------------------------------
   carbon: (scale = 1) =>
     once('carbon' + scale, () =>
@@ -50,7 +57,16 @@ export const M = {
   woodU: () => once('woodU', () => matte({ map: tiled(tex.wood(), 1 / 3, 1 / 1.4), roughness: 0.8 })),
   tt: () => once('tt', () => std({ color: 0xffc21a, roughness: 0.46 })), // yellow gear motors, XT60
   ttDark: () => once('ttDark', () => std({ color: 0xd99a00, roughness: 0.5 })),
-  rubber: () => once('rubber', () => matte({ color: 0x17181b, roughness: 0.88 })),
+  rubber: () =>
+    once('rubber', () => {
+      // a little glow of its own, so tyres keep their shape in the dark
+      const m = matte({ color: 0x17181b, emissive: 0x1c222b });
+      onTheme((light) => {
+        m.color.setHex(light ? 0x17181b : 0x2a2e35);
+        m.emissiveIntensity = light ? 0 : 1;
+      });
+      return m;
+    }),
   black: () => once('black', () => std({ color: 0x121317, roughness: 0.55 })),
   blackGloss: () => once('blackGloss', () => std({ color: 0x0e0f12, roughness: 0.22 })),
   grey: () => once('grey', () => std({ color: 0x59606c, roughness: 0.6 })),

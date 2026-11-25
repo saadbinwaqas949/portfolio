@@ -90,6 +90,29 @@ function useDrop(dir: string, accept: (srcs: string[]) => void, single = false) 
   };
 }
 
+/** Grab a frame from a video and store it as its cover. */
+async function coverOf(src: string): Promise<string> {
+  const v = document.createElement('video');
+  v.muted = true;
+  v.preload = 'auto';
+  v.src = mediaUrl(src);
+  await new Promise((ok, no) => {
+    v.onloadeddata = ok;
+    v.onerror = no;
+  });
+  v.currentTime = Math.min(v.duration * 0.4, v.duration - 0.05);
+  await new Promise((ok) => (v.onseeked = ok));
+  const c = document.createElement('canvas');
+  c.width = v.videoWidth;
+  c.height = v.videoHeight;
+  c.getContext('2d')!.drawImage(v, 0, 0);
+  const blob = await new Promise<Blob | null>((ok) => c.toBlob(ok, 'image/jpeg', 0.86));
+  if (!blob) return '';
+  const name = src.split('/').pop()!.replace(/\.[^.]+$/, '') + '.jpg';
+  const r = await api.upload(new File([blob], name, { type: 'image/jpeg' }), 'clips');
+  return r.src;
+}
+
 function ImageBox({ path, dir, caption = true, onRemove }: { path: string; dir: string; caption?: boolean; onRemove?(): void }) {
   const s = useStudio();
   const v: Img = getAt(s.site, path) ?? { src: '', alt: '' };
@@ -98,6 +121,15 @@ function ImageBox({ path, dir, caption = true, onRemove }: { path: string; dir: 
   const choose = async () => {
     const [src] = await s.pick({ dir, kind: 'image' });
     if (src) s.set(path, { ...v, src });
+  };
+  const [clip, setClip] = useState('');
+  const chooseClip = async () => {
+    const [video] = await s.pick({ dir: 'clips', kind: 'video' });
+    if (!video) return;
+    setClip('Making a cover picture');
+    const cover = await coverOf(video).catch(() => '');
+    setClip('');
+    s.set(path, { ...v, video, src: cover || v.src });
   };
   return (
     <div className={'img ' + (drop.over ? 'over' : '')} {...drop.props} data-path={join(path, 'src')}>
@@ -118,6 +150,9 @@ function ImageBox({ path, dir, caption = true, onRemove }: { path: string; dir: 
           ) : null}
           <button type="button" className="b sm" onClick={choose}>
             {v.src ? 'Replace' : 'Choose'}
+          </button>
+          <button type="button" className="b sm" disabled={!!clip} onClick={v.video ? () => s.set(path, { ...v, video: '' }) : chooseClip} title={v.video || 'A short silent video that plays here'}>
+            {clip || (v.video ? 'Remove clip' : 'Add a clip')}
           </button>
           {v.src ? (
             <button type="button" className="b sm ghost" onClick={() => (onRemove ? onRemove() : s.set(path, { src: '', alt: '', caption: '' }))}>

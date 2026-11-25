@@ -1,9 +1,9 @@
 // The end is the start again: same bench, same pad. The drone comes home, the
 // letters slide back together, the goggles come off.
 import { useRef, useState } from 'react';
-import { Cat } from '../components/Cat';
 import { Icon } from '../components/Icon';
-import { Portrait, type PortraitApi } from '../components/Portrait';
+import { CatPilot, type PilotApi } from '../components/CatPilot';
+import { Kitty } from '../components/Kitty';
 import { useSite } from '../content';
 import { pinProgress, useGsap } from '../lib/hooks';
 import { emit, gsap, isTouch, reduced, scrollToId } from '../lib/motion';
@@ -20,7 +20,7 @@ export function Contact() {
   const { contact, person } = site;
   const p = useRef(0);
   const pad = useRef<PadStage | null>(null);
-  const portrait = useRef<PortraitApi>(null);
+  const pilot = useRef<PilotApi>(null);
   const [copied, setCopied] = useState(false);
 
   const padEl = useStage<HTMLDivElement>((el) => {
@@ -41,8 +41,8 @@ export function Contact() {
         if (w) w.track.bonus = smooth(0.3, 0.95, v);
         const home = 1 - smooth(0.02, 0.8, v);
         if (pad.current) pad.current.p = home;
-        portrait.current?.goggles(1 - smooth(0.8, 0.9, v));
-        portrait.current?.wind(smooth(0.3, 0.5, v) * (1 - smooth(0.7, 0.8, v)));
+        pilot.current?.goggles(1 - smooth(0.8, 0.9, v));
+        pilot.current?.wind(smooth(0.3, 0.5, v) * (1 - smooth(0.7, 0.8, v)));
         const inn = smooth(0.3, 0.62, v);
         gsap.set(copy, { x: -(1 - inn) * innerWidth * 0.5, rotate: -(1 - inn) * 7, opacity: inn });
       });
@@ -94,10 +94,10 @@ export function Contact() {
       <div className="ct-pin" data-pin style={{ height: '230vh' }}>
         <div className="pin hero ct" style={{ ['--em' as any]: emWidth(title) }}>
           <div className="hero-names">
-            <Letters as="h2" text={title} style="kraft" depth={56} shy={0.8} className="hero-first ct-first" onLetters={wire} />
+            <Letters as="h2" text={title} style="night" depth={56} shy={0.8} className="hero-first ct-first" onLetters={wire} />
           </div>
           <div className="hero-figure">
-            <Portrait api={portrait} start="up" />
+            <CatPilot api={pilot} start="down" />
           </div>
           <div className="hero-copy ct-copy">
             <p className="hero-line">{contact.text}</p>
@@ -121,7 +121,7 @@ export function Contact() {
             <ul className="ct-links">
               {person.links.map((l) => (
                 <li key={l.url}>
-                  <a href={l.url} target="_blank" rel="noreferrer">
+                  <a href={l.url} target="_blank" rel="noopener">
                     <Icon name={l.icon ?? ''} />
                     <span>{l.label}</span>
                   </a>
@@ -138,7 +138,11 @@ export function Contact() {
             </ul>
           </div>
           <div className="hero-pad" ref={padEl} />
-          <Cat />
+          <div className="ct-cats">
+            <Kitty pose="sit" coat="calico" say="meow meow" />
+            <Kitty pose="sit" coat="black" flip className="small" />
+            <Kitty pose="sit" coat="ginger" className="tiny" />
+          </div>
           <div className="ct-foot">
             <span>{contact.footer}</span>
             <button type="button" className="tlink" onClick={() => scrollToId('top')}>

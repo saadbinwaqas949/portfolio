@@ -13,6 +13,13 @@ export interface LineFollower {
 export function ttWheel(r = 33, w = 24) {
   const g = group();
   const tyre = cylX(r, w, M.rubber());
+  const rings: number[] = [];
+  for (let i = 0; i < 28; i++) {
+    const a = (i / 28) * Math.PI * 2;
+    const b = ((i + 1) / 28) * Math.PI * 2;
+    for (const x of [-w / 2, w / 2]) rings.push(x, Math.sin(a) * r, Math.cos(a) * r, x, Math.sin(b) * r, Math.cos(b) * r);
+  }
+  tyre.userData.ink = new Float32Array(rings);
   g.add(tyre);
   const spokes = group();
   for (const s of [-1, 1]) {
@@ -25,6 +32,7 @@ export function ttWheel(r = 33, w = 24) {
     }
     spokes.add(cylX(5, 3, M.white(), s * (w / 2 + 2), 0, 0, 14));
   }
+  spokes.children.forEach((c) => (c.userData.plain = true));
   g.add(spokes);
   // tread blocks, so you can see it turn
   const tread = new THREE.BoxGeometry(w * 0.94, 4, 3);
@@ -32,6 +40,7 @@ export function ttWheel(r = 33, w = 24) {
     const a = (i / 16) * Math.PI * 2;
     const b = mesh(tread, M.rubber(), 0, Math.sin(a) * (r + 0.4), Math.cos(a) * (r + 0.4));
     b.rotation.x = -a;
+    b.userData.plain = true;
     g.add(b);
   }
   bake(g);

@@ -5,7 +5,7 @@
   position: fixed;
   inset: 0;
   z-index: 200;
-  background: #050e34;
+  background: #040608;
   overflow: hidden;
 }
 .ld-l,
@@ -16,24 +16,35 @@
   align-items: center;
   will-change: transform;
 }
+.loader {
+  --xw: clamp(150px, 17vw, 250px);
+}
+/* closed, the two bodies meet face to face: 17 of the drawing's 220 units
+   either side of the middle leaves exactly the pins overlapping */
 .ld-l {
-  right: calc(50% - 8px);
+  right: calc(50% - var(--xw) * 17 / 220);
   transform-origin: 0% 50%;
+  z-index: 2;
 }
 .ld-r {
-  left: calc(50% - 38px);
+  left: calc(50% - var(--xw) * 17 / 220);
   transform-origin: 100% 50%;
+  z-index: 1;
+}
+.ld-flash,
+.ld-ui {
+  z-index: 3;
 }
 .ld-l .xt,
 .ld-r .xt {
-  width: clamp(150px, 17vw, 250px);
+  width: var(--xw);
   flex: none;
 }
 .ld-wire {
   width: 70vw;
   flex: none;
   aspect-ratio: auto;
-  height: calc(clamp(150px, 17vw, 250px) * 0.5455);
+  height: calc(var(--xw) * 0.5455);
   background:
     linear-gradient(#ff8a80, #ff8a80) 0 29% / 100% 2% no-repeat,
     linear-gradient(#4a4f5d, #4a4f5d) 0 59.5% / 100% 2% no-repeat,
@@ -110,7 +121,7 @@
   height: 138px;
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(rgba(3, 13, 64, 0.86), rgba(3, 13, 64, 0.7) 34%, rgba(3, 13, 64, 0.28) 70%, rgba(3, 13, 64, 0));
+  background: linear-gradient(rgba(5, 7, 10, 0.86), rgba(5, 7, 10, 0.7) 34%, rgba(5, 7, 10, 0.28) 70%, rgba(5, 7, 10, 0));
   opacity: 0;
   transition: opacity 0.5s;
 }
@@ -252,14 +263,14 @@
   height: 170px;
   overflow: visible;
   pointer-events: none;
-  filter: drop-shadow(0 4px 6px rgba(3, 8, 36, 0.5));
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
 }
 
 .menu {
   position: fixed;
   inset: 0;
   z-index: 80;
-  background: rgba(8, 20, 74, 0.93);
+  background: rgba(6, 8, 12, 0.93);
   backdrop-filter: blur(10px);
   clip-path: circle(0% at calc(100% - 60px) 40px);
   transition: clip-path 0.7s var(--ease);
@@ -333,7 +344,7 @@ html:not(.has-cursor) .cursor {
   margin: -3.5px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 0 0 1.5px rgba(8, 16, 60, 0.55);
+  box-shadow: 0 0 0 1.5px rgba(2, 4, 8, 0.55);
 }
 .cu-box {
   position: absolute;
@@ -345,7 +356,7 @@ html:not(.has-cursor) .cursor {
   width: 9px;
   height: 9px;
   border: 2.5px solid #fff;
-  filter: drop-shadow(0 0 1px rgba(8, 16, 60, 0.8));
+  filter: drop-shadow(0 0 1px rgba(2, 4, 8, 0.8));
   transition: border-color 0.2s, width 0.3s, height 0.3s;
 }
 .cu-box.locked i {

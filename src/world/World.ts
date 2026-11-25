@@ -1,9 +1,10 @@
 // The bench. One fixed WebGL canvas behind the page; 100 px = 1 unit and the
 // mat lies at z = 0, so anything placed on it lines up with the DOM exactly.
 import * as THREE from 'three';
+import { isLight, onTheme } from '../lib/theme';
 import { makeEnvironment } from './env';
 import { makeDust, makeMat } from './mat';
-import { damp, lerp } from './kit';
+import { INK, inkFor, damp, lerp } from './kit';
 import { Track } from './track';
 
 export const U = 100;
@@ -84,6 +85,7 @@ export class World {
   lampPower = { v: 0 };
   /** 0 = lamp only, 1 = ceiling light on */
   room = { v: 0 };
+  day = isLight();
   spark = { v: 0 };
   /** places that can pull the lamp on touch screens */
   attract: { x: number; y: number } | null = null;
@@ -116,7 +118,7 @@ export class World {
     r.toneMappingExposure = 1.0;
     r.shadowMap.enabled = true;
     r.shadowMap.type = THREE.PCFShadowMap;
-    r.setClearColor(0x0a1b55, 1);
+    r.setClearColor(0x06080b, 1);
     // integrated graphics start one step down
     try {
       const gl = r.getContext();
@@ -129,10 +131,10 @@ export class World {
 
     this.scene.environment = makeEnvironment();
 
-    this.hemi = new THREE.HemisphereLight(0x9db4ff, 0x10206a, 0.5);
+    this.hemi = new THREE.HemisphereLight(0x8fa8cc, 0x0b0e14, 0.3);
     this.scene.add(this.hemi);
 
-    this.sky = new THREE.DirectionalLight(0xbfd0ff, 0.5);
+    this.sky = new THREE.DirectionalLight(0xc4d6f2, 0.4);
     this.sky.position.set(-4, 5, 9);
     this.sky.castShadow = true;
     this.sky.shadow.bias = -0.0004;
@@ -151,6 +153,17 @@ export class World {
 
     this.scene.add(this.mat.plane, this.dust.pts, this.track.group);
     this.ceiling = this.quality;
+    onTheme((light) => {
+      this.day = light;
+      this.room.v = light ? 0.72 : 0;
+      r.setClearColor(light ? 0x0a1b55 : 0x06080b, 1);
+      this.hemi.color.setHex(light ? 0x9db4ff : 0x8fa8cc);
+      this.hemi.groundColor.setHex(light ? 0x10206a : 0x0b0e14);
+      this.sky.color.setHex(light ? 0xbfd0ff : 0xc4d6f2);
+      inkFor(light);
+      // the browser is about to take its picture of the new bench
+      if (this.started) queueMicrotask(() => this.tick(0.001));
+    });
     this.resize();
     this.bind();
   }
@@ -432,10 +445,17 @@ export class World {
     const room = Math.max(this.room.v, this.touch ? 0.2 : 0);
     this.lamp.position.copy(this.lampPos);
     this.lamp.target.position.set(this.lampPos.x - this.lampVel.x * 0.04, this.lampPos.y - this.lampVel.y * 0.04, 0);
-    this.lamp.intensity = power * lerp(50, 14, room);
-    this.sky.intensity = lerp(0.5, 2.3, room);
-    this.hemi.intensity = lerp(0.3, 1.1, room);
-    this.scene.environmentIntensity = lerp(0.36, 0.75, room);
+    if (this.day) {
+      this.lamp.intensity = power * lerp(50, 14, room);
+      this.sky.intensity = lerp(0.5, 2.3, room);
+      this.hemi.intensity = lerp(0.3, 1.1, room);
+      this.scene.environmentIntensity = lerp(0.36, 0.75, room);
+    } else {
+      this.lamp.intensity = power * lerp(64, 16, room);
+      this.sky.intensity = lerp(0.34, 2.1, room);
+      this.hemi.intensity = lerp(0.2, 1.0, room);
+      this.scene.environmentIntensity = lerp(0.34, 0.7, room);
+    }
 
     const mu = this.mat.u;
     mu.uScroll.value = ws;
@@ -444,6 +464,10 @@ export class World {
     mu.uLampOn.value = power;
     mu.uRoom.value = room;
     mu.uSpark.value = this.spark.v;
+    INK.uLamp.value.copy(this.lampPos);
+    INK.uOn.value = power;
+    INK.uRoom.value = this.room.v;
+    INK.uTime.value = t;
     const du = this.dust.u;
     du.uTime.value = t;
     du.uOn.value = power * (1 - room * 0.8);

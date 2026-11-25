@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
+import { Kitty } from '../components/Kitty';
 import { Print } from '../components/Print';
-import { useSite, youtubeId, type EventItem } from '../content';
+import { Stamp } from '../components/Stamp';
+import { media, useSite, youtubeId, type EventItem } from '../content';
 import { useGsap } from '../lib/hooks';
 import { onceInView } from '../lib/inview';
 import { emit, gsap, reduced } from '../lib/motion';
@@ -11,7 +13,7 @@ import { getWorld } from '../world/World';
 import { medalStage, showBotStage } from '../world/stages/misc';
 import { popLetters } from './About';
 
-const TAPE: Record<string, string> = { won: 'green', award: 'yellow', semi: 'yellow', out: 'red', part: '', demo: 'blue' };
+const TAPE: Record<string, string> = { won: 'green', award: 'yellow', semi: 'yellow', out: 'red', part: '', demo: 'blue', next: 'green' };
 
 /** These letters fall over. */
 function flop(letters: Letter[], stage: LetterStage) {
@@ -132,7 +134,7 @@ function Pass({ e, i }: { e: EventItem; i: number }) {
         {e.kind === 'won' ? <Medal /> : null}
         {e.photos.length === 0 && e.kind !== 'won' ? <Bot /> : null}
         {e.photos.map((im, k) => (
-          <Print key={im.src + k} img={im} rot={rots[(k + i) % 4]} limits={[0.52, 1.5]} />
+          <Print key={im.src + k} img={im} rot={rots[(k + i) % 4]} limits={[0.52, 3.2]} />
         ))}
       </div>
     </article>
@@ -182,7 +184,10 @@ export function Log() {
           <div className="wrap mid-grid">
             {mid.map((e, i) => (
               <article className="mid" key={e.title + i}>
-                {e.photos[0] ? <Print img={e.photos[0]} video={e.video} rot={i % 2 ? 2.5 : -3} limits={[0.95, 2.3]} /> : null}
+                {e.photos[0] ? <Print img={e.photos[0]} video={e.video} rot={i % 2 ? 2.2 : -2.4} limits={[0.95, 2.3]} /> : <Stamp seed={e.title} />}
+                {e.photos.slice(1, 3).map((im, k) => (
+                  <Print key={k} img={im} rot={k % 2 ? -2 : 2.4} limits={[0.95, 2.6]} tape={false} className="second" />
+                ))}
                 <span className={'dymo ' + (TAPE[e.kind] ?? '')} data-rv="dymo">
                   {e.result}
                 </span>
@@ -201,9 +206,11 @@ export function Log() {
       {small.length ? (
         <div className="section smalls" data-track="[[0.03,0],[0.03,1]]" data-track-s="[[0.004,0],[0.004,1]]">
           <div className="wrap">
+            <Kitty pose="loaf" coat="cream" className="on-list" say="took part" />
             <ul className="small-list">
               {small.map((e, i) => (
                 <li key={e.title + i}>
+                  <span className="small-pic">{e.photos[0] ? <img src={media(e.photos[0].src)} alt={e.photos[0].alt} loading="lazy" /> : <Stamp seed={e.title} />}</span>
                   <b>{e.title}</b>
                   <span>{e.host}</span>
                   <span>{e.date}</span>

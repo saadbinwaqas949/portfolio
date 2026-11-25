@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import { clamp, damp, lerp, smooth } from '../kit';
 import { makeF450, makePlane, makeQuad, type Quad } from '../models/quad';
+import { makeFirstFpv, makeLongRange } from '../models/extra';
 import { makeBox } from '../models/robots';
 import type { Stage, World } from '../World';
 
@@ -103,6 +104,24 @@ export function bayStage(el: HTMLElement, model: string): BayStage {
       p.group.position.set(Math.cos(a) * r - r * 0.2, Math.sin(a) * r, 70 + (h * 1.7) / s);
       p.group.rotation.z = lerp(0.5, a + Math.PI / 2 - Math.PI / 2, 0) + (h > 0.02 ? a : 0.5 * (1 - h));
       p.body.rotation.y = -h * 0.55 + Math.sin(t * 1.3) * 0.03;
+    };
+  } else if (model === 'fpv1' || model === 'quad5' || model === 'longrange') {
+    const q = model === 'fpv1' ? makeFirstFpv() : model === 'quad5' ? makeQuad() : makeLongRange();
+    inner.add(q.group);
+    span = model === 'longrange' ? 430 : 400;
+    const seed = model === 'fpv1' ? 1 : model === 'quad5' ? 2.4 : 4;
+    let yaw = seed;
+    step = (t, dt, h) => {
+      q.setRpm(h);
+      q.update(dt);
+      yaw += dt * (0.12 + h * (model === 'longrange' ? 0.3 : 1.6));
+      const s = inner.scale.x;
+      q.group.position.z = 16 + (h * 1.35) / s + (Math.sin(t * 2.3 + seed) * 0.06 * h) / s;
+      q.group.position.x = model === 'longrange' ? -20 : 0;
+      q.body.rotation.z = yaw;
+      // it carves while it spins
+      q.body.rotation.x = Math.sin(t * 1.9 + seed) * 0.2 * h;
+      q.body.rotation.y = Math.cos(t * 1.6 + seed) * 0.24 * h;
     };
   } else {
     // a parcel with a quad inside

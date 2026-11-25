@@ -1,5 +1,6 @@
 // The cutting mat: the ground the whole page sits on.
 import * as THREE from 'three';
+import { onTheme } from '../lib/theme';
 import * as tex from './textures';
 
 export interface MatUniforms {
@@ -17,12 +18,20 @@ export function makeMat() {
     uSpark: { value: 0 },
     uSchem: { value: tex.schematic() },
     uNoise: { value: tex.matNoise() },
-    uMat: { value: new THREE.Color('#0f4fc9') },
-    uMatDeep: { value: new THREE.Color('#0b3ba2') },
-    uLine: { value: new THREE.Color('#cfe0ff') },
-    uGlow: { value: new THREE.Color('#8fd0ff') },
+    uMat: { value: new THREE.Color('#252d38') },
+    uMatDeep: { value: new THREE.Color('#1a2029') },
+    uLine: { value: new THREE.Color('#a9bdd4') },
+    uGlow: { value: new THREE.Color('#6fb4f2') },
     uHot: { value: new THREE.Color('#ffd257') },
+    uDay: { value: 0 },
   };
+  onTheme((light) => {
+    u.uDay.value = light ? 1 : 0;
+    u.uMat.value.set(light ? '#0f4fc9' : '#252d38');
+    u.uMatDeep.value.set(light ? '#0b3ba2' : '#1a2029');
+    u.uLine.value.set(light ? '#cfe0ff' : '#a9bdd4');
+    u.uGlow.value.set(light ? '#8fd0ff' : '#6fb4f2');
+  });
 
   const m = new THREE.MeshLambertMaterial({ color: 0xffffff });
   m.onBeforeCompile = (s) => {
@@ -35,7 +44,7 @@ export function makeMat() {
         '#include <common>',
         /* glsl */ `#include <common>
         varying vec2 vPx;
-        uniform float uScroll, uTime, uLampOn, uRoom, uSpark;
+        uniform float uScroll, uTime, uLampOn, uRoom, uSpark, uDay;
         uniform vec2 uRes, uLamp;
         uniform sampler2D uSchem, uNoise;
         uniform vec3 uMat, uMatDeep, uLine, uGlow, uHot;
@@ -62,10 +71,10 @@ export function makeMat() {
         // ruler ticks down both edges
         float edge = uRes.x * 0.5 - abs(P.x);
         float tick = lineAt(P.y, 8.0, 0.5) * step(edge, 9.0) + lineAt(P.y, cell, 0.6) * step(edge, 18.0);
-        float ink = minor * 0.12 + major * 0.24 + diag * 0.10 + tick * 0.45;
+        float ink = minor * mix(0.07, 0.12, uDay) + major * mix(0.15, 0.24, uDay) + diag * mix(0.06, 0.10, uDay) + tick * mix(0.34, 0.45, uDay);
         vec3 ground = mix(uMatDeep, uMat, 0.55 + 0.45 * nzb.r * nz.r);
         ground *= 0.95 + 0.10 * nz.r;
-        ground += nz.g * vec3(0.05, 0.08, 0.16);
+        ground += nz.g * mix(vec3(0.012, 0.014, 0.018), vec3(0.05, 0.08, 0.16), uDay);
         diffuseColor.rgb = mix(ground, uLine, clamp(ink, 0.0, 1.0));
         `,
       )
@@ -79,13 +88,13 @@ export function makeMat() {
         // pulses run along every trace, brighter under the lamp
         float ph = fract(sc.g - uTime * 0.22);
         float pulse = smoothstep(0.86, 0.99, ph) * step(0.004, sc.g) * sc.r;
-        float faint = trace * 0.014;
-        vec3 glow = uGlow * trace * reveal * 0.34 + mix(uGlow, uHot, 0.75) * pulse * (reveal * 1.9 + 0.015 + uSpark * 0.8);
+        float faint = mix(trace * 0.02 + (major * 0.016 + minor * 0.005 + tick * 0.05), trace * 0.014, uDay);
+        vec3 glow = uGlow * trace * reveal * mix(0.2, 0.34, uDay) + mix(uGlow, uHot, 0.75) * pulse * (reveal * 1.9 + 0.015 + uSpark * 0.8);
         totalEmissiveRadiance += (glow + uGlow * faint) * mix(1.0, 0.55, uRoom);
         `,
       );
   };
-  m.customProgramCacheKey = () => 'mat-v2';
+  m.customProgramCacheKey = () => 'mat-v4';
 
   const plane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), m);
   plane.receiveShadow = true;

@@ -54,6 +54,11 @@ export function scrollToId(id: string, immediate = false) {
   if (!lenis) el.scrollIntoView();
 }
 
+export function scrollToY(y: number) {
+  if (lenis) lenis.scrollTo(y, { duration: 1.1, force: true });
+  else scrollTo(0, y);
+}
+
 export const holdScroll = (on: boolean) => (on ? lenis?.stop() : lenis?.start());
 
 /* ---- intro gate: sections wait for the loader ------------------------ */

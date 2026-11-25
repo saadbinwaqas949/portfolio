@@ -1,9 +1,11 @@
 // One board per robot. Each robot actually does its job on it.
 import * as THREE from 'three';
-import { angleDelta, box, clamp, cyl, damp, mesh, roundedRect } from '../kit';
+import { angleDelta, box, clamp, cyl, damp, mesh, roundedRect, outline } from '../kit';
+import { onTheme } from '../../lib/theme';
 import { M } from '../materials';
 import { makeLineFollower } from '../models/lineFollower';
 import { makeBall, makeCar, type Robot } from '../models/robots';
+import { makeMetalSumo, makeWalker } from '../models/extra';
 import { ribbon } from '../track';
 import type { Frame, Stage } from '../World';
 
@@ -31,12 +33,18 @@ function steer(g: Agent, tx: number, ty: number, top: number, dt: number, turn =
 
 const SCALE = 0.0058; // units per mm inside a pen
 
-function boardMaterial() {
-  return [
-    new THREE.MeshLambertMaterial({ color: 0xf3f6fb, emissive: 0xb9c8ee, emissiveIntensity: 0.16 }),
-    M.solid(0xcfd8ea, 0.8),
-  ];
-}
+// white boards and black tape by day, dark boards and glowing tape by night
+const boardTop = new THREE.MeshLambertMaterial();
+const boardSide = new THREE.MeshLambertMaterial();
+const tapeMat = new THREE.MeshBasicMaterial({ toneMapped: false, side: THREE.DoubleSide });
+onTheme((light) => {
+  boardTop.color.setHex(light ? 0xf3f6fb : 0x1d242e);
+  boardTop.emissive.setHex(light ? 0xb9c8ee : 0x0f1720);
+  boardTop.emissiveIntensity = light ? 0.16 : 0.5;
+  boardSide.color.setHex(light ? 0xcfd8ea : 0x10151c);
+  tapeMat.color.setHex(light ? 0x0b0c10 : 0x8cc2ff);
+});
+const boardMaterial = () => [boardTop, boardSide];
 
 export interface PenStage extends Stage {
   /** pointer is inside the pen element */
@@ -88,7 +96,7 @@ export function penStage(el: HTMLElement, model: string): PenStage {
         mm.remove(board);
       }
       const geo = new THREE.ExtrudeGeometry(roundedRect(hw * 2, hh * 2, 22), { depth: 8, bevelEnabled: false, curveSegments: 8 });
-      board = mesh(geo, boardMaterial(), 0, 0, 0);
+      board = outline(mesh(geo, boardMaterial(), 0, 0, 0), 0x9fcbff, 0.55, 0.3);
       mm.add(board);
       layout();
     },
@@ -118,7 +126,7 @@ export function penStage(el: HTMLElement, model: string): PenStage {
     const bot = makeLineFollower();
     bot.group.scale.setScalar(0.92);
     actors.add(bot.group);
-    const tape = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshLambertMaterial({ color: 0x0b0c10, side: THREE.DoubleSide }));
+    const tape = new THREE.Mesh(new THREE.BufferGeometry(), tapeMat);
     tape.position.z = 0.8;
     tape.receiveShadow = true;
     tape.frustumCulled = false;
@@ -477,12 +485,44 @@ export function penStage(el: HTMLElement, model: string): PenStage {
       });
       put(r, g, dt, t);
     };
+  } else if (model === 'walker') {
+    // strolls about, waddles away from you when you come close
+    const r = makeWalker();
+    r.group.scale.setScalar(1.5);
+    actors.add(r.group);
+    const g: Agent = { x: 0, y: 0, a: Math.PI / 2, v: 0, w: 0 };
+    let tx = 80;
+    let ty = 40;
+    let hold = 0;
+    let phase = 0;
+    step = ({ t, dt }, p) => {
+      hold -= dt;
+      if (p.near) {
+        const d = Math.hypot(g.x - p.x, g.y - p.y) || 1;
+        if (d < 190) {
+          tx = clamp(g.x + ((g.x - p.x) / d) * 200, -hw + 90, hw - 90);
+          ty = clamp(g.y + ((g.y - p.y) / d) * 200, -hh + 90, hh - 90);
+          hold = 1.2;
+        }
+      }
+      if (hold <= 0) {
+        tx = (Math.random() - 0.5) * (hw * 2 - 200);
+        ty = (Math.random() - 0.5) * (hh * 2 - 200);
+        hold = 2.4 + Math.random() * 2;
+      }
+      steer(g, tx, ty, 90, dt, 3, 14);
+      keepIn(g, 70);
+      phase += dt * (3 + g.v * 0.075);
+      r.step(phase, clamp(g.v / 46));
+      r.group.position.set(g.x, g.y, 0);
+      r.group.rotation.z = g.a - Math.PI / 2 + Math.sin(t * 2) * 0.02;
+    };
   } else {
     // sumo v2: guards the middle, faces you down, lunges when you get close
-    const r = makeCar({ chassis: 'metal', front: 'wedge', trim: 0xffc21a, battery: '4S' });
+    const r = makeMetalSumo();
     actors.add(r.group);
     const g: Agent = { x: 0, y: 0, a: 0, v: 0, w: 0 };
-    const ring = new THREE.Mesh(new THREE.RingGeometry(0.93, 1, 80), new THREE.MeshLambertMaterial({ color: 0x0b0c10, side: THREE.DoubleSide }));
+    const ring = new THREE.Mesh(new THREE.RingGeometry(0.93, 1, 80), tapeMat);
     ring.position.z = 0.6;
     ring.receiveShadow = true;
     actors.add(ring);

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useSite } from '../content';
-import { Portrait, type PortraitApi } from '../components/Portrait';
+import { CatPilot, type PilotApi } from '../components/CatPilot';
+import { Kitty } from '../components/Kitty';
 import { useGsap, pinProgress } from '../lib/hooks';
 import { emit, gsap, introIsDone, isTouch, onIntro, reduced, scrollToId, SplitText } from '../lib/motion';
 import { Letters, useStage } from '../world/hooks';
@@ -17,7 +18,7 @@ interface Intro {
   k: number;
 }
 
-/** "things that {fly}, {fight}" becomes links that act out their verb. */
+/** "I {model|race} things" becomes a link to #race that acts out its verb. */
 function Line({ text }: { text: string }) {
   // keep "{fly}," glued together so the comma never wraps alone
   const bits = useMemo(() => text.split(/(\{[^}]+\}[.,;:!?]?)/g).filter(Boolean), [text]);
@@ -26,28 +27,28 @@ function Line({ text }: { text: string }) {
       {bits.map((b, i) => {
         if (!b.startsWith('{')) return <span key={i} className="hl-t">{b}</span>;
         const end = b.indexOf('}');
-        const word = b.slice(1, end);
+        const [word, target] = b.slice(1, end).split('|');
         const tail = b.slice(end + 1);
         const id = word.split(' ')[0].toLowerCase();
+        const to = target || id;
         return (
           <span className="verb-wrap" key={i}>
           <a
-            href={'#' + id}
+            href={'#' + to}
             className={'verb verb-' + id}
+            aria-label={word}
             onClick={(e) => {
               e.preventDefault();
-              scrollToId(id);
+              scrollToId(to);
             }}
             onPointerEnter={() => emit('smile', true)}
             onPointerLeave={() => emit('smile', false)}
           >
-            {id === 'fight'
-              ? word.split('').map((c, k) => (
-                  <span key={k} style={{ ['--i' as any]: k }}>
-                    {c}
-                  </span>
-                ))
-              : word}
+            {word.split('').map((c, k) => (
+              <span key={k} aria-hidden style={{ ['--i' as any]: k }}>
+                {c === ' ' ? '\u00a0' : c}
+              </span>
+            ))}
             <svg viewBox="0 0 120 14" preserveAspectRatio="none" aria-hidden>
               <path d="M2 9 C20 3 34 12 52 8 S92 4 118 9" pathLength={1} />
             </svg>
@@ -64,7 +65,7 @@ export function Hero() {
   const site = useSite();
   const { hero, person } = site;
   const p = useRef(0);
-  const portrait = useRef<PortraitApi>(null);
+  const pilot = useRef<PilotApi>(null);
   const pad = useRef<PadStage | null>(null);
 
   const padEl = useStage<HTMLDivElement>((el) => {
@@ -76,15 +77,18 @@ export function Hero() {
   const root = useGsap<HTMLElement>((el) => {
     const copy = el.querySelector<HTMLElement>('.hero-copy')!;
     const hint = el.querySelector<HTMLElement>('.hero-hint')!;
+    const napper = el.querySelector<HTMLElement>('.hero-nap')!;
     const figure = el.querySelector<HTMLElement>('.hero-figure')!;
     const st = pinProgress(el, (v) => {
       p.current = v;
       if (pad.current) pad.current.p = v;
-      // goggles on before the props start
-      portrait.current?.goggles(smooth(0.02, 0.1, v));
-      portrait.current?.wind(smooth(0.08, 0.24, v) * (1 - smooth(0.5, 0.7, v)));
+      // goggles down before the props start
+      pilot.current?.goggles(smooth(0.02, 0.1, v));
+      pilot.current?.wind(smooth(0.08, 0.24, v) * (1 - smooth(0.5, 0.7, v)));
       const out = smooth(0.3, 0.72, v);
       gsap.set(copy, { x: -out * innerWidth * 0.75, rotate: -out * 9, opacity: 1 - smooth(0.4, 0.75, v) });
+      const hop = smooth(0.05, 0.3, v);
+      gsap.set(napper, { x: hop * 240, y: -Math.sin(hop * Math.PI) * 120 + hop * hop * innerHeight * 0.5, rotate: hop * 200, opacity: 1 - smooth(0.22, 0.32, v) });
       gsap.set(hint, { opacity: 1 - smooth(0.0, 0.06, v) });
       const f = smooth(0.42, 0.86, v);
       gsap.set(figure, { yPercent: f * 118, rotate: f * 11 });
@@ -96,6 +100,7 @@ export function Hero() {
       gsap
         .timeline({ delay: 0.85 })
         .from([...split.words, ...el.querySelectorAll('.verb')], { yPercent: 60, opacity: 0, rotate: 5, stagger: 0.045, duration: 0.7 })
+        .from('.hero-nap > *', { opacity: 0, y: -60, duration: 0.6, ease: 'bounce.out' }, '-=0.3')
         .from('.hero-sub', { opacity: 0, y: 20, duration: 0.6 }, '-=0.45')
         .from('.hero-badges .dymo', { xPercent: -30, opacity: 0, clipPath: 'inset(0 100% 0 0)', stagger: 0.09, duration: 0.6, ease: 'power4.out', clearProps: 'clipPath' }, '-=0.4')
         .from('.hero-hint', { opacity: 0, y: 14, duration: 0.6 }, '-=0.2');
@@ -189,13 +194,16 @@ export function Hero() {
             {person.first} {person.last}
           </h1>
           <div className="hero-names">
-            <Letters text={person.first.toUpperCase()} style="kraft" depth={56} shy={0.8} decorative className="hero-first" onLetters={(l, s) => wire(l, s, 0)} />
+            <Letters text={person.first.toUpperCase()} style="night" depth={56} shy={0.8} decorative className="hero-first" onLetters={(l, s) => wire(l, s, 0)} />
+          </div>
+          <div className="hero-nap">
+            <Kitty pose="loaf" coat="ginger" say="five more minutes" />
           </div>
           <div className="hero-figure">
-            <Portrait api={portrait} />
+            <CatPilot api={pilot} />
           </div>
           <div className="hero-copy">
-            <Letters text={person.last.toUpperCase()} style="kraft" depth={26} shy={0.6} decorative className="hero-last" onLetters={(l, s) => wire(l, s, 1)} />
+            <Letters text={person.last.toUpperCase()} style="night" depth={26} shy={0.6} decorative className="hero-last" onLetters={(l, s) => wire(l, s, 1)} />
             <Line text={hero.line} />
             <p className="hero-sub">{hero.sub}</p>
             <ul className="hero-badges">

@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import { Kitty } from '../components/Kitty';
+import { Print } from '../components/Print';
 import { useSite } from '../content';
 import { pinProgress, useFrame, useGsap } from '../lib/hooks';
 import { onceInView } from '../lib/inview';
@@ -214,6 +216,23 @@ export function Fight() {
           </span>
         </div>
       </div>
+
+      {f.photos.length ? (
+        <div className="section fi-build" data-track="[[0.975,0],[0.975,0.08],[0.04,0.08],[0.04,0.94],[0.5,0.94],[0.5,1]]" data-track-s="[[0.004,0],[0.004,1]]">
+          <div className="wrap">
+            {f.photosTitle ? <h3 className="fi-buildh" data-rv="lines">{f.photosTitle}</h3> : null}
+            <div className="fi-cats">
+              <Kitty pose="peek" coat="black" say="hsss" />
+              <Kitty pose="peek" coat="cream" say="mrrow" />
+            </div>
+            <div className="fi-strip">
+              {f.photos.map((im, i) => (
+                <Print key={im.src + i} img={im} rot={[-2.4, 1.6, -1.2, 2.2, -1.8, 1.4][i % 6]} ratio="4/3" />
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

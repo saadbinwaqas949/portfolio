@@ -73,6 +73,7 @@ export function reveals(root: HTMLElement) {
     tl.from(el, { scale: 1.5, opacity: 0, rotate: `+=${dir * 16}`, x: dir * 90, y: -70, duration: 0.75, ease: 'power3.out' }, d);
     const tape = el.querySelector('.tape');
     if (tape) tl.from(tape, { scaleY: 0, opacity: 0, rotate: -14, duration: 0.45, ease: 'back.out(2)' }, d + 0.5);
+    tl.add(() => el.classList.add('seen'), d + 0.15);
     play(el, tl, 8);
   });
 

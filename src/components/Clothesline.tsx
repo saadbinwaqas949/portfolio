@@ -1,9 +1,10 @@
 // Baby clothes on a line. Each piece is a little pendulum: wind moves them, so
 // does brushing past with the cursor, and you can pull them.
+import { Kitty } from './Kitty';
 import { useEffect, useRef, type ReactNode } from 'react';
 import { gsap, reduced } from '../lib/motion';
 
-const INK = '#0b1433';
+const INK = 'var(--cl-ink)';
 interface Piece {
   x: number;
   fill: string;
@@ -147,21 +148,24 @@ export function Clothesline() {
   }, []);
 
   return (
+    <div className="clothes-wrap">
     <svg ref={ref} className="clothes" viewBox="0 0 980 250" role="img" aria-label="Baby clothes hanging on a washing line" style={{ touchAction: 'pan-y' }} data-cursor="Tug">
-      <path className="cl-rope" d="M0 46L980 46" fill="none" stroke="#fff" strokeWidth="4" strokeLinecap="round" />
+      <path className="cl-rope" d="M0 46L980 46" fill="none" strokeLinecap="round" />
       {PIECES.map((p, i) => (
         <g className="cl-piece" key={i} transform={`translate(${p.x} ${sag(p.x)})`}>
-          <path d={p.body} fill="#fff" stroke="#fff" strokeWidth="17" strokeLinejoin="round" />
-          <path d={p.body} fill={p.fill} transform="translate(4 4)" />
-          <path d={p.body} fill="none" stroke={INK} strokeWidth="4.6" strokeLinejoin="round" />
+          <path className="cl-back" d={p.body} strokeLinejoin="round" />
+          <path className="cl-fill" d={p.body} fill={p.fill} />
+          <path className="cl-line" d={p.body} style={{ ['--pc' as string]: p.fill }} strokeLinejoin="round" />
           <g strokeLinecap="round" strokeLinejoin="round">
             {p.extra}
           </g>
           {[-15, 15].map((x) => (
-            <rect key={x} x={x - 4} y={-12} width="8" height="26" rx="3" fill="#e2c493" stroke={INK} strokeWidth="3" />
+            <rect key={x} x={x - 4} y={-12} width="8" height="26" rx="3" className="cl-peg" />
           ))}
         </g>
       ))}
     </svg>
+      <Kitty pose="hang" coat="grey" className="on-line" say="hang on" />
+    </div>
   );
 }

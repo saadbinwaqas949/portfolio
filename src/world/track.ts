@@ -1,8 +1,10 @@
 // The black line down the page, and the line follower that drives it.
 import * as THREE from 'three';
+import { onTheme } from '../lib/theme';
 import { angleDelta, clamp, damp } from './kit';
 import * as tex from './textures';
 import { makeLineFollower, type LineFollower } from './models/lineFollower';
+import { makeKitten } from './models/kitten';
 import type { World } from './World';
 
 interface P {
@@ -99,12 +101,13 @@ export class Track {
   group = new THREE.Group();
   tape: THREE.Mesh;
   bot: LineFollower;
+  rider = makeKitten('ginger');
   private pts: P[] = [];
   private yMax: Float32Array = new Float32Array(0);
   private s = 0;
   private v = 0;
   private heading = -Math.PI / 2;
-  private u = { uS: { value: 0 }, uTime: { value: 0 } };
+  private u = { uS: { value: 0 }, uTime: { value: 0 }, uDay: { value: 0 } };
   length = 0;
   enabled = true;
   /** lets the bot run on while the last section is pinned */
@@ -123,20 +126,32 @@ export class Track {
         .replace('#include <common>', '#include <common>\nvarying vec2 vT;')
         .replace('#include <begin_vertex>', '#include <begin_vertex>\nvT = uv;');
       sh.fragmentShader = sh.fragmentShader
-        .replace('#include <common>', '#include <common>\nvarying vec2 vT; uniform float uS, uTime;')
+        .replace('#include <common>', '#include <common>\nvarying vec2 vT; uniform float uS, uTime, uDay;')
         .replace(
           '#include <emissivemap_fragment>',
-          `float mid = 1.0 - smoothstep(0.05, 0.12, abs(vT.x - 0.5));
+          `float off = abs(vT.x - 0.5);
+           float mid = 1.0 - smoothstep(0.045, 0.095, off);
+           float halo = exp(-off * off * 26.0);
+           float rim = smoothstep(0.43, 0.46, off) * (1.0 - smoothstep(0.47, 0.5, off));
            float done = 1.0 - smoothstep(uS - 0.25, uS - 0.1, vT.y);
-           float run = smoothstep(0.75, 1.0, fract(vT.y * 0.45 - uTime * 0.9));
+           float run = smoothstep(0.72, 1.0, fract(vT.y * 0.36 - uTime * 0.8));
+           float ahead = smoothstep(0.9, 1.0, fract(vT.y * 0.12 - uTime * 0.35));
+           vec3 ice = vec3(0.34, 0.62, 1.0) * (mid * (0.34 + 0.7 * ahead) + halo * 0.035 + rim * 0.07);
+           vec3 hot = vec3(1.0, 0.66, 0.1) * (mid * (0.62 + 1.3 * run) + halo * (0.10 + 0.16 * run) + rim * 0.12);
            float dash = step(0.42, fract(vT.y * 2.5));
-           totalEmissiveRadiance += vec3(1.0, 0.72, 0.1) * mid * dash * done * (0.35 + 0.9 * run);`,
+           float wide = 1.0 - smoothstep(0.05, 0.12, off);
+           vec3 day = vec3(1.0, 0.72, 0.1) * wide * dash * done * (0.35 + 0.9 * smoothstep(0.75, 1.0, fract(vT.y * 0.45 - uTime * 0.9)));
+           totalEmissiveRadiance += mix(mix(ice, hot, done), day, uDay);`,
         );
     };
+    onTheme((light) => (this.u.uDay.value = light ? 1 : 0));
     this.tape = new THREE.Mesh(new THREE.BufferGeometry(), m);
     this.tape.receiveShadow = true;
     this.tape.frustumCulled = false;
     this.bot = makeLineFollower();
+    this.rider.group.position.set(0, 2, 58);
+    this.rider.group.scale.setScalar(1.25);
+    this.bot.group.add(this.rider.group);
     // start and finish lines
     const flag = tex.label('flag', 256, 64, (g) => {
       for (let x = 0; x < 16; x++)
@@ -258,6 +273,17 @@ export class Track {
     b.group.visible = this.sink < 0.97;
     b.group.rotation.z = this.heading - Math.PI / 2 + wob * 0.1;
     b.update(world.t, dt, this.v, wob);
+    // it looks at the lamp, or at the road when the robot is moving fast
+    const go = Math.min(1, Math.abs(this.v) / 900);
+    const dx = world.lampPos.x - x;
+    const dy = world.lampPos.y - y;
+    const far = Math.hypot(dx, dy) || 1;
+    const c = Math.cos(-b.group.rotation.z);
+    const sn = Math.sin(-b.group.rotation.z);
+    const kx = ((dx * c - dy * sn) / far) * (1 - go);
+    const ky = ((dx * sn + dy * c) / far) * (1 - go) + go;
+    this.rider.update(world.t, dt, kx, ky);
+    this.rider.group.position.z = 58 + Math.abs(Math.sin(world.t * 15)) * 2.4 * go;
     this.client.x = x * 100 + world.vw / 2;
     this.client.y = -y * 100 + world.vh / 2;
     this.u.uS.value = this.s / 100;

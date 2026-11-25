@@ -1,11 +1,12 @@
 import { useRef, useState } from 'react';
 import { Print } from '../components/Print';
 import { Sheet } from '../components/Sheet';
-import { SimRun } from '../components/SimRun';
-import { media, useSite, youtubeId, type Aircraft } from '../content';
+import { Deck } from '../components/Deck';
+import { Kitty } from '../components/Kitty';
+import { useSite, type Aircraft } from '../content';
 import { pinProgress, useFrame, useGsap } from '../lib/hooks';
 import { whileInView } from '../lib/inview';
-import { emit, gsap, reduced } from '../lib/motion';
+import { gsap, reduced } from '../lib/motion';
 import { reveals } from '../lib/reveal';
 import { Letters, useStage } from '../world/hooks';
 import { damp, smooth } from '../world/kit';
@@ -47,7 +48,6 @@ function Bay({ a, i }: { a: Aircraft; i: number }) {
     },
     [a.model],
   );
-  const yt = youtubeId(a.video);
   const hot = (v: number) => () => {
     if (stage.current) stage.current.hot = v;
   };
@@ -65,13 +65,9 @@ function Bay({ a, i }: { a: Aircraft; i: number }) {
       {a.images.length ? (
         <div className="bay-shots">
           {a.images.map((im, k) => (
-            <Print key={k} img={im} video={k === 0 ? a.video : undefined} rot={k % 2 ? 4 : -3} ratio="4/3" />
+            <Print key={k} img={im} rot={k % 2 ? 2.4 : -2} ratio={k ? '1/1' : '4/3'} tape={k === 0} />
           ))}
         </div>
-      ) : yt ? (
-        <button type="button" className="tlink" onClick={() => emit('lightbox', { type: 'yt', id: yt, title: a.name })}>
-          Watch it fly
-        </button>
       ) : null}
       {a.link ? (
         <a className="tlink" href={a.link} target="_blank" rel="noreferrer">
@@ -298,32 +294,18 @@ export function Fly() {
         </div>
       </div>
 
-      <div className="section fly-extra" data-track="[[0.5,0],[0.5,0.08],[0.06,0.08],[0.06,0.92],[0.5,0.92],[0.5,1]]" data-track-s="[[0.996,0],[0.996,1]]">
+      <div className="section fly-extra" data-track="[[0.5,0],[0.5,0.08],[0.022,0.08],[0.022,0.94],[0.5,0.94],[0.5,1]]" data-track-s="[[0.996,0],[0.996,1]]">
         <div className="wrap fly-two">
           <div className="fly-note">
-            <Print img={f.notebook.image} rot={-4} ratio="3/4" className="notebook" />
+            <Print img={f.notebook.image} rot={-3} className="notebook" />
             <p className="note" data-rv="mark">{f.notebook.caption}</p>
           </div>
-          <div className="sim">
-            <div className="sim-head">
-              <h3>{f.sim.title}</h3>
-              <p>{f.sim.text}</p>
-            </div>
-            <div className="goggles">
-              {f.sim.video && youtubeId(f.sim.video) ? (
-                <button type="button" className="sim-vid" onClick={() => emit('lightbox', { type: 'yt', id: youtubeId(f.sim.video), title: f.sim.title })}>
-                  <img src={f.sim.poster ? media(f.sim.poster) : `https://i.ytimg.com/vi/${youtubeId(f.sim.video)}/hqdefault.jpg`} alt="" loading="lazy" />
-                  <span className="pb">
-                    <svg viewBox="0 0 24 24">
-                      <path d="M4 2l17 10L4 22z" fill="#0b1433" />
-                    </svg>
-                  </span>
-                </button>
-              ) : f.sim.video ? (
-                <video className="sim-cv" src={media(f.sim.video)} poster={f.sim.poster ? media(f.sim.poster) : undefined} muted loop autoPlay playsInline />
-              ) : (
-                <SimRun label={f.sim.text} />
-              )}
+          <div className="fly-deck">
+            <h3>{f.field.title}</h3>
+            <p>{f.field.text}</p>
+            <div className="kt-on">
+              <Deck clips={f.field.clips} label={f.field.title} />
+              <Kitty pose="peek" coat="grey" className="on-deck" />
             </div>
           </div>
         </div>

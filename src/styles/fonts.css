@@ -1,0 +1,15 @@
+/* Barlow without hinting: the hinted files lose the dot of the i at 19 px */
+@font-face {
+  font-family: 'Barlow';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('../fonts/barlow-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Barlow';
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url('../fonts/barlow-600.woff2') format('woff2');
+}

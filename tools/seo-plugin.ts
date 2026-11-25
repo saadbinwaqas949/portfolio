@@ -59,7 +59,7 @@ export function seo(): Plugin {
         const link = (u: string, t: string) => (u ? `<a href="${esc(u)}">${esc(t)}</a>` : esc(t));
         const plain = `<noscript><main style="max-width:760px;margin:40px auto;padding:0 20px;font:18px/1.6 system-ui,sans-serif;color:#eef3ff">
 <h1>${esc(name)}</h1>
-<p>${esc((s.hero?.line ?? '').replace(/[{}]/g, ''))} ${esc(s.hero?.sub)}</p>
+<p>${esc((s.hero?.line ?? '').replace(/\{([^|}]+)(\|[^}]*)?\}/g, '$1'))} ${esc(s.hero?.sub)}</p>
 <ul>${(s.hero?.badges ?? []).map((b: any) => li(esc(b.text))).join('')}</ul>
 <h2>${esc(s.about?.title)}</h2><p>${esc(s.about?.left?.text)}</p><p>${esc(s.about?.right?.text)}</p><p>${esc(s.about?.statement)}</p>
 <h2>Drones</h2><p>${esc(s.fly?.intro)}</p><h3>${esc(s.fly?.build?.name)}</h3><p>${esc(s.fly?.build?.text)}</p>
@@ -67,6 +67,9 @@ export function seo(): Plugin {
 <ul>${(s.fly?.aircraft ?? []).map((a: any) => li(`${esc(a.name)}. ${esc(a.text)}`)).join('')}</ul>
 <h2>${esc(s.fight?.event)}</h2><p>${esc(s.fight?.eventLong)}. ${esc(s.fight?.text)}</p>
 <h2>Robots</h2><ul>${(s.follow?.robots ?? []).map((r: any) => li(`${esc(r.name)}. ${esc(r.text)} ${esc(r.note)}`)).join('')}</ul>
+<h2>${esc(s.race?.event)}</h2><p>${esc(s.race?.lead)} ${esc(s.race?.text)}</p>
+<h2>${esc(s.chimera?.title)}</h2><p>${esc(s.chimera?.teaser)} ${s.chimera?.open ? esc(s.chimera?.story) : ''}</p>
+<h2>Simulators</h2><p>${esc([s.sim?.main, ...(s.sim?.others ?? []), s.sim?.gazebo?.title].filter(Boolean).join(', '))}</p>
 <h2>Games</h2><ul>${(s.play?.games ?? []).map((g: any) => li(`${link(g.url, g.name)}. ${esc(g.text)}`)).join('')}</ul>
 <h2>Software</h2><h3>${link(s.ship?.codshield?.link?.url, s.ship?.codshield?.name)}</h3><p>${esc(s.ship?.codshield?.text)}</p>
 <h3>${link(s.ship?.ragnready?.link?.url, s.ship?.ragnready?.name)}</h3><p>${esc(s.ship?.ragnready?.text)}</p>

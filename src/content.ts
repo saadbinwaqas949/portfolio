@@ -9,6 +9,8 @@ export interface Img {
   caption?: string;
   /** which part to keep when the photo is cropped */
   focus?: string;
+  /** a short silent clip that plays in place of the photo */
+  video?: string;
 }
 export interface Link {
   label: string;
@@ -65,6 +67,12 @@ export interface Robot {
   text: string;
   model: string;
   note: string;
+  images: Img[];
+}
+export interface Mode {
+  id: string;
+  title: string;
+  text: string;
 }
 export interface Game {
   name: string;
@@ -151,8 +159,36 @@ export interface Site {
     intro: string;
     build: { name: string; tag: string; text: string; link: Link; stats: Stat[]; parts: Part[] };
     notebook: { image: Img; caption: string };
-    sim: { title: string; text: string; video: string; poster: string };
+    field: { title: string; text: string; clips: Img[] };
     aircraft: Aircraft[];
+  };
+  sim: {
+    title: string;
+    intro: string;
+    main: string;
+    mainText: string;
+    others: string[];
+    othersText: string;
+    clips: Img[];
+    gazebo: { title: string; text: string; image: Img };
+    game: { title: string; text: string };
+  };
+  race: {
+    title: string;
+    event: string;
+    status: string;
+    date: string;
+    iso: string;
+    place: string;
+    link: Link;
+    lead: string;
+    text: string;
+    stand: string;
+    launch: string;
+    stats: Stat[];
+    clips: Img[];
+    judgedTitle: string;
+    judged: Stat[];
   };
   fight: {
     title: string;
@@ -161,6 +197,8 @@ export interface Site {
     lead: string;
     text: string;
     rounds: Round[];
+    photosTitle: string;
+    photos: Img[];
     game: { title: string; text: string; start: string };
   };
   follow: { title: string; intro: string; robots: Robot[]; photos: Img[] };
@@ -190,9 +228,21 @@ export interface Site {
     ragnready: Project;
     projects: Project[];
   };
-  chimera: { title: string; teaser: string; open: boolean; story: string; images: Img[]; link: Link };
+  chimera: {
+    title: string;
+    teaser: string;
+    open: boolean;
+    story: string;
+    status: string;
+    modes: Mode[];
+    uses: string[];
+    stats: Stat[];
+    chapters: Round[];
+    images: Img[];
+    link: Link;
+  };
   log: { title: string; intro: string; events: EventItem[] };
-  toolbox: { title: string; intro: string; groups: SkillGroup[]; courses: Course[] };
+  toolbox: { title: string; intro: string; groups: SkillGroup[]; courses: Course[]; photos: Img[] };
   extra: { lipo: { show: boolean; title: string; text: string; image: Img; video: string } };
   contact: { title: string; text: string; button: string; copied: string; footer: string };
   custom: CustomSection[];
@@ -210,7 +260,8 @@ export const BLANK = {
   part: { name: '', note: '', anchor: 'frame' } as Part,
   aircraft: { name: '', text: '', model: 'px4', status: '', images: [], video: '', link: '' } as Aircraft,
   round: { when: '', title: '', text: '', result: 'out' } as Round,
-  robot: { name: '', text: '', model: 'line', note: '' } as Robot,
+  robot: { name: '', text: '', model: 'line', note: '', images: [] } as Robot,
+  mode: { id: 'car', title: '', text: '' } as Mode,
   game: { name: '', text: '', tag: '', platform: 'browser', url: '', color: '#2f6bff', images: [] } as Game,
   point: { title: '', text: '' } as Point,
   chat: { from: 'customer', text: '' } as ChatLine,
@@ -234,10 +285,12 @@ const DEFAULTS = {
     intro: '',
     build: { name: '', tag: '', text: '', link: LINK, stats: [], parts: [] },
     notebook: { image: IMG, caption: '' },
-    sim: { title: '', text: '', video: '', poster: '' },
+    field: { title: '', text: '', clips: [] },
     aircraft: [],
   },
-  fight: { title: 'Fight', event: '', eventLong: '', lead: '', text: '', rounds: [], game: { title: '', text: '', start: '' } },
+  sim: { title: 'Simulate', intro: '', main: '', mainText: '', others: [], othersText: '', clips: [], gazebo: { title: '', text: '', image: IMG }, game: { title: '', text: '' } },
+  race: { title: 'Race', event: '', status: '', date: '', iso: '', place: '', link: LINK, lead: '', text: '', stand: '', launch: 'Launch', stats: [], clips: [], judgedTitle: '', judged: [] },
+  fight: { title: 'Fight', event: '', eventLong: '', lead: '', text: '', rounds: [], photosTitle: '', photos: [], game: { title: '', text: '', start: '' } },
   follow: { title: 'Follow lines', intro: '', robots: [], photos: [] },
   play: { title: 'Play', intro: '', profile: '', games: [] },
   ship: {
@@ -250,9 +303,9 @@ const DEFAULTS = {
     ragnready: BLANK.project,
     projects: [],
   },
-  chimera: { title: 'Chimera', teaser: '', open: false, story: '', images: [], link: LINK },
+  chimera: { title: 'Chimera', teaser: '', open: false, story: '', status: '', modes: [], uses: [], stats: [], chapters: [], images: [], link: LINK },
   log: { title: '', intro: '', events: [] },
-  toolbox: { title: 'Toolbox', intro: '', groups: [], courses: [] },
+  toolbox: { title: 'Toolbox', intro: '', groups: [], courses: [], photos: [] },
   extra: { lipo: { show: false, title: '', text: '', image: IMG, video: '' } },
   contact: { title: 'Say hi', text: '', button: 'Copy email', copied: 'Copied', footer: '' },
   custom: [],
@@ -282,7 +335,12 @@ export function normalise(input: unknown): Site {
   s.fly.build.stats = each(s.fly.build.stats, BLANK.stat);
   s.fly.build.parts = each(s.fly.build.parts, BLANK.part);
   s.fly.aircraft = each(s.fly.aircraft, BLANK.aircraft);
+  s.race.stats = each(s.race.stats, BLANK.stat);
+  s.race.judged = each(s.race.judged, BLANK.stat);
   s.fight.rounds = each(s.fight.rounds, BLANK.round);
+  s.chimera.modes = each(s.chimera.modes, BLANK.mode);
+  s.chimera.stats = each(s.chimera.stats, BLANK.stat);
+  s.chimera.chapters = each(s.chimera.chapters, BLANK.round);
   s.follow.robots = each(s.follow.robots, BLANK.robot);
   s.play.games = each(s.play.games, BLANK.game);
   s.ship.codshield.points = each(s.ship.codshield.points, BLANK.point);

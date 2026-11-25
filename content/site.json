@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Saad Bin Waqas, builder of drones, robots and games",
-    "description": "Saad Bin Waqas builds drones, sumo robots, Unity games and software in Lahore, Pakistan. NERC sumo semi-finalist, RobotMEA sumo and soccer winner, youngest participant at SOFTEC'23.",
+    "title": "Saad Bin Waqas, drones, robots, race cars and code",
+    "description": "Saad Bin Waqas models, simulates, builds, flies and automates machines in Lahore, Pakistan: FPV drones, sumo robots, a Race Pakistan car, Unity games and software.",
     "url": "",
     "ogImage": "og.jpg"
   },
@@ -17,21 +17,6 @@
         "label": "GitHub",
         "url": "https://github.com/saadbinwaqas949",
         "icon": "github"
-      },
-      {
-        "label": "YouTube",
-        "url": "https://www.youtube.com/channel/UCiMLQDlMWLxuFxfzzGmWuSA",
-        "icon": "youtube"
-      },
-      {
-        "label": "itch.io",
-        "url": "https://saad-bin-waqas.itch.io/",
-        "icon": "itch"
-      },
-      {
-        "label": "LinkedIn",
-        "url": "https://www.linkedin.com/in/hafiz-saad-bin-waqas-b37884260/",
-        "icon": "linkedin"
       }
     ]
   },
@@ -49,6 +34,18 @@
       "inNav": true
     },
     {
+      "id": "sim",
+      "nav": "Sims",
+      "visible": true,
+      "inNav": true
+    },
+    {
+      "id": "race",
+      "nav": "Race car",
+      "visible": true,
+      "inNav": true
+    },
+    {
       "id": "fight",
       "nav": "NERC",
       "visible": true,
@@ -57,6 +54,12 @@
     {
       "id": "follow",
       "nav": "Robots",
+      "visible": true,
+      "inNav": true
+    },
+    {
+      "id": "chimera",
+      "nav": "Chimera",
       "visible": true,
       "inNav": true
     },
@@ -73,12 +76,6 @@
       "inNav": true
     },
     {
-      "id": "chimera",
-      "nav": "Chimera",
-      "visible": true,
-      "inNav": false
-    },
-    {
       "id": "log",
       "nav": "Events",
       "visible": true,
@@ -92,23 +89,27 @@
     }
   ],
   "hero": {
-    "line": "I build things that {fly}, {fight} and {follow lines}.",
-    "sub": "Drones, sumo robots, Unity games and the code in between, from a workbench in Lahore.",
+    "line": "I {model|race}, {simulate|sim}, {build|follow}, {fly} and {automate|ship} machines.",
+    "sub": "Drones, robots, a race car, games and software, from a bench in Lahore.",
     "badges": [
       {
-        "text": "NERC sumo semi-finalist",
-        "color": "red"
-      },
-      {
-        "text": "RobotMEA sumo winner",
+        "text": "Aerodynamics",
         "color": "black"
       },
       {
-        "text": "Youngest participant, SOFTEC'23",
+        "text": "Onshape and Blender",
         "color": "blue"
       },
       {
-        "text": "Emerging Star Award",
+        "text": "Gazebo and FPV sims",
+        "color": "black"
+      },
+      {
+        "text": "Robotics",
+        "color": "red"
+      },
+      {
+        "text": "Automation",
         "color": "green"
       }
     ],
@@ -119,54 +120,59 @@
     "left": {
       "label": "Where it started",
       "title": "Cardboard",
-      "text": "My first competition robots were popsicle sticks, layers of corrugated cardboard and an Arduino. One of them won a soccer final.",
+      "text": "My first competition robots were popsicle sticks, corrugated cardboard and an Arduino. One of them won a soccer final.",
       "image": {
-        "src": "media/photos/soccer-bot-top.webp",
-        "alt": "Top view of a small four-wheeled robot built from popsicle sticks and cardboard, with an Arduino Uno, a red motor driver and a LiPo battery, on a blue table"
+        "src": "media/robots/soccer.webp",
+        "alt": "Top view of a four-wheeled robot made of popsicle sticks and cardboard, with an Arduino, a motor driver and a LiPo battery"
       }
     },
     "right": {
       "label": "Where it is now",
       "title": "Carbon fibre",
-      "text": "The newest build is a 5-inch FPV quad, soldered from bare parts, tuned in Betaflight and flown by me. In between I picked up Unity, Blender, CAD, Python and TypeScript."
+      "text": "Now it is carbon fibre, CAD and simulation: FPV quads, a CO2 race car in Onshape, and an airframe in Gazebo before any of it gets cut."
     },
-    "statement": "RobotMEA gave me its Emerging Star Award for doing every project on my own, without a teacher's help. That is still how I work: pick something I can't build yet, then build it.",
+    "statement": "I work with a team now, often out of CETC, the Crescent Emerging Technologies Centre in Lahore. The method has not changed: pick something we cannot build yet, draw it, simulate it, then build it.",
     "disciplines": [
       {
         "name": "Drones",
-        "text": "FPV, PX4 and Naze32 builds",
+        "text": "FPV, PX4, iNav and Naze32 builds",
         "link": "fly"
       },
       {
-        "name": "Robots",
-        "text": "Sumo, soccer and line following",
-        "link": "follow"
-      },
-      {
-        "name": "Arduino and hardware",
-        "text": "Soldering, motor drivers, sensors",
-        "link": "follow"
-      },
-      {
         "name": "CAD and 3D modelling",
-        "text": "CAD parts and Blender",
-        "link": "toolbox"
+        "text": "Onshape, SOLIDWORKS and Blender",
+        "link": "race"
+      },
+      {
+        "name": "Simulation",
+        "text": "Gazebo, and many hours in DRL",
+        "link": "sim"
+      },
+      {
+        "name": "Aerodynamics",
+        "text": "A race car, gliders and RC planes",
+        "link": "race"
+      },
+      {
+        "name": "Robots and hardware",
+        "text": "Sumo, soccer, line following, Arduino",
+        "link": "follow"
+      },
+      {
+        "name": "Automation and code",
+        "text": "Python, TypeScript, AI back ends",
+        "link": "ship"
       },
       {
         "name": "Games",
         "text": "Six Unity games on itch.io",
         "link": "play"
-      },
-      {
-        "name": "Code",
-        "text": "Python, TypeScript, AI back ends",
-        "link": "ship"
       }
     ]
   },
   "fly": {
     "title": "Fly",
-    "intro": "Quads on three different flight controllers, and one RC plane.",
+    "intro": "Five quads and the RC planes, all built from parts. Pictures, and clips cut short.",
     "build": {
       "name": "5-inch FPV quad",
       "tag": "SpeedyBee F405 on a Mark4 frame",
@@ -248,10 +254,10 @@
     },
     "notebook": {
       "image": {
-        "src": "media/drones/wiring.webp",
-        "alt": "Hand-drawn wiring diagram in blue pen on ruled paper: flight controller in the middle, camera, receiver, battery and video transmitter around it"
+        "src": "media/drones/field-kit.webp",
+        "alt": "Laptop, FPV goggles, batteries and a carry case on the grass of a playing field"
       },
-      "caption": "The wiring plan, before any solder."
+      "caption": "Flight day: goggles, spare packs, and a laptop for tuning."
     },
     "sim": {
       "title": "Sim hours",
@@ -261,65 +267,213 @@
     },
     "aircraft": [
       {
+        "name": "First FPV drone",
+        "text": "Where FPV started for me. Carbon plates, red tri-blades, and arms wrapped in tape.",
+        "model": "fpv1",
+        "status": "",
+        "images": [
+          {
+            "src": "media/drones/fpv1-side.webp",
+            "alt": "Black FPV quad with red props leaning on a battery"
+          },
+          {
+            "src": "media/drones/fpv1-top.webp",
+            "alt": "First FPV quad from above, electronics exposed, arms wrapped in black and red tape"
+          },
+          {
+            "src": "media/drones/fpv1-inside.webp",
+            "alt": "Close view of the flight controller and wiring"
+          },
+          {
+            "src": "media/drones/fpv1-carpet.webp",
+            "alt": "First FPV quad on a patterned carpet"
+          },
+          {
+            "src": "media/drones/fpv1-low.webp",
+            "alt": "First FPV quad from the side"
+          },
+          {
+            "src": "media/drones/fpv1-prop.webp",
+            "alt": "Red prop close up"
+          }
+        ],
+        "video": "",
+        "link": ""
+      },
+      {
+        "name": "SpeedyBee 5-inch",
+        "text": "Mark4 frame, SpeedyBee F405 stack, tuned in Betaflight. The exploded drawing above is this one.",
+        "model": "quad5",
+        "status": "",
+        "images": [
+          {
+            "src": "media/drones/speedybee-lab.webp",
+            "alt": "Five-inch carbon quad on a lab bench next to a laptop"
+          },
+          {
+            "src": "media/clips/hover-lab.webp",
+            "alt": "A small quad hovering indoors",
+            "video": "media/clips/hover-lab.mp4"
+          },
+          {
+            "src": "media/drones/radio.webp",
+            "alt": "FlySky radio and charging cables"
+          }
+        ],
+        "video": "",
+        "link": "https://github.com/saadbinwaqas949/5-inch_FPV_SpeedyBee-F405"
+      },
+      {
         "name": "PX4 drone",
-        "text": "An autopilot build running PX4.",
+        "text": "A Pixhawk on an F450 frame, running PX4, with GPS on a mast.",
         "model": "px4",
         "status": "",
-        "images": [],
+        "images": [
+          {
+            "src": "media/drones/px4-side.webp",
+            "alt": "Red and white F450 quad with a GPS mast"
+          },
+          {
+            "src": "media/drones/px4-top.webp",
+            "alt": "F450 quad from above with Pixhawk, receiver and GPS"
+          },
+          {
+            "src": "media/drones/px4-inside.webp",
+            "alt": "Pixhawk and receiver close up"
+          }
+        ],
         "video": "",
         "link": ""
       },
       {
         "name": "Naze32 drone",
-        "text": "An earlier quad on a Naze32 flight controller.",
+        "text": "An earlier F450 build on a Naze32 flight controller.",
         "model": "naze",
         "status": "",
-        "images": [],
+        "images": [
+          {
+            "src": "media/drones/naze-top.webp",
+            "alt": "F450 quad with yellow props on a marble floor"
+          },
+          {
+            "src": "media/clips/naze-liftoff.webp",
+            "alt": "A red and white quad lifting off dry grass",
+            "video": "media/clips/naze-liftoff.mp4"
+          }
+        ],
         "video": "",
         "link": ""
       },
       {
         "name": "Commissioned drone",
-        "text": "Built to order for a client.",
-        "model": "commission",
+        "text": "A big quad, built to order for a client.",
+        "model": "longrange",
         "status": "Commission",
-        "images": [],
+        "images": [
+          {
+            "src": "media/drones/charging.webp",
+            "alt": "LiPo packs on a parallel charging board"
+          }
+        ],
         "video": "",
         "link": ""
       },
       {
-        "name": "RC plane",
-        "text": "My first plane, a trainer. The first flight is on video.",
+        "name": "RC planes",
+        "text": "Foam trainers, hand launched. Some landings went better than others.",
         "model": "plane",
         "status": "",
         "images": [
           {
-            "src": "media/drones/rc-plane.webp",
-            "alt": "Silhouette of a small RC plane high in a hazy evening sky above a line of trees"
+            "src": "media/drones/plane-hand.webp",
+            "alt": "A hand holding a dark foam RC plane"
+          },
+          {
+            "src": "media/drones/plane-crash.webp",
+            "alt": "A white foam RC plane with a broken nose"
+          },
+          {
+            "src": "media/clips/plane-launch.webp",
+            "alt": "An RC plane climbing at dusk",
+            "video": "media/clips/plane-launch.mp4"
           }
         ],
-        "video": "https://www.youtube.com/watch?v=9CpYiXKf_z8",
+        "video": "",
         "link": ""
       }
-    ]
+    ],
+    "field": {
+      "title": "Off the goggles",
+      "text": "Short cuts from flights and the bench. Change the channel.",
+      "clips": [
+        {
+          "src": "media/clips/fpv-arm.webp",
+          "alt": "View from the quad as it arms and climbs off a playing field",
+          "caption": "Armed and away",
+          "video": "media/clips/fpv-arm.mp4"
+        },
+        {
+          "src": "media/clips/fpv-carve.webp",
+          "alt": "View from the quad carving over a playing field",
+          "caption": "Carving the ground",
+          "video": "media/clips/fpv-carve.mp4"
+        },
+        {
+          "src": "media/clips/fpv-net.webp",
+          "alt": "View from the quad over trees, ending tangled in a net",
+          "caption": "Found the goal net",
+          "video": "media/clips/fpv-net.mp4"
+        },
+        {
+          "src": "media/clips/hover-lab.webp",
+          "alt": "A small quad hovering indoors over a white floor",
+          "caption": "Hover test, indoors",
+          "video": "media/clips/hover-lab.mp4"
+        },
+        {
+          "src": "media/clips/bench-pan.webp",
+          "alt": "A quad on a bench, Betaflight on a laptop, a radio and batteries",
+          "caption": "On the bench, Betaflight open",
+          "video": "media/clips/bench-pan.mp4"
+        },
+        {
+          "src": "media/clips/quad-sunset.webp",
+          "alt": "A quad silhouetted against a sunset above trees",
+          "caption": "Before dark",
+          "video": "media/clips/quad-sunset.mp4"
+        },
+        {
+          "src": "media/clips/quad-night.webp",
+          "alt": "A quad with bright LEDs lifting off grass at night",
+          "caption": "After dark",
+          "video": "media/clips/quad-night.mp4"
+        },
+        {
+          "src": "media/clips/quad-sky.webp",
+          "alt": "A quad crossing a clear evening sky",
+          "caption": "High pass",
+          "video": "media/clips/quad-sky.mp4"
+        }
+      ]
+    }
   },
   "fight": {
     "title": "Fight",
     "event": "NERC",
-    "eventLong": "National Engineering Robotics Contest, NUST, Islamabad",
+    "eventLong": "National Engineering Robotics Contest, NUST",
     "lead": "Semi-finals",
-    "text": "Two robots, one ring, first one out loses. The second time I entered, I made it to the semi-finals, against university students.",
+    "text": "Two robots, one ring, first one out loses. I have entered twice. The second robot was all metal: steel chassis, four geared motors, wide tyres.",
     "rounds": [
       {
-        "when": "July 2023",
-        "title": "First try",
-        "text": "Entered sumo and aero. Out in both.",
+        "when": "9 to 13 July 2023",
+        "title": "First entry",
+        "text": "Sumo, and the quadcopter build and fly. Out in both.",
         "result": "out"
       },
       {
-        "when": "The next time",
-        "title": "Second try",
-        "text": "Back for sumo and aero. All the way to the sumo semi-finals, against university students.",
+        "when": "19 to 21 June 2025",
+        "title": "Second entry",
+        "text": "Back with a full metal robot. All the way to the sumo semi-finals, against university students.",
         "result": "semi"
       }
     ],
@@ -327,64 +481,178 @@
       "title": "Your turn",
       "text": "Move to drive. Push the other robot out of the ring.",
       "start": "Start the bout"
-    }
+    },
+    "photosTitle": "The metal one, from plate to ring",
+    "photos": [
+      {
+        "src": "media/robots/nerc-chassis.webp",
+        "alt": "Folded black steel chassis plates with bolt holes",
+        "caption": "Steel chassis"
+      },
+      {
+        "src": "media/robots/nerc-bench.webp",
+        "alt": "Four gear motors standing on a steel chassis",
+        "caption": "Four geared motors"
+      },
+      {
+        "src": "media/robots/nerc-hand.webp",
+        "alt": "The motor block held up over a workbench",
+        "caption": "The motor block"
+      },
+      {
+        "src": "media/robots/nerc-motors.webp",
+        "alt": "The finished drive base with chunky tyres",
+        "caption": "Wheels on"
+      },
+      {
+        "src": "media/clips/nerc-ring.webp",
+        "alt": "Sumo robots on a red ring, filmed from above",
+        "caption": "On the ring",
+        "video": "media/clips/nerc-ring.mp4"
+      },
+      {
+        "src": "media/clips/nerc-bout.webp",
+        "alt": "A box-shaped sumo robot pushing another off a red ring",
+        "caption": "Out it goes",
+        "video": "media/clips/nerc-bout.mp4"
+      }
+    ]
   },
   "follow": {
-    "title": "Follow lines",
+    "title": "Build",
     "intro": "Small robots with one job each. They are all live: move your cursor near them.",
     "robots": [
       {
         "name": "Line follower",
         "text": "Reads a black line with infrared sensors and steers to stay on it.",
         "model": "line",
-        "note": "Entered at both RobotMEA conferences"
+        "note": "Entered at both RobotMEA events",
+        "images": [
+          {
+            "src": "media/robots/line.webp",
+            "alt": "Line follower close up, wires and sensor board"
+          },
+          {
+            "src": "media/robots/line-test.webp",
+            "alt": "Hands setting a line follower on a black line"
+          }
+        ]
       },
       {
         "name": "Obstacle avoider",
-        "text": "Looks ahead, finds the wall, turns away. Try to get in front of it.",
+        "text": "Looks ahead with ultrasound, finds the wall, turns away. Try to get in front of it.",
         "model": "avoid",
-        "note": ""
+        "note": "",
+        "images": [
+          {
+            "src": "media/robots/avoid.webp",
+            "alt": "Four-wheeled robot with an ultrasonic sensor head"
+          },
+          {
+            "src": "media/robots/avoid-top.webp",
+            "alt": "The obstacle avoider from above"
+          }
+        ]
       },
       {
         "name": "Soccer bot",
         "text": "Popsicle sticks, cardboard arms and a ball. Driven from a phone.",
         "model": "soccer",
-        "note": "Won RoboSoccer, RobotMEA"
+        "note": "Won RoboSoccer, RobotMEA",
+        "images": [
+          {
+            "src": "media/robots/soccer.webp",
+            "alt": "Soccer bot from above"
+          },
+          {
+            "src": "media/clips/soccer-drive.webp",
+            "alt": "The soccer bot driving on a marble floor",
+            "video": "media/clips/soccer-drive.mp4"
+          }
+        ]
       },
       {
         "name": "Bluetooth car",
         "text": "Remote control over Bluetooth. Press and hold to drive it.",
         "model": "bluetooth",
-        "note": ""
+        "note": "",
+        "images": [
+          {
+            "src": "media/robots/table-floor.webp",
+            "alt": "Quad, plane, line follower and cardboard robots laid out on the floor"
+          }
+        ]
       },
       {
         "name": "Sumo robot, v1",
-        "text": "The first attempt.",
+        "text": "A card body, geared motors, and rubber bands on the wheels for grip.",
         "model": "sumo1",
-        "note": ""
+        "note": "",
+        "images": [
+          {
+            "src": "media/robots/sumo1.webp",
+            "alt": "Black box robot with yellow wheels wrapped in rubber bands"
+          },
+          {
+            "src": "media/robots/sumo1-shelf.webp",
+            "alt": "The first sumo robot on a shelf"
+          }
+        ]
       },
       {
         "name": "Sumo robot, v2",
-        "text": "The rebuild.",
+        "text": "Rebuilt in metal, with more power. The scars are real.",
         "model": "sumo2",
-        "note": ""
+        "note": "Won Sumo War, TechBlitz",
+        "images": [
+          {
+            "src": "media/robots/sumo2.webp",
+            "alt": "Red and black metal sumo robot with a scraped front"
+          },
+          {
+            "src": "media/robots/sumo2-top.webp",
+            "alt": "The metal sumo body from above"
+          }
+        ]
+      },
+      {
+        "name": "Walking robot",
+        "text": "Tiny. It does one thing, and that thing is walking.",
+        "model": "walker",
+        "note": "",
+        "images": []
       }
     ],
     "photos": [
       {
-        "src": "media/photos/soccer-bot-hands.webp",
-        "alt": "Hands holding a four-wheeled robot made of wood sticks and cardboard",
-        "caption": "Popsicle sticks and cardboard"
+        "src": "media/robots/family.webp",
+        "alt": "Drones and robots of every size on one table",
+        "caption": "Most of the family"
       },
       {
-        "src": "media/events/soccer-match.webp",
-        "alt": "Saad driving a robot on a green soccer pitch in front of a crowd",
-        "caption": "RoboSoccer, RobotMEA"
+        "src": "media/robots/table.webp",
+        "alt": "Line follower, quad and RC plane on a blue table",
+        "caption": "Exhibition table"
       },
       {
-        "src": "media/events/project-table.webp",
-        "alt": "Exhibition table with a quadcopter, a soccer bot and other robots",
-        "caption": "Project exhibition table"
+        "src": "media/robots/code.webp",
+        "alt": "Code on a laptop below a half-built robot",
+        "caption": "Arduino code, robot waiting"
+      },
+      {
+        "src": "media/drones/lab.webp",
+        "alt": "A lab bench with a quad, laptop and parts boxes",
+        "caption": "The lab bench"
+      },
+      {
+        "src": "media/drones/packs.webp",
+        "alt": "Five LiPo packs and a charger",
+        "caption": "Charging for tomorrow"
+      },
+      {
+        "src": "media/robots/shelf.webp",
+        "alt": "Shelves full of parts",
+        "caption": "The parts shelf"
       }
     ]
   },
@@ -536,7 +804,7 @@
     ]
   },
   "ship": {
-    "title": "Ship",
+    "title": "Automate",
     "intro": "Software for people in Pakistan who sell things and need them to arrive.",
     "codshield": {
       "name": "CODShield",
@@ -638,27 +906,167 @@
   },
   "chimera": {
     "title": "Chimera",
-    "teaser": "Still taped shut. The story and the photos come out soon.",
-    "open": false,
-    "story": "",
-    "images": [],
+    "teaser": "One machine that drives, floats, flies and hovers.",
+    "open": true,
+    "story": "A car, a boat, a plane and a quadcopter, in one airframe. It got as far as a full CAD model and a Gazebo run. It did not get built, because the money ran out before the parts list did.",
+    "images": [
+      {
+        "src": "media/chimera/sketch.webp",
+        "alt": "Dimensioned Onshape sketch of the airframe",
+        "caption": "The first sketch"
+      },
+      {
+        "src": "media/chimera/render-front.webp",
+        "alt": "CAD render from the front",
+        "caption": "April, front"
+      },
+      {
+        "src": "media/chimera/render-back.webp",
+        "alt": "CAD render from behind",
+        "caption": "April, back"
+      },
+      {
+        "src": "media/chimera/render-wheels.webp",
+        "alt": "CAD render with wheels under the front arms",
+        "caption": "Wheels"
+      },
+      {
+        "src": "media/chimera/render-drums.webp",
+        "alt": "CAD render with large drums under the wing",
+        "caption": "Drums that float"
+      },
+      {
+        "src": "media/chimera/pod-front.webp",
+        "alt": "CAD render with a central pod",
+        "caption": "October, with the pod"
+      },
+      {
+        "src": "media/chimera/pod-back.webp",
+        "alt": "CAD render from above and behind",
+        "caption": "October, back"
+      },
+      {
+        "src": "media/chimera/plan.webp",
+        "alt": "CAD plan view",
+        "caption": "Plan view"
+      }
+    ],
     "link": {
       "label": "",
       "url": ""
-    }
+    },
+    "status": "Not finished",
+    "modes": [
+      {
+        "id": "car",
+        "title": "Car",
+        "text": "Drums down, rotors idle. It drives itself to where it is needed and burns almost nothing doing it."
+      },
+      {
+        "id": "boat",
+        "title": "Boat",
+        "text": "Floats under the booms, front rotors leaned forward. Water stops being an edge on the map."
+      },
+      {
+        "id": "plane",
+        "title": "Plane",
+        "text": "Front rotors tilt all the way, the wing takes the weight, and the range goes up."
+      },
+      {
+        "id": "quad",
+        "title": "Quadcopter",
+        "text": "Rotors up. Straight off a rooftop, then it stays exactly where you tell it to."
+      }
+    ],
+    "uses": [
+      "Flood rescue",
+      "Survey",
+      "Delivery",
+      "Search at night",
+      "Inspection",
+      "Filming",
+      "Farm scouting",
+      "Whatever is next"
+    ],
+    "stats": [
+      {
+        "value": "1600 mm",
+        "label": "wingspan"
+      },
+      {
+        "value": "1180 mm",
+        "label": "nose to tail"
+      },
+      {
+        "value": "230 mm",
+        "label": "chord"
+      },
+      {
+        "value": "3",
+        "label": "rotors, two that tilt"
+      },
+      {
+        "value": "4",
+        "label": "ways to move"
+      }
+    ],
+    "chapters": [
+      {
+        "when": "The question",
+        "title": "Why carry four machines?",
+        "text": "Every job had its own vehicle, and each one was useless the moment the ground changed. The idea was to build the one that did not care.",
+        "result": ""
+      },
+      {
+        "when": "13 April 2026",
+        "title": "First lines",
+        "text": "The document in Onshape is called Mini_VTOL. The first sketch fixed the numbers: a 1.6 metre wing, booms 750 mm apart, a 900 mm tail, three motor mounts.",
+        "result": ""
+      },
+      {
+        "when": "14 April 2026",
+        "title": "It gets a body",
+        "text": "Aerofoil wing, two booms, twin fins. The front arms rotate so the same motors lift and pull. Hollow drums went on as wheels, big enough to float.",
+        "result": ""
+      },
+      {
+        "when": "Gazebo",
+        "title": "It meets gravity",
+        "text": "The airframe went into Gazebo to see how it sat and where it wanted to tip. The centre of mass moved more than once.",
+        "result": ""
+      },
+      {
+        "when": "4 October 2026",
+        "title": "The last version",
+        "text": "A pod in the middle for the battery and cargo, cleaner joints, and a plan view that finally looked like an aircraft.",
+        "result": ""
+      },
+      {
+        "when": "The bill",
+        "title": "Then we priced it",
+        "text": "Motors, speed controllers, packs, carbon tube, servos strong enough to tilt a spinning rotor. No cheaper list could still do all four jobs, so we stopped.",
+        "result": "out"
+      },
+      {
+        "when": "What stayed",
+        "title": "The crate is not empty",
+        "text": "The CAD, the Gazebo model, and a very clear idea of what four jobs cost. If the budget turns up, so does Chimera.",
+        "result": ""
+      }
+    ]
   },
   "log": {
     "title": "Won some, lost some",
     "intro": "Every competition, conference and science fair so far, including the ones that went badly.",
     "events": [
       {
-        "title": "NERC, second try",
-        "host": "NUST, Islamabad",
-        "date": "",
+        "title": "NERC '25",
+        "host": "NUST College of E&ME, Rawalpindi",
+        "date": "19 to 21 June 2025",
         "importance": 3,
         "kind": "semi",
         "result": "Sumo semi-finals",
-        "text": "Sumo and aero again. Reached the sumo semi-finals against university students.",
+        "text": "Second time at the National Engineering Robotics Contest, with a full metal robot. Reached the sumo semi-finals against university students.",
         "entries": [
           {
             "name": "Sumo",
@@ -671,20 +1079,130 @@
             "kind": "part"
           }
         ],
-        "photos": [],
+        "photos": [
+          {
+            "src": "media/clips/nerc-ring.webp",
+            "alt": "Sumo robots on a red ring",
+            "caption": "Round one",
+            "video": "media/clips/nerc-ring.mp4"
+          },
+          {
+            "src": "media/events/nerc25-cert.webp",
+            "alt": "Heading of the NERC '25 certificate",
+            "caption": "NERC '25"
+          },
+          {
+            "src": "media/robots/nerc-motors.webp",
+            "alt": "Drive base of the metal sumo robot",
+            "caption": "The drive base"
+          }
+        ],
         "video": ""
       },
       {
-        "title": "2nd EdTech Conference 4.0",
-        "host": "RobotMEA, Islamabad",
-        "date": "9–10 June 2023",
+        "title": "Scienject 6.0",
+        "host": "LGS Senior School, Gulberg. With CETC",
+        "date": "2026",
         "importance": 3,
         "kind": "won",
-        "result": "Won sumo, Emerging Star Award",
-        "text": "Won the sumo competition. Took the Emerging Star Award, a gold medal and a cash prize for doing every project on my own, without a teacher's help. The line follower lost.",
+        "result": "First place, Avionix",
+        "text": "Three rounds. Our truss bridge held more than 33 kg, until they ran out of weights. Our glider flew the furthest. Then we pitched a new aircraft.",
         "entries": [
           {
-            "name": "Sumo",
+            "name": "Truss bridge",
+            "result": "33 kg and up",
+            "kind": "won"
+          },
+          {
+            "name": "Glider",
+            "result": "Furthest",
+            "kind": "won"
+          },
+          {
+            "name": "Proposal",
+            "result": "Pitched",
+            "kind": "award"
+          }
+        ],
+        "photos": [
+          {
+            "src": "media/events/scienject-shield.webp",
+            "alt": "Glass shield: Scienject 6.0, Avionix winner",
+            "caption": "Avionix winner"
+          },
+          {
+            "src": "media/events/scienject-bridge.webp",
+            "alt": "A stick truss bridge holding a tall stack of weights",
+            "caption": "33 kg on sticks"
+          },
+          {
+            "src": "media/events/scienject-glider.webp",
+            "alt": "A hand holding a cardboard glider",
+            "caption": "The glider"
+          },
+          {
+            "src": "media/events/scienject-badge.webp",
+            "alt": "Scienject 6.0 delegate badge, team CETC",
+            "caption": "Team CETC"
+          }
+        ],
+        "video": ""
+      },
+      {
+        "title": "TechBlitz 1.0",
+        "host": "RobotMEA and CETC, Lahore",
+        "date": "1 February 2025",
+        "importance": 3,
+        "kind": "won",
+        "result": "Won Sumo War",
+        "text": "Sumo War champions, and runners-up in Robo Race on the same day.",
+        "entries": [
+          {
+            "name": "Sumo War",
+            "result": "Won",
+            "kind": "won"
+          },
+          {
+            "name": "Robo Race",
+            "result": "Runner-up",
+            "kind": "award"
+          }
+        ],
+        "photos": [
+          {
+            "src": "media/events/techblitz-medals.webp",
+            "alt": "Two medals: Robo Race runner-up and Sumo War champion",
+            "caption": "Both medals"
+          },
+          {
+            "src": "media/events/techblitz-shield.webp",
+            "alt": "Glass shield: Sumo War champions",
+            "caption": "Sumo War"
+          },
+          {
+            "src": "media/robots/sumo2.webp",
+            "alt": "Red and black metal sumo robot",
+            "caption": "The winner"
+          },
+          {
+            "src": "media/events/techblitz-runner.webp",
+            "alt": "Glass shield: Robo Race runners-up",
+            "caption": "Robo Race"
+          }
+        ],
+        "video": ""
+      },
+      {
+        "title": "International EdTech Conference 4.0",
+        "host": "RobotMEA, Islamabad",
+        "date": "9 and 10 June 2023",
+        "importance": 3,
+        "kind": "won",
+        "result": "Won Robo Sumo, Emerging Star Award",
+        "text": "Won Robo Sumo and its cash prize, and was given the Emerging Star Award. The line follower lost.",
+        "entries": [
+          {
+            "name": "Robo Sumo",
             "result": "Won",
             "kind": "won"
           },
@@ -701,27 +1219,31 @@
         ],
         "photos": [
           {
-            "src": "media/events/emerging-star.webp",
-            "alt": "Saad receiving the Emerging Star Award on stage",
-            "caption": "Emerging Star Award"
+            "src": "media/events/robotmea2-cheque.webp",
+            "alt": "A large prize cheque: Robo Sumo champions",
+            "caption": "Robo Sumo prize"
           },
           {
-            "src": "media/events/gold-medal.webp",
-            "alt": "Saad smiling, wearing a gold medal",
-            "caption": "Gold medal",
-            "focus": "top"
+            "src": "media/events/robotmea2-star.webp",
+            "alt": "Heading of the Emerging Star Award certificate",
+            "caption": "Emerging Star"
+          },
+          {
+            "src": "media/events/robotmea2-sumo.webp",
+            "alt": "Heading of the Robo Sumo champions certificate",
+            "caption": "Robo Sumo"
           }
         ],
-        "video": "https://www.youtube.com/watch?v=m9tk_-sLkLY"
+        "video": ""
       },
       {
-        "title": "1st EdTech Conference 4.0",
-        "host": "RobotMEA",
-        "date": "9–11 February 2023",
+        "title": "EdTech Conference 4.0",
+        "host": "RobotMEA, Shadman, Lahore",
+        "date": "9 to 11 February 2023",
         "importance": 3,
         "kind": "won",
         "result": "Won RoboSoccer",
-        "text": "Entered four categories with robots built from popsicle sticks and cardboard. Won RoboSoccer, a gold medal and a cash prize.",
+        "text": "Entered four categories with robots made of popsicle sticks and cardboard. Won RoboSoccer, a gold medal and a cash prize.",
         "entries": [
           {
             "name": "RoboSoccer",
@@ -746,59 +1268,84 @@
         ],
         "photos": [
           {
-            "src": "media/events/soccer-final.webp",
-            "alt": "Two small robots facing off on a green soccer pitch",
-            "caption": "The final"
+            "src": "media/events/robotmea1-pitch.webp",
+            "alt": "Two small robots beside a model pitch and ramp",
+            "caption": "The pitch"
           },
           {
-            "src": "media/events/soccer-match.webp",
-            "alt": "Saad driving his robot on the pitch",
-            "caption": "Match day"
+            "src": "media/events/robotmea1-kit.webp",
+            "alt": "Hands building a kit robot on a table",
+            "caption": "Theme solver"
+          },
+          {
+            "src": "media/events/medals.webp",
+            "alt": "Three gold medals on blue ribbons",
+            "caption": "Three of them"
+          },
+          {
+            "src": "media/events/robotmea1-cert.webp",
+            "alt": "Heading of the soccer bot champions certificate",
+            "caption": "Champions"
           }
         ],
-        "video": "https://www.youtube.com/watch?v=VzVq7XrDFXI"
+        "video": ""
+      },
+      {
+        "title": "Race Pakistan 2027",
+        "host": "Expo Centre Karachi",
+        "date": "30 and 31 January 2027",
+        "importance": 2,
+        "kind": "next",
+        "result": "Coming up",
+        "text": "A CO2 race car, a portfolio, a pitch and a track.",
+        "entries": [],
+        "photos": [
+          {
+            "src": "media/clips/cad-spokes.webp",
+            "alt": "Onshape: a five-spoke wheel",
+            "caption": "In CAD now",
+            "video": "media/clips/cad-spokes.mp4"
+          }
+        ],
+        "video": ""
       },
       {
         "title": "SOFTEC'23",
         "host": "FAST NUCES, Lahore",
-        "date": "5–7 May 2023",
+        "date": "5 to 7 May 2023",
         "importance": 2,
         "kind": "award",
         "result": "Youngest Participant Award",
-        "text": "Showed a drone at the Electronic Project Competition, a university event.",
-        "entries": [
-          {
-            "name": "Electronic Project Competition",
-            "result": "Youngest participant",
-            "kind": "award"
-          }
-        ],
+        "text": "Showed a medicine delivery drone, an RC drone, an RC plane, a phone-controlled car and a line follower at the Engineering Project Competition, next to university students.",
+        "entries": [],
         "photos": [
           {
-            "src": "media/events/softec.webp",
-            "alt": "Saad presenting a drone to a judge",
-            "caption": "Electronic Project Competition",
-            "focus": "top"
+            "src": "media/events/softec-badge.webp",
+            "alt": "Yellow SOFTEC '23 participant badge",
+            "caption": "EPC, SOFTEC '23"
+          },
+          {
+            "src": "media/events/softec-cert.webp",
+            "alt": "Heading of the SOFTEC '23 certificate"
           }
         ],
-        "video": "https://www.youtube.com/watch?v=AqFxCebpFJY"
+        "video": ""
       },
       {
-        "title": "LGS",
-        "host": "With CETC",
-        "date": "",
+        "title": "PsiFi XVII",
+        "host": "SPADES, LUMS, Lahore",
+        "date": "26 to 29 December 2025",
         "importance": 2,
-        "kind": "won",
-        "result": "Won aero",
-        "text": "Second time at LGS with CETC.",
-        "entries": [
+        "kind": "part",
+        "result": "Took part",
+        "text": "",
+        "entries": [],
+        "photos": [
           {
-            "name": "Aero",
-            "result": "Won",
-            "kind": "won"
+            "src": "media/events/psifi.webp",
+            "alt": "Black PsiFi XVII certificate"
           }
         ],
-        "photos": [],
         "video": ""
       },
       {
@@ -812,28 +1359,32 @@
         "entries": [],
         "photos": [
           {
-            "src": "media/events/italian-flight.webp",
-            "alt": "Saad with a transmitter watching his drone while a visitor films it",
-            "caption": "In the air"
+            "src": "media/events/italian-drone.webp",
+            "alt": "Hands holding a quad while someone films it"
           }
         ],
-        "video": "https://www.youtube.com/watch?v=xbyuHm1sTJ4"
-      },
-      {
-        "title": "NERC, first try",
-        "host": "NUST, Islamabad",
-        "date": "9–13 July 2023",
-        "importance": 1,
-        "kind": "out",
-        "result": "Out in sumo and aero",
-        "text": "Sumo robot, and the quadcopter build-and-fly competition.",
-        "entries": [],
-        "photos": [],
         "video": ""
       },
       {
-        "title": "LGS",
-        "host": "With CETC",
+        "title": "NERC 2023",
+        "host": "NUST",
+        "date": "9 to 13 July 2023",
+        "importance": 2,
+        "kind": "out",
+        "result": "Out in sumo and aero",
+        "text": "First try: the sumo robot, and the quadcopter build and fly competition.",
+        "entries": [],
+        "photos": [
+          {
+            "src": "media/events/nerc23-badge.webp",
+            "alt": "Part of a NERC 2023 participant badge"
+          }
+        ],
+        "video": ""
+      },
+      {
+        "title": "LGS, with CETC",
+        "host": "Lahore Grammar School",
         "date": "",
         "importance": 1,
         "kind": "part",
@@ -844,15 +1395,20 @@
         "video": ""
       },
       {
-        "title": "Lahore Science Mela",
-        "host": "Crescent Model School, Shadman",
-        "date": "2023",
+        "title": "Lahore Science Mela 2023",
+        "host": "Khwarizmi Science Society, Crescent Model School, Shadman",
+        "date": "28 and 29 October 2023",
         "importance": 1,
         "kind": "part",
         "result": "Exhibited projects",
         "text": "",
         "entries": [],
-        "photos": [],
+        "photos": [
+          {
+            "src": "media/robots/family.webp",
+            "alt": "Drones and robots on one table"
+          }
+        ],
         "video": ""
       },
       {
@@ -864,19 +1420,29 @@
         "result": "Exhibited projects",
         "text": "",
         "entries": [],
-        "photos": [],
+        "photos": [
+          {
+            "src": "media/robots/table.webp",
+            "alt": "Line follower, quad and RC plane on a table"
+          }
+        ],
         "video": ""
       },
       {
-        "title": "Al-Khawarizmi Science Mela",
-        "host": "Divisional Public School, Model Town, Lahore",
-        "date": "29–30 October 2022",
+        "title": "Lahore Science Mela 2022",
+        "host": "Khwarizmi Science Society, Divisional Public School, Model Town",
+        "date": "29 and 30 October 2022",
         "importance": 1,
         "kind": "part",
         "result": "Exhibited projects",
         "text": "",
         "entries": [],
-        "photos": [],
+        "photos": [
+          {
+            "src": "media/events/mela22-cert.webp",
+            "alt": "Heading of the Lahore Science Mela 2022 certificate"
+          }
+        ],
         "video": ""
       }
     ]
@@ -888,12 +1454,42 @@
       {
         "name": "Flight",
         "items": [
+          "FPV",
+          "PX4",
+          "Betaflight",
+          "iNav",
           "Drone building",
           "Drone piloting",
-          "Betaflight",
-          "PX4",
           "Naze32",
-          "BLHeli_32"
+          "BLHeli_32",
+          "RC planes",
+          "OSD and rates",
+          "Failsafe setup",
+          "LiPo care"
+        ]
+      },
+      {
+        "name": "Design",
+        "items": [
+          "Onshape",
+          "Blender",
+          "SOLIDWORKS",
+          "Aerodynamics",
+          "CAD",
+          "3D modelling",
+          "Aerofoils",
+          "Truss design",
+          "Gliders",
+          "Technical sketches"
+        ]
+      },
+      {
+        "name": "Simulation",
+        "items": [
+          "Gazebo",
+          "DRL Simulator",
+          "TRYP FPV",
+          "Orqa FPV.SkyDive"
         ]
       },
       {
@@ -902,14 +1498,13 @@
           "Arduino",
           "Soldering",
           "L298N",
-          "CAD",
-          "Blender"
-        ]
-      },
-      {
-        "name": "Games",
-        "items": [
-          "Unity"
+          "Sensors",
+          "Motor drivers",
+          "Bluetooth control",
+          "Servos",
+          "Wiring",
+          "Metal chassis",
+          "Power distribution"
         ]
       },
       {
@@ -917,25 +1512,78 @@
         "items": [
           "Python",
           "FastAPI",
-          "PostgreSQL",
           "TypeScript",
           "Next.js",
-          "Supabase"
+          "PostgreSQL",
+          "Supabase",
+          "React",
+          "Arduino C++",
+          "pytest",
+          "Row level security",
+          "Cloudflare",
+          "Git and GitHub"
+        ]
+      },
+      {
+        "name": "Automation",
+        "items": [
+          "AI agents",
+          "Gemini API",
+          "WhatsApp",
+          "Twilio",
+          "Background workers",
+          "Risk scoring",
+          "Email alerts"
+        ]
+      },
+      {
+        "name": "Games",
+        "items": [
+          "Unity",
+          "C#",
+          "Game jams",
+          "Level design",
+          "itch.io publishing"
+        ]
+      },
+      {
+        "name": "People",
+        "items": [
+          "Teamwork",
+          "Presenting",
+          "Pitching",
+          "Digital marketing",
+          "Social media",
+          "Brand ambassador, Aslase"
         ]
       }
     ],
     "courses": [
       {
-        "name": "Scout training, Ghora Gali",
-        "date": "2022 and 2023"
+        "name": "ICS, computer science, Crescent College Lahore",
+        "date": "2025 to 2027"
       },
       {
-        "name": "Exploring identity and inner voice through movement",
-        "date": "26–27 December 2022"
+        "name": "Scout rallies, Ghora Gali",
+        "date": "June 2022 and June 2023"
       },
       {
-        "name": "Essentials of Dialogue",
-        "date": "7 November 2022"
+        "name": "Exploring identity and inner voice through movement, Seeds of Peace",
+        "date": "26 and 27 December 2022"
+      },
+      {
+        "name": "Essentials of Dialogue, Seeds of Peace",
+        "date": "November 2022"
+      }
+    ],
+    "photos": [
+      {
+        "src": "media/events/scouts23.webp",
+        "alt": "Heading of the 39th All Punjab Shaheen Scouts Rally certificate"
+      },
+      {
+        "src": "media/events/dialogue.webp",
+        "alt": "Essentials of Dialogue certificate"
       }
     ]
   },
@@ -945,18 +1593,159 @@
       "title": "The battery incident",
       "text": "A 3S 5000 mAh LiPo was already dead, so I overcharged it outside to see what would happen. This happened. Not a recommended way to retire a battery.",
       "image": {
-        "src": "media/photos/lipo.webp",
-        "alt": "A LiPo battery burning on a rooftop"
+        "src": "media/clips/lipo.webp",
+        "alt": "A LiPo battery burning on a rooftop",
+        "video": "media/clips/lipo.mp4"
       },
-      "video": "https://www.youtube.com/watch?v=FQHk3KlbsUY"
+      "video": ""
     }
   },
   "contact": {
     "title": "Say hi",
-    "text": "Need a drone built, a robot fixed or a game made? Write to me.",
+    "text": "Need a drone built, a part modelled, a robot fixed or a job automated? Write to me.",
     "button": "Copy email",
     "copied": "Copied. Talk soon.",
-    "footer": "Built on a cutting mat in Lahore."
+    "footer": "Built on a bench in Lahore. Cats supervised."
   },
-  "custom": []
+  "custom": [],
+  "sim": {
+    "title": "Simulate",
+    "intro": "Crashing is free in the simulator, so that is where the hours go.",
+    "main": "DRL Simulator",
+    "mainText": "Most of my stick time. Four cuts from one run.",
+    "others": [
+      "TRYP FPV",
+      "Orqa FPV.SkyDive"
+    ],
+    "othersText": "Also flown, along with a few more.",
+    "clips": [
+      {
+        "src": "media/clips/drl-dive.webp",
+        "alt": "DRL Simulator: a stairwell, then a gate",
+        "caption": "Stairwell to gate",
+        "video": "media/clips/drl-dive.mp4"
+      },
+      {
+        "src": "media/clips/drl-stadium.webp",
+        "alt": "DRL Simulator: out of a tunnel into a stadium",
+        "caption": "Tunnel into the stadium",
+        "video": "media/clips/drl-stadium.mp4"
+      },
+      {
+        "src": "media/clips/drl-spiral.webp",
+        "alt": "DRL Simulator: a spiral ramp",
+        "caption": "Down the spiral",
+        "video": "media/clips/drl-spiral.mp4"
+      },
+      {
+        "src": "media/clips/drl-tunnel.webp",
+        "alt": "DRL Simulator: gates and a long tunnel",
+        "caption": "The long tunnel",
+        "video": "media/clips/drl-tunnel.mp4"
+      }
+    ],
+    "gazebo": {
+      "title": "Gazebo",
+      "text": "For my own airframes I use Gazebo. This is Chimera, loaded in and about to find out what gravity does.",
+      "image": {
+        "src": "media/chimera/gazebo.webp",
+        "alt": "A wing with two booms and a tail on a grid in Gazebo Sim"
+      }
+    },
+    "game": {
+      "title": "Your turn",
+      "text": "Steer through the gates."
+    }
+  },
+  "race": {
+    "title": "Race",
+    "event": "Race Pakistan 2027",
+    "status": "Competing",
+    "date": "30 and 31 January 2027",
+    "iso": "2027-01-30T09:00:00+05:00",
+    "place": "Expo Centre Karachi",
+    "link": {
+      "label": "racepakistan.com",
+      "url": "https://www.racepakistan.com/"
+    },
+    "lead": "A race car the length of a hand, pushed by one CO2 cartridge. Air is the whole problem.",
+    "text": "Race Pakistan is a national student competition: design a miniature car, machine it, defend it in front of judges, then race it down a 20 metre track. My team is in for 2027, and the car is being drawn in Onshape.",
+    "stand": "Drawn to the 2027 rules. The real one is still in CAD.",
+    "launch": "Launch",
+    "stats": [
+      {
+        "value": "20 m",
+        "label": "straight track"
+      },
+      {
+        "value": "12 g",
+        "label": "of CO2, one shot"
+      },
+      {
+        "value": "50 g",
+        "label": "lightest car allowed"
+      },
+      {
+        "value": "210 mm",
+        "label": "longest"
+      },
+      {
+        "value": "85 mm",
+        "label": "widest"
+      }
+    ],
+    "clips": [
+      {
+        "src": "media/clips/cad-spokes.webp",
+        "alt": "Onshape: a five-spoke wheel being modelled",
+        "caption": "Custom wheel, five curved spokes",
+        "video": "media/clips/cad-spokes.mp4"
+      },
+      {
+        "src": "media/clips/cad-wheel.webp",
+        "alt": "Onshape: a three-spoke wheel being modelled",
+        "caption": "First wheel, three spokes",
+        "video": "media/clips/cad-wheel.mp4"
+      },
+      {
+        "src": "media/clips/cad-co2.webp",
+        "alt": "Onshape: a CO2 cartridge being modelled",
+        "caption": "The CO2 cartridge, so its chamber fits",
+        "video": "media/clips/cad-co2.mp4"
+      },
+      {
+        "src": "media/clips/cad-cargo.webp",
+        "alt": "Onshape: a wedge-shaped block being modelled",
+        "caption": "The virtual cargo every body has to hide",
+        "video": "media/clips/cad-cargo.mp4"
+      }
+    ],
+    "judged": [
+      {
+        "value": "300",
+        "label": "Racing"
+      },
+      {
+        "value": "200",
+        "label": "Engineering presentation"
+      },
+      {
+        "value": "200",
+        "label": "Business presentation"
+      },
+      {
+        "value": "100",
+        "label": "Engineering portfolio"
+      },
+      {
+        "value": "100",
+        "label": "Business portfolio"
+      },
+      {
+        "value": "50",
+        "label": "Paddock"
+      }
+    ],
+    "judgedTitle": "950 points, and only 300 are for speed"
+  }
 }

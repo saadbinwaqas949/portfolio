@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSite } from '../content';
 import { batchTriggers } from '../lib/hooks';
-import { gsap, holdScroll, onIntro, scrollToId, ScrollTrigger } from '../lib/motion';
+import { gsap, holdScroll, onIntro, reduced, scrollToId, ScrollTrigger } from '../lib/motion';
+import { isLight, onTheme, toggleTheme } from '../lib/theme';
 import { whenWorld } from '../world/World';
 
-/** Pull-cord switch for the ceiling light. Drag it or click it. */
+/** Pull cord: switches between the night bench and the day bench. Drag it or click it. */
 function Cord() {
   const root = useRef<HTMLButtonElement>(null);
-  const [on, setOn] = useState(false);
-  const live = useRef(false);
+  const [on, setOn] = useState(isLight());
 
   useEffect(() => {
     const el = root.current!;
@@ -23,10 +23,10 @@ function Cord() {
     let moved = 0;
 
     const toggle = () => {
-      live.current = !live.current;
-      setOn(live.current);
-      document.documentElement.classList.toggle('lights-on', live.current);
-      whenWorld((w) => gsap.to(w.room, { v: live.current ? 1 : 0, duration: live.current ? 0.9 : 0.6, ease: live.current ? 'rough({strength:1.4,points:14,clamp:true})' : 'power2.out' }));
+      const r = el.getBoundingClientRect();
+      toggleTheme(r.left + 40 + s.x, s.y + 14, reduced());
+      // the lamp on the desk notices
+      whenWorld((w) => gsap.fromTo(w.lampPower, { v: 0.25 }, { v: 1, duration: 0.9, delay: 0.1, ease: 'rough({strength:1.2,points:10,clamp:true})', overwrite: true }));
     };
 
     const draw = () => {
@@ -48,6 +48,7 @@ function Cord() {
       if (Math.abs(s.vx) + Math.abs(s.vy) + Math.abs(s.x) + Math.abs(s.y - REST) > 0.02) draw();
     };
     gsap.ticker.add(tick);
+    const off = onTheme(setOn);
 
     const down = (e: PointerEvent) => {
       held = true;
@@ -95,6 +96,7 @@ function Cord() {
     el.addEventListener('keydown', key);
     return () => {
       gsap.ticker.remove(tick);
+      off();
       el.removeEventListener('pointerdown', down);
       el.removeEventListener('pointermove', move);
       el.removeEventListener('pointerup', up);
@@ -104,12 +106,16 @@ function Cord() {
   }, []);
 
   return (
-    <button ref={root} className="cord" type="button" aria-pressed={on} aria-label="Ceiling light" data-nolock data-cursor="Pull">
+    <button ref={root} className="cord" type="button" aria-pressed={on} aria-label={on ? 'Switch to dark mode' : 'Switch to light mode'} data-nolock data-cursor={on ? 'Dark' : 'Light'}>
       <svg viewBox="0 0 80 170" aria-hidden>
         <path d="M40 -10V74" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         <g>
-          <path d="M-5 0h10l3 10-2 16a6 6 0 0 1-12 0l-2-16z" fill="#ffc21a" />
-          <path d="M-5 0h10l1.4 5h-12.8z" fill="#ffe39a" />
+          {/* a moon by night, a lit bulb by day: it shows what you have */}
+          <path className="cord-moon" d="M4 2a13 13 0 1 0 9 21A10.5 10.5 0 1 1 4 2z" />
+          <g className="cord-sun">
+            <path d="M0 -1v-6M0 35v6M-18 17h-6M18 17h6M-13 4l-4-4M13 30l4 4M13 4l4-4M-13 30l-4 4" />
+            <circle cx="0" cy="17" r="11" />
+          </g>
         </g>
       </svg>
     </button>

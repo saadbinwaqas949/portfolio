@@ -112,7 +112,115 @@ export function rbox(w: number, h: number, d: number, r: number, mat: Mat, x = 0
 /** A wire through a list of points. */
 export function wire(pts: [number, number, number][], mat: Mat, r = 1.1, seg = 28) {
   const curve = new THREE.CatmullRomCurve3(pts.map((p) => new THREE.Vector3(...p)));
-  return mesh(new THREE.TubeGeometry(curve, seg, r, 6, false), mat);
+  const g = new THREE.TubeGeometry(curve, seg, r, 6, false);
+  // a wire is drawn as one stroke, not as six facets
+  const line: number[] = [];
+  const c = curve.getPoints(seg);
+  for (let i = 0; i < seg; i++) line.push(c[i].x, c[i].y, c[i].z + r, c[i + 1].x, c[i + 1].y, c[i + 1].z + r);
+  edgeCache.set(g, new Float32Array(line));
+  g.userData.wire = true;
+  return mesh(g, mat);
+}
+
+// ---- the line drawing -------------------------------------------------------
+// Every model carries its own drawing: its hard edges as thin glowing strokes.
+// In the dark that drawing is all you see (the unlit body still hides the lines
+// behind it). Where the lamp falls the strokes fade and the real thing shows.
+const edgeCache = new WeakMap<THREE.BufferGeometry, Float32Array>();
+
+/** Hard edges of a geometry as a flat list of segment end points. */
+export function edgesOf(g: THREE.BufferGeometry, angle = 34): Float32Array {
+  let e = edgeCache.get(g);
+  if (!e) {
+    const eg = new THREE.EdgesGeometry(g, angle);
+    e = new Float32Array((eg.getAttribute('position') as THREE.BufferAttribute).array);
+    eg.dispose();
+    edgeCache.set(g, e);
+  }
+  return e;
+}
+
+/** Shared by every drawing on the page; the world moves the lamp each frame. */
+export const INK = {
+  uLamp: { value: new THREE.Vector3(0, 0, 4) },
+  uOn: { value: 0 },
+  uRoom: { value: 0 },
+  uTime: { value: 0 },
+};
+
+const inkCache = new Map<string, THREE.ShaderMaterial>();
+export function inkMaterial(color = 0x9fcbff, gain = 0.62, rest = 0.1) {
+  const key = `${color}-${gain}-${rest}`;
+  let m = inkCache.get(key);
+  if (!m) {
+    m = new THREE.ShaderMaterial({
+      uniforms: { ...INK, uColor: { value: new THREE.Color(color) }, uGain: { value: gain }, uRest: { value: rest } },
+      transparent: true,
+      depthWrite: false,
+      toneMapped: false,
+      vertexShader: /* glsl */ `
+        varying vec3 vW;
+        void main() {
+          vec4 w = modelMatrix * vec4(position, 1.0);
+          vW = w.xyz;
+          gl_Position = projectionMatrix * viewMatrix * w;
+          gl_Position.z -= 0.00022 * gl_Position.w;
+        }`,
+      fragmentShader: /* glsl */ `
+        uniform vec3 uLamp, uColor; uniform float uOn, uRoom, uGain, uRest; varying vec3 vW;
+        void main() {
+          float d = distance(vW.xy, uLamp.xy);
+          float lit = max(smoothstep(3.4, 1.1, d) * uOn, uRoom * 0.85);
+          gl_FragColor = vec4(uColor, mix(uGain, uRest, lit));
+          #include <colorspace_fragment>
+        }`,
+    });
+    // lines that are the same lit or unlit are part of the picture, the rest is the drawing
+    m.userData.diagram = rest >= gain * 0.85;
+    m.visible = m.userData.diagram || !inkOff;
+    inkCache.set(key, m);
+  }
+  return m;
+}
+
+let inkOff = false;
+/** By day nothing is a drawing: only diagram lines stay. */
+export function inkFor(light: boolean) {
+  inkOff = light;
+  inkCache.forEach((m) => (m.visible = m.userData.diagram || !light));
+}
+
+/** A drawing from raw segments. */
+export function strokes(seg: Float32Array | number[], color?: number, gain?: number, rest?: number) {
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(seg instanceof Float32Array ? seg : new Float32Array(seg), 3));
+  const l = new THREE.LineSegments(g, inkMaterial(color, gain, rest));
+  l.userData.ink = true;
+  return l;
+}
+
+/** Put a drawing on one mesh that is not baked (props, transparent parts). */
+export function outline<T extends THREE.Mesh>(m: T, color?: number, gain?: number, rest?: number, angle = 34): T {
+  m.add(strokes(edgesOf(m.geometry, angle), color, gain, rest));
+  return m;
+}
+
+/** Worth outlining? Screws, pins and treads are not. */
+function big(g: THREE.BufferGeometry) {
+  if (!g.boundingBox) g.computeBoundingBox();
+  const b = g.boundingBox!;
+  const d = [b.max.x - b.min.x, b.max.y - b.min.y, b.max.z - b.min.z].sort((p, q) => q - p);
+  return !!g.userData.wire || (d[0] > 17 && d[1] > 9);
+}
+
+function place(seg: Float32Array, mx: THREE.Matrix4, out: number[]) {
+  const e = mx.elements;
+  for (let i = 0; i < seg.length; i += 3) {
+    const x = seg[i];
+    const y = seg[i + 1];
+    const z = seg[i + 2];
+    out.push(e[0] * x + e[4] * y + e[8] * z + e[12], e[1] * x + e[5] * y + e[9] * z + e[13], e[2] * x + e[6] * y + e[10] * z + e[14]);
+  }
 }
 
 /** Sticker facing the viewer. */
@@ -177,7 +285,8 @@ function shared(mat: THREE.Material): THREE.Material {
  * Merge everything under a node into one mesh per material. Nodes flagged with
  * userData.keep (wheels, props, anything animated) are left alone.
  */
-export function bake(root: THREE.Object3D): THREE.Object3D {
+export function bake(root: THREE.Object3D, ink: number | false = 0x9fcbff): THREE.Object3D {
+  const drawn: number[] = [];
   root.updateMatrixWorld(true);
   const inv = new THREE.Matrix4().copy(root.matrixWorld).invert();
   const buckets = new Map<THREE.Material, THREE.BufferGeometry[]>();
@@ -192,7 +301,9 @@ export function bake(root: THREE.Object3D): THREE.Object3D {
       if (!g.getAttribute('normal')) g.computeVertexNormals();
       const n = g.getAttribute('position').count;
       if (!g.getAttribute('uv')) g.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(n * 2), 2));
-      g.applyMatrix4(new THREE.Matrix4().multiplyMatrices(inv, m.matrixWorld));
+      const mx = new THREE.Matrix4().multiplyMatrices(inv, m.matrixWorld);
+      if (ink !== false && !m.userData.plain && (m.userData.ink || big(m.geometry))) place(m.userData.ink ?? edgesOf(m.geometry), mx, drawn);
+      g.applyMatrix4(mx);
       const add = (mat: THREE.Material, geo: THREE.BufferGeometry) => {
         geo.clearGroups();
         const to = shared(mat);
@@ -223,6 +334,7 @@ export function bake(root: THREE.Object3D): THREE.Object3D {
     const g = list.length > 1 ? mergeGeometries(list, false) : list[0];
     if (g) root.add(mesh(g, mat));
   }
+  if (drawn.length) root.add(strokes(drawn, ink === false ? undefined : ink));
   return root;
 }
 

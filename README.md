@@ -1,10 +1,14 @@
 # Saad Bin Waqas, portfolio
 
-One page, laid out as a workbench. The page is a cutting mat, the cursor is the
-desk lamp, and everything on it is real-time 3D built in code: cardboard
-letters, a 5-inch FPV quad that takes off, explodes and lands again, a sumo
-ring you can fight in, six robots doing their jobs, a handheld that plays
-cartridges, and a line follower that drives the whole page as you scroll.
+One page, laid out as a workbench. Pull the cord to switch between two benches:
+at night everything is a line drawing that turns real where the lamp falls; by
+day it is a blue cutting mat with cardboard letters. One line runs down the whole
+page with a robot on it and a kitten on the robot. Along the way: a cat pilot
+whose goggles play real flight footage, a 5-inch quad that takes off, explodes
+and lands again, a video receiver full of short clips, a wind tunnel with a race
+car in it, a sumo ring you can fight in, seven robots doing their jobs, a vehicle
+that is a car, a boat, a plane and a quadcopter, a handheld that plays
+cartridges, and a lot of cats. All of it is built in code.
 
 ![Preview](public/og.jpg)
 
@@ -18,6 +22,8 @@ form on the left and the live page on the right.
   link or a whole new section.
 - **Photos**: drag them from the desktop onto a field, paste them, or pick from
   the library. They are resized and their location data is removed.
+- **Clips**: press *Add a clip* on any photo and choose a short video. It plays
+  silently in place of the photo, and a cover picture is made for it.
 - **Page order** moves, hides and renames sections.
 - **Save** (Ctrl+S) writes to this computer. **Undo** and **Older versions** go back.
 - **Publish** commits and pushes to GitHub.
@@ -32,8 +38,13 @@ medal, *cards* sit in a grid, and *one line* events go in the list underneath.
 
 ### Chimera
 
-The crate stays taped shut until **Open the crate** is switched on in the
-Studio. Then it opens and shows the story and photos.
+**Open the crate** in the Studio switches between a sealed box and the full
+story: the four modes, the numbers, the chapters and the pictures.
+
+### Raw material
+
+`Recources/` holds the original photos, videos, certificates and CVs, sorted into
+folders. It is never uploaded. Only cropped, resized copies in `public/media` are.
 
 ## Run it
 

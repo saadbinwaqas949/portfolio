@@ -18,3 +18,8 @@ Portfolio.txt
 
 # editor and agent settings
 .claude/
+
+# raw photos, videos and documents, never published
+/Recources/
+/Resources/
+/resources/

@@ -42,8 +42,8 @@ function Gauge({ label }: { label: string }) {
       <path d="M86 31A96 96 0 0 1 154 31" stroke="#ff9d1a" />
       <path d="M161 35A96 96 0 0 1 216 122" stroke="#e5322d" />
       <g className="needle">
-        <path d="M114 122L120 42L126 122Z" fill="#0b1433" stroke="none" />
-        <circle cx="120" cy="122" r="11" fill="#0b1433" />
+        <path d="M114 122L120 42L126 122Z" stroke="none" />
+        <circle cx="120" cy="122" r="11" />
       </g>
       <text x="120" y="158" textAnchor="middle">
         {label}
@@ -111,7 +111,7 @@ export function Ship() {
         data-track="[[0.5,0],[0.5,0.14],[0.95,0.14],[0.95,0.5],[0.8,0.6],[0.8,0.8],[0.975,0.86],[0.975,1]]" data-track-s="[[0.004,0],[0.004,0.74],[0.996,0.94],[0.996,1]]"
       >
         <div className="wrap">
-          <Letters as="h2" text={s.title.toUpperCase()} style="kraft" depth={58} className="title3d" onLetters={conveyor} />
+          <Letters as="h2" text={s.title.toUpperCase()} style="kraft" depth={46} className="title3d long" onLetters={conveyor} />
           <p className="lede" data-rv="lines">{s.intro}</p>
         </div>
       </div>

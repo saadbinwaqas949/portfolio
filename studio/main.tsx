@@ -11,7 +11,7 @@ import { Fields, Picker, Studio, type Ctx } from './fields';
 import { dirtyFor, PANELS, QUICK } from './schema';
 
 const DRAFT = 'portfolio-studio-draft';
-const BUILTIN = ['about', 'fly', 'fight', 'follow', 'play', 'ship', 'chimera', 'log', 'toolbox'];
+const BUILTIN = ['about', 'fly', 'sim', 'race', 'fight', 'follow', 'chimera', 'play', 'ship', 'log', 'toolbox'];
 const DEVICES = { desktop: 0, tablet: 820, phone: 390 } as const;
 
 /** Keep the page order in step with the list of extra sections. */
@@ -326,7 +326,7 @@ function App() {
         }
       }
       if (d?.type === 'studio:pick' && siteRef.current) {
-        const norm = (s: string) => s.replace(/\s+/g, ' ').replace(/[{}]/g, '').trim().toLowerCase();
+        const norm = (s: string) => s.replace(/\s+/g, ' ').replace(/\{([^|}]+)(\|[^}]*)?\}/g, '$1').trim().toLowerCase();
         const all = flatten(siteRef.current).filter((x) => x.value && !/^(media\/|https?:|#)/.test(x.value));
         const want = norm(d.text ?? '');
         const inSec = (p: string) => {

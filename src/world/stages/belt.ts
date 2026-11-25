@@ -1,7 +1,8 @@
 // The CODShield conveyor: a parcel is packed, checked at three gates and then
 // carried off by a drone.
 import * as THREE from 'three';
-import { box, clamp, cylX, damp, decal, lerp, mesh, smooth } from '../kit';
+import { box, clamp, cylX, damp, decal, lerp, mesh, smooth, outline } from '../kit';
+import { onTheme } from '../../lib/theme';
 import { M } from '../materials';
 import { makeQuad } from '../models/quad';
 import { makeBox } from '../models/robots';
@@ -19,8 +20,18 @@ export const GATES = [
   { x: 0.76, at: 0.7, go: 0.79, label: 'CALL', color: 0x46ff8a },
 ];
 
+const gateMat = new THREE.MeshStandardMaterial({ roughness: 0.5 });
+onTheme((light) => gateMat.color.setHex(light ? 0xf2f4f8 : 0x2a313c));
+
 export function beltStage(el: HTMLElement): BeltStage {
   const group = new THREE.Group();
+  const labels: THREE.MeshLambertMaterial[] = [];
+  let day = false;
+  const paintLabels = () => labels.forEach((m) => m.color.setHex(day ? 0x16265f : 0xcfe3ff));
+  onTheme((light) => {
+    day = light;
+    paintLabels();
+  });
 
   // ---- belt ---------------------------------------------------------------
   const chev = tex.label('chevron', 256, 256, (g) => {
@@ -151,7 +162,7 @@ export function beltStage(el: HTMLElement): BeltStage {
         for (const c of [...g.o.children]) if (c !== g.glow) g.o.remove(c);
         const span = bh * 0.62 + 0.66;
         for (const s of [-1, 1]) g.o.add(box(0.34, 0.3, 1.25, M.darkMetal(), 0, (s * span) / 2, 0));
-        g.o.add(box(0.5, span + 0.34, 0.16, M.solid(0xf2f4f8, 0.5), 0, 0, 1.22));
+        g.o.add(outline(box(0.5, span + 0.34, 0.16, gateMat, 0, 0, 1.22), 0x9fcbff, 0.7, 0.3));
         for (const s of [-1, 1]) {
           const l = mesh(new THREE.BoxGeometry(0.05, span, 0.05), g.strip, s * 0.27, 0, 1.22);
           l.castShadow = false;
@@ -162,7 +173,7 @@ export function beltStage(el: HTMLElement): BeltStage {
           span * 0.2,
           tex.label('gate' + g.label, 512, 128, (c, w, h) => {
             c.clearRect(0, 0, w, h);
-            c.fillStyle = '#16265f';
+            c.fillStyle = '#fff';
             c.textAlign = 'center';
             c.textBaseline = 'middle';
             c.font = '700 96px "Barlow Condensed", Arial';
@@ -173,6 +184,8 @@ export function beltStage(el: HTMLElement): BeltStage {
           1.4,
         );
         d.rotation.z = Math.PI / 2;
+        labels.push(d.material as THREE.MeshLambertMaterial);
+        paintLabels();
         g.o.add(d);
       });
     },

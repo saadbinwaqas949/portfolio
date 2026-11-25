@@ -3,6 +3,8 @@
 // puts a mesh exactly where each character sits.
 import * as THREE from 'three';
 import data from '../data/letters.json';
+import { edgesOf, strokes } from './kit';
+import { isLight, onTheme } from '../lib/theme';
 import { M } from './materials';
 import { U, type Stage, type World } from './World';
 
@@ -19,7 +21,7 @@ export function emWidth(text: string) {
   return +w.toFixed(3);
 }
 
-export type LetterStyle = 'kraft' | 'carbon' | 'metal' | 'toy' | 'gold' | 'wood' | 'foam' | 'ink' | 'steel';
+export type LetterStyle = 'night' | 'card' | 'kraft' | 'carbon' | 'metal' | 'toy' | 'gold' | 'wood' | 'foam' | 'ink' | 'steel';
 
 const shapeCache = new Map<string, THREE.Shape[]>();
 function shapesFor(ch: string): THREE.Shape[] {
@@ -82,6 +84,11 @@ const TOY = [0xff4b3e, 0xffc21a, 0x19b36b, 0x2f6bff, 0xff7ab8];
 
 function materialsFor(style: LetterStyle, i: number): THREE.Material[] {
   switch (style) {
+    case 'night':
+      // cardboard by day, gunmetal by night
+      return isLight() ? [M.kraftFace(), M.kraftEdge()] : [M.gun(), M.gunEdge()];
+    case 'card':
+      return isLight() ? [M.solid(0x1b120a, 0.78), M.kraftEdge()] : [M.kraftFace(), M.kraftEdge()];
     case 'kraft':
       return [M.kraftFace(), M.kraftEdge()];
     case 'carbon':
@@ -128,6 +135,8 @@ export interface LetterOptions {
   shy?: number;
   /** px above the mat, for letters that lie on a sheet */
   lift?: number;
+  /** colour of the line drawing on the letters, or false for none */
+  ink?: number | false;
 }
 
 export class LetterStage implements Stage {
@@ -140,13 +149,14 @@ export class LetterStage implements Stage {
   letters: Letter[] = [];
   private opt: Required<LetterOptions>;
   private spans: HTMLElement[];
+  private off: () => void;
   onReady?: (l: Letter[]) => void;
   /** runs each frame before letters are placed */
   drive?: (t: number, dt: number, world: World) => void;
 
   constructor(el: HTMLElement, opt: LetterOptions) {
     this.el = el;
-    this.opt = { depth: 42, curve: 3, bevel: 0, shy: 0, lift: 0, ...opt };
+    this.opt = { depth: 42, curve: 3, bevel: 0, shy: 0, lift: 0, ink: 0x9fcbff, ...opt };
     this.spans = Array.from(el.querySelectorAll<HTMLElement>('[data-ch]'));
     this.spans.forEach((sp, i) => {
       const mesh = new THREE.Mesh(new THREE.BufferGeometry(), materialsFor(this.opt.style, i));
@@ -160,6 +170,7 @@ export class LetterStage implements Stage {
         hx: 0, hy: 0, ox: 0, oy: 0,
       });
     });
+    this.off = onTheme(() => this.letters.forEach((l) => (l.mesh.material = materialsFor(this.opt.style, l.i))));
   }
 
   resize() {
@@ -174,6 +185,10 @@ export class LetterStage implements Stage {
       const size = parseFloat(getComputedStyle(sp).fontSize) || fs;
       const g = letterGeometry(l.ch, size, depth, this.opt.curve, Math.min(this.opt.bevel / U, depth * 0.3));
       l.mesh.geometry = g;
+      if (this.opt.ink !== false) {
+        l.mesh.children.filter((c) => c.userData.ink).forEach((c) => l.mesh.remove(c));
+        l.mesh.add(strokes(edgesOf(g, 28), this.opt.ink, 0.8, 0.16));
+      }
       // line boxes are 1em tall, so the baseline is a fixed fraction down
       l.hx = r.left - cx;
       l.hy = -(r.top + (r.height - size) / 2 + size * BASE - cy);
@@ -226,6 +241,7 @@ export class LetterStage implements Stage {
   }
 
   dispose() {
+    this.off();
     this.letters.length = 0;
   }
 }

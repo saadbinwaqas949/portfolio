@@ -1,0 +1,161 @@
+/* ------------------------------------------------------------------ */
+/* What the two benches do not share, and the switch between them      */
+/* ------------------------------------------------------------------ */
+:root {
+  --cl-ink: #bcdcff;
+}
+html.light {
+  --cl-ink: #0b1433;
+  --line: #ffffff;
+  --panel: #f4f7fc;
+}
+.swapping,
+.swapping * {
+  transition: none !important;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+/* ---- the cord ------------------------------------------------------ */
+.cord-moon,
+.cord-sun {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition: transform 0.6s var(--spring), opacity 0.25s;
+}
+.cord-moon {
+  fill: #e9f1ff;
+  filter: drop-shadow(0 0 7px rgba(190, 215, 255, 0.75));
+}
+.cord-sun circle {
+  fill: #ffc21a;
+  filter: drop-shadow(0 0 9px rgba(255, 200, 40, 0.9));
+}
+.cord-sun path {
+  fill: none;
+  stroke: #ffd76a;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+html:not(.light) .cord-sun,
+html.light .cord-moon {
+  opacity: 0;
+  transform: scale(0.2) rotate(-120deg);
+}
+
+/* ---- clothesline --------------------------------------------------- */
+.cl-back {
+  fill: #0a0e14;
+  stroke: #0a0e14;
+  stroke-width: 10;
+}
+.cl-fill {
+  opacity: 0.13;
+}
+.cl-line {
+  fill: none;
+  stroke: var(--pc);
+  stroke-width: 3.4;
+}
+.cl-peg {
+  fill: #0a0e14;
+  stroke: var(--cl-ink);
+  stroke-width: 2.2;
+}
+.cl-rope {
+  stroke: var(--cl-ink);
+  stroke-width: 2.4;
+}
+html.light .cl-back {
+  fill: #fff;
+  stroke: #fff;
+  stroke-width: 17;
+}
+html.light .cl-fill {
+  opacity: 1;
+  transform: translate(4px, 4px);
+}
+html.light .cl-line {
+  stroke: var(--cl-ink);
+  stroke-width: 4.6;
+}
+html.light .cl-peg {
+  fill: #e2c493;
+  stroke-width: 3;
+}
+html.light .cl-rope {
+  stroke: #fff;
+  stroke-width: 4;
+}
+.needle > * {
+  fill: #eef3fa;
+}
+html.light .needle > * {
+  fill: #0b1433;
+}
+
+/* ---- newer panels by day ------------------------------------------- */
+html.light .rc-card {
+  background: #f4f7fc;
+  color: var(--ink);
+  box-shadow: 0 24px 60px rgba(2, 7, 36, 0.45);
+}
+html.light .rc-card p,
+html.light .rc-count span {
+  color: #35457f;
+}
+html.light .rc-count b {
+  color: #c4160f;
+}
+html.light .rc-lights {
+  background: #16181f;
+}
+html.light .small-pic {
+  background: #f4f7fc;
+}
+html.light .small-pic .stamp {
+  --line: #16265f;
+}
+html.light .chm-tabs button {
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+html.light .chm-tabs button[aria-pressed='true'] {
+  color: var(--ink);
+}
+html.light .chm-uses span {
+  -webkit-text-stroke-color: rgba(255, 255, 255, 0.75);
+}
+html.light .skill li {
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+}
+html.light .bay-spot path {
+  stroke: #eef3ff;
+}
+html.light .rc-bar i {
+  background: linear-gradient(90deg, #e5322d, rgba(229, 50, 45, 0.5));
+}
+html.light .chm-step .print .im {
+  background: #20252d;
+}
+html.light .print img,
+html.light .print video {
+  filter: none;
+}
+html.light .deck {
+  background: linear-gradient(180deg, #343b52, #171b29 22%, #0e111b);
+}
+
+html.light {
+  --fg-2: rgba(232, 239, 255, 0.9);
+}

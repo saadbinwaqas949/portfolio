@@ -1,10 +1,10 @@
 // A photo print lying on the mat. Drag it, throw it, click to look closer.
-import { useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { useGSAP } from '@gsap/react';
 import sizes from 'virtual:media-sizes';
 import { media, youtubeId, type Img } from '../content';
 import { useLit } from '../lib/lit';
-import { Draggable, emit, gsap, isTouch } from '../lib/motion';
+import { Draggable, emit, gsap, isTouch, reduced } from '../lib/motion';
 
 let top = 10;
 
@@ -44,7 +44,17 @@ export function Print({
   const ar = fw / (fh || 1);
   useLit(ref);
   const yt = video ? youtubeId(video) : null;
+  const clip = img.video ? media(img.video) : '';
+  const vid = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const v = vid.current;
+    if (!v || reduced()) return;
+    const io = new IntersectionObserver(([e]) => (e.isIntersecting ? v.play().catch(() => undefined) : v.pause()), { threshold: 0.2 });
+    io.observe(v);
+    return () => io.disconnect();
+  }, [clip]);
   const open = () => {
+    if (clip) return emit('lightbox', { type: 'video', src: clip, title: img.caption || img.alt });
     if (yt) emit('lightbox', { type: 'yt', id: yt, title: img.caption || img.alt });
     else if (video) emit('lightbox', { type: 'video', src: media(video), title: img.caption || img.alt });
     else emit('lightbox', { type: 'img', src: media(img.src), alt: img.alt, title: img.caption });
@@ -86,7 +96,7 @@ export function Print({
       className={`print ${playable ? 'play' : ''} ${className}`}
       style={{ ...style, ['--ar' as string]: ar }}
       data-rv={reveal ? 'toss' : undefined}
-      data-cursor={playable ? 'Play' : 'Look'}
+      data-cursor={playable || clip ? 'Play' : 'Look'}
       data-nolock
       role="button"
       tabIndex={0}
@@ -104,7 +114,11 @@ export function Print({
       <span className="sh" aria-hidden />
       <span className="pp" aria-hidden />
       <div className="im" style={{ aspectRatio: ar }}>
+        {clip ? (
+          <video ref={vid} src={clip} poster={media(img.src)} muted loop playsInline preload="none" aria-label={img.alt} />
+        ) : null}
         <img
+          hidden={!!clip}
           src={media(img.src)}
           alt={img.alt}
           loading={eager ? 'eager' : 'lazy'}

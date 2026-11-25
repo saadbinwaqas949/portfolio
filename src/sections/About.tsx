@@ -114,7 +114,7 @@ export function About() {
       if (s) scrubWords(s);
 
       // discipline list: the lamp picks the row
-      const rows = gsap.utils.toArray<HTMLElement>('.ab-list a', el);
+      const rows = gsap.utils.toArray<HTMLElement>('.ab-list li', el); // not the links: those have CSS transitions
       rows.forEach((r, i) => {
         if (reduced()) return;
         const tw = gsap.from(r, { xPercent: i % 2 ? 12 : -12, opacity: 0, duration: 0.9, paused: true });
@@ -136,7 +136,7 @@ export function About() {
                 <div className="ab-in">
                   <div className="ab-text">
                     <span className="dymo" data-rv="dymo">{a.left.label}</span>
-                    <Letters text={a.left.title} style="ink" depth={34} lift={17} decorative className="ab-word" onLetters={(l, s) => popLetters(l, s, 24)} />
+                    <Letters text={a.left.title} style="card" depth={34} lift={17} decorative className="ab-word" onLetters={(l, s) => popLetters(l, s, 24)} />
                     <p className="ab-body" data-rv="lines">{a.left.text}</p>
                   </div>
                   <div className="ab-media">

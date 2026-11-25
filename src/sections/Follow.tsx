@@ -53,7 +53,7 @@ function Pen({ r }: { r: Robot }) {
   const inside = (v: boolean) => () => {
     if (stage.current) stage.current.inside = v;
   };
-  const hint: Record<string, string> = { line: 'Bend it', avoid: 'Block it', soccer: 'Kick', bluetooth: 'Drive', sumo1: 'Aim', sumo2: 'Dare it' };
+  const hint: Record<string, string> = { line: 'Bend it', avoid: 'Block it', soccer: 'Kick', bluetooth: 'Drive', sumo1: 'Aim', sumo2: 'Dare it', walker: 'Shoo' };
   return (
     <article className="pen">
       <div className="pen-floor" ref={floor} data-cursor={hint[r.model]} onPointerEnter={inside(true)} onPointerLeave={inside(false)} style={{ touchAction: 'pan-y' }}>
@@ -68,6 +68,13 @@ function Pen({ r }: { r: Robot }) {
         <p>{r.text}</p>
         {r.note ? <span className="dymo" data-rv="dymo">{r.note}</span> : null}
       </div>
+      {r.images.length ? (
+        <div className="pen-shots">
+          {r.images.map((im, k) => (
+            <Print key={k} img={im} rot={k % 2 ? 2.6 : -2.2} ratio="4/3" tape={false} />
+          ))}
+        </div>
+      ) : null}
     </article>
   );
 }
@@ -89,7 +96,7 @@ export function Follow() {
         data-track="[[0.975,0],[0.975,0.32],[0.82,0.4],[0.9,0.5],[0.78,0.6],[0.9,0.7],[0.5,0.82],[0.04,0.82],[0.04,1]]" data-track-s="[[0.004,0],[0.004,0.66],[0.996,0.86],[0.996,1]]"
       >
         <div className="wrap">
-          <Letters as="h2" text={f.title.toUpperCase()} style="kraft" depth={36} className="title3d long" onLetters={convoy} />
+          <Letters as="h2" text={f.title.toUpperCase()} style="night" depth={36} className="title3d long" onLetters={convoy} />
           <p className="lede" data-rv="lines">{f.intro}</p>
         </div>
       </div>

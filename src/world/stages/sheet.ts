@@ -1,9 +1,10 @@
 // Big flat sheets that lie on the mat behind DOM content: drawing paper,
 // cardboard, carbon plate, felt. They catch the lamp like everything else.
 import * as THREE from 'three';
+import { isLight, onTheme } from '../../lib/theme';
 import { M } from '../materials';
 import * as tex from '../textures';
-import { cyl, mesh, roundedRect } from '../kit';
+import { cyl, mesh, outline, roundedRect } from '../kit';
 import type { Stage } from '../World';
 
 export type SheetKind = 'paper' | 'kraft' | 'carbon' | 'wood' | 'black';
@@ -26,15 +27,16 @@ function paperTexture(w: number, h: number) {
   c.width = Math.max(2, Math.round(w * k));
   c.height = Math.max(2, Math.round(h * k));
   const g = c.getContext('2d')!;
+  const day = isLight();
   g.scale(k, k);
-  g.fillStyle = '#f4f7fc';
+  g.fillStyle = day ? '#f4f7fc' : '#0d131b';
   g.fillRect(0, 0, w, h);
   const r = tex.rng(3);
   for (let i = 0; i < 2600; i++) {
-    g.fillStyle = `rgba(40,70,140,${r() * 0.03})`;
+    g.fillStyle = day ? `rgba(40,70,140,${r() * 0.03})` : `rgba(150,190,240,${r() * 0.025})`;
     g.fillRect(r() * w, r() * h, 1 + r() * 2, 1);
   }
-  g.strokeStyle = 'rgba(52,110,220,.13)';
+  g.strokeStyle = day ? 'rgba(52,110,220,.13)' : 'rgba(120,180,255,.07)';
   g.lineWidth = 1;
   for (let x = (w / 2) % 20; x < w; x += 20) {
     g.beginPath();
@@ -48,7 +50,7 @@ function paperTexture(w: number, h: number) {
     g.lineTo(w, y);
     g.stroke();
   }
-  g.strokeStyle = 'rgba(52,110,220,.26)';
+  g.strokeStyle = day ? 'rgba(52,110,220,.26)' : 'rgba(120,180,255,.15)';
   for (let x = (w / 2) % 100; x < w; x += 100) {
     g.beginPath();
     g.moveTo(x, 0);
@@ -62,14 +64,14 @@ function paperTexture(w: number, h: number) {
     g.stroke();
   }
   // drawing border with zone marks
-  g.strokeStyle = '#16265f';
+  g.strokeStyle = day ? '#16265f' : '#6fa8dc';
   g.lineWidth = 2.5;
   g.strokeRect(22, 22, w - 44, h - 44);
   g.lineWidth = 1;
   g.strokeRect(14, 14, w - 28, h - 28);
   const n = Math.max(2, Math.round(w / 240));
   g.font = '600 12px "Barlow Condensed", Arial';
-  g.fillStyle = '#16265f';
+  g.fillStyle = day ? '#16265f' : '#6fa8dc';
   g.textAlign = 'center';
   g.textBaseline = 'middle';
   for (let i = 1; i < n; i++) {
@@ -154,12 +156,12 @@ export function sheetStage(el: HTMLElement, o: SheetOptions): Stage {
           const t = paperTexture(w, h);
           t.repeat.set(1 / W, 1 / H);
           t.offset.set(0.5, 0.5);
-          paperMat = new THREE.MeshLambertMaterial({ map: t, emissiveMap: t, emissive: 0xc9d6f5, emissiveIntensity: 0.36 });
-          mats = [paperMat, M.solid(0xe6ecf7, 0.9)];
+          paperMat = new THREE.MeshLambertMaterial({ map: t, emissiveMap: t, emissive: 0xc9d6f5, emissiveIntensity: isLight() ? 0.36 : 0.62 });
+          mats = [paperMat, M.solid(isLight() ? 0xe6ecf7 : 0x1a222d, 0.9)];
           break;
         }
         case 'kraft':
-          mats = [M.kraft(), M.kraftEdge()];
+          mats = isLight() ? [M.kraft(), M.kraftEdge()] : [M.kraftNight(), M.kraftNightEdge()];
           break;
         case 'carbon':
           mats = [M.carbon(1 / 0.8), M.carbonEdge()];
@@ -172,6 +174,7 @@ export function sheetStage(el: HTMLElement, o: SheetOptions): Stage {
       }
       body = mesh(geo, mats, 0, 0, (o.z ?? 2) / 100);
       body.castShadow = true;
+      if (o.kind !== 'paper') outline(body, 0x7d93ad, 0.5, 0.14);
       group.add(body);
 
       const top = (o.z ?? 2) / 100 + thick;
@@ -204,11 +207,14 @@ export function sheetStage(el: HTMLElement, o: SheetOptions): Stage {
       for (let i = 0; i < screws.length; i++) screws[i].rotation.z = world.worldScroll * 0.006 * (i % 2 ? 1 : -1);
     },
     dispose() {
+      off();
       body?.geometry.dispose();
       paperMat?.map?.dispose();
       paperMat?.dispose();
     },
   };
+  let first = true;
+  const off = onTheme(() => (first ? (first = false) : s.resize?.(null as never)));
   return s;
 }
 

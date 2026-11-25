@@ -16,12 +16,16 @@ import { Follow } from './sections/Follow';
 import { Hero } from './sections/Hero';
 import { Log } from './sections/Log';
 import { Play } from './sections/Play';
+import { Race } from './sections/Race';
+import { Sim } from './sections/Sim';
 import { Ship } from './sections/Ship';
 import { Toolbox } from './sections/Toolbox';
 
 const SECTIONS: Record<string, ComponentType> = {
   about: About,
   fly: Fly,
+  sim: Sim,
+  race: Race,
   fight: Fight,
   follow: Follow,
   play: Play,

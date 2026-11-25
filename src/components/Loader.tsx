@@ -13,8 +13,10 @@ function Connector({ male = false }: { male?: boolean }) {
           <path d="M96 78H220" stroke="#191b22" strokeWidth="17" />
           <path d="M96 37H220" stroke="#ff8a80" strokeWidth="3" opacity=".7" />
           <path d="M96 73H220" stroke="#4a4f5d" strokeWidth="3" opacity=".8" />
-          <rect x="2" y="35" width="46" height="13" rx="6.5" fill="url(#pin)" />
-          <rect x="2" y="72" width="46" height="13" rx="6.5" fill="url(#pin)" />
+          <g className="pins">
+            <rect x="2" y="35" width="46" height="13" rx="6.5" fill="url(#pin)" />
+            <rect x="2" y="72" width="46" height="13" rx="6.5" fill="url(#pin)" />
+          </g>
           <path d="M44 22h62v76H44l-12-12V34z" fill="#ffc21a" />
           <path d="M44 22h62v14H40z" fill="#ffdf7d" />
           <path d="M34 86l10 12h62V84H36z" fill="#cf9200" />
@@ -30,8 +32,10 @@ function Connector({ male = false }: { male?: boolean }) {
           <path d="M112 22h78l28 12v8l-28-6h-78z" fill="#ffdf7d" />
           <path d="M112 98h78l28-12v-7l-28 6h-78z" fill="#cf9200" />
           <path d="M132 22v76M142 22v76M152 22v76" stroke="#cf9200" strokeWidth="3" opacity=".6" />
-          <ellipse cx="214" cy="42" rx="4" ry="7" fill="#5c4100" />
-          <ellipse cx="214" cy="78" rx="4" ry="7" fill="#5c4100" />
+          <g className="sock">
+            <ellipse cx="214" cy="42" rx="4" ry="7.5" fill="#3a2900" />
+            <ellipse cx="214" cy="78" rx="4" ry="7.5" fill="#3a2900" />
+          </g>
         </>
       )}
       <defs>
@@ -65,16 +69,24 @@ export function Loader({ canvas, quick }: { canvas: React.RefObject<HTMLCanvasEl
     const volts = el.querySelector<HTMLElement>('.ld-v')!;
     const bars = el.querySelectorAll<HTMLElement>('.ld-bars i');
     const flash = el.querySelector<HTMLElement>('.ld-flash')!;
+    const sock = el.querySelector<SVGGElement>('.sock')!;
+    const pins = el.querySelector<SVGGElement>('.pins')!;
     const still = reduced();
     startScroll();
     holdScroll(true);
     scrollTo(0, 0);
 
-    const state = { p: 0 };
+    // one place moves the plugs: p is how closed they are, jolt the click, fall the exit
+    const state = { p: 0, jolt: 0, fall: 0 };
     const draw = () => {
       const gap = (1 - state.p) * Math.max(160, innerWidth * 0.36);
-      left.style.transform = `translate3d(${-gap}px,-50%,0) rotate(${(1 - state.p) * -2.5}deg)`;
-      right.style.transform = `translate3d(${gap}px,-50%,0) rotate(${(1 - state.p) * 3}deg)`;
+      const y = `calc(-50% + ${(state.fall * 34).toFixed(2)}vh)`;
+      left.style.transform = `translate3d(${(-gap + state.jolt).toFixed(2)}px,${y},0) rotate(${((1 - state.p) * -2.5).toFixed(3)}deg)`;
+      right.style.transform = `translate3d(${(gap + state.jolt).toFixed(2)}px,${y},0) rotate(${((1 - state.p) * 3).toFixed(3)}deg)`;
+      left.style.opacity = right.style.opacity = String(1 - state.fall);
+      // once the pins are in they are out of sight, and the holes are filled
+      pins.style.visibility = state.p > 0.995 ? 'hidden' : 'visible';
+      sock.style.opacity = String(1 - Math.min(1, Math.max(0, (state.p - 0.9) / 0.09)));
       volts.textContent = (16.8 * state.p).toFixed(1);
     };
     draw();
@@ -129,22 +141,22 @@ export function Loader({ canvas, quick }: { canvas: React.RefObject<HTMLCanvasEl
       bars.forEach((b, i) => gsap.fromTo(b, { opacity: 0.2, scaleY: 0.5 }, { opacity: 1, scaleY: 1, duration: 0.08, delay: 0.22 + i * 0.11, repeat: 1, yoyo: true }));
       gsap
         .timeline()
-        .to(state, { p: 1, duration: 0.22, ease: 'power4.in', onUpdate: draw }, 0)
-        .fromTo(flash, { opacity: 0, scale: 0.2 }, { opacity: 1, scale: 1, duration: 0.06, ease: 'none' }, 0.22)
-        .to(flash, { opacity: 0, scale: 1.9, duration: 0.42, ease: 'power2.out' }, 0.28)
-        .fromTo([left, right], { x: '+=0' }, { x: (i) => (i ? 5 : -5), duration: 0.05, yoyo: true, repeat: 3, ease: 'none' }, 0.22)
+        .to(state, { p: 1, duration: 0.3, ease: 'power4.in', onUpdate: draw }, 0)
+        // the click: both halves are one piece from here on
+        .to(state, { keyframes: { jolt: [0, 9, -6, 4, -2, 0] }, duration: 0.34, ease: 'none', onUpdate: draw }, 0.3)
+        .fromTo(flash, { opacity: 0, scale: 0.15 }, { opacity: 0.95, scale: 0.6, duration: 0.05, ease: 'none' }, 0.3)
+        .to(flash, { opacity: 0, scale: 1.5, duration: 0.4, ease: 'power2.out' }, 0.36)
         // an old lamp warming up
-        .set(lamp, { v: 0.75 }, 0.36)
-        .set(lamp, { v: 0.05 }, 0.43)
-        .set(lamp, { v: 0.55 }, 0.54)
-        .set(lamp, { v: 0.12 }, 0.6)
-        .to(lamp, { v: 1, duration: 0.45, ease: 'power2.out' }, 0.7)
-        .to('.ld-ui', { opacity: 0, duration: 0.18 }, 0.46)
-        .to(el, { backgroundColor: 'rgba(5,14,52,0)', duration: 0.4, ease: 'power2.out' }, 0.48)
-        .to(left, { yPercent: 190, rotate: -24, opacity: 0, duration: 0.48, ease: 'power2.in' }, 0.52)
-        .to(right, { yPercent: 170, rotate: 26, opacity: 0, duration: 0.48, ease: 'power2.in' }, 0.56)
-        .add(open, 0.66)
-        .add(() => setGone(true), 1.08);
+        .set(lamp, { v: 0.75 }, 0.5)
+        .set(lamp, { v: 0.05 }, 0.57)
+        .set(lamp, { v: 0.55 }, 0.68)
+        .set(lamp, { v: 0.12 }, 0.74)
+        .to(lamp, { v: 1, duration: 0.45, ease: 'power2.out' }, 0.86)
+        .to('.ld-ui', { opacity: 0, duration: 0.2 }, 0.72)
+        .to(el, { backgroundColor: 'rgba(4,6,8,0)', duration: 0.5, ease: 'power2.out' }, 0.72)
+        .to(state, { fall: 1, duration: 0.5, ease: 'power3.in', onUpdate: draw }, 0.92)
+        .add(open, 0.96)
+        .add(() => setGone(true), 1.46);
     })();
     return () => {
       cancelled = true;
@@ -155,13 +167,14 @@ export function Loader({ canvas, quick }: { canvas: React.RefObject<HTMLCanvasEl
   if (gone) return null;
   return (
     <div className="loader" ref={root} role="status" aria-label="Loading">
-      <div className="ld-l">
-        <div className="ld-wire" />
-        <Connector />
-      </div>
+      {/* the male half is drawn first: its pins slide in behind the other body */}
       <div className="ld-r">
         <Connector male />
         <div className="ld-wire" />
+      </div>
+      <div className="ld-l">
+        <div className="ld-wire" />
+        <Connector />
       </div>
       <div className="ld-flash" />
       <div className="ld-ui" aria-hidden>

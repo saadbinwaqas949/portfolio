@@ -1,3 +1,4 @@
+import { Kitty } from '../components/Kitty';
 import { useEffect, useRef, useState } from 'react';
 import { media, useSite } from '../content';
 import { useGsap } from '../lib/hooks';
@@ -160,6 +161,7 @@ export function Play() {
                 {g.platform === 'browser' ? 'Play it' : 'Get it'}
               </a>
             </div>
+            <Kitty pose="sit" coat="grey" className="play-cat" cheer={cur + 1} say="player two" />
           </div>
           <div className="carts" role="group" aria-label="Games">
             {p.games.map((k, i) => (

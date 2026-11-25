@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import { angleDelta, clamp, damp, lerp, smooth } from '../kit';
 import { makeCar, makeDohyo, type Robot } from '../models/robots';
+import { makeMetalSumo } from '../models/extra';
 import * as tex from '../textures';
 import type { Stage, World } from '../World';
 
@@ -54,8 +55,8 @@ export function arenaStage(el: HTMLElement): ArenaStage {
   world.add(ring);
   group.add(world);
 
-  const ours = makeCar({ chassis: 'wood', front: 'plough', battery: '3S' });
-  const theirs = makeCar({ chassis: 'metal', front: 'wedge', trim: 0xd42a24, battery: '4S' });
+  const ours = makeMetalSumo();
+  const theirs = makeCar({ chassis: 'wood', front: 'plough', battery: '3S' });
   const last = makeCar({ chassis: 'metal', front: 'wedge', trim: 0x1f56ff, battery: '4S' });
   for (const b of [ours, theirs, last]) {
     b.group.scale.setScalar(0.94);
