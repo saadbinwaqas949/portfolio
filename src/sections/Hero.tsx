@@ -183,12 +183,12 @@ export function Hero() {
       ref={root}
       style={{ height: '250vh' }}
     >
-      <div className="pin hero">
+      <div className="pin hero" style={{ ['--em' as any]: emWidth(person.first.toUpperCase()) }}>
         <div className="hero-shake">
           <h1 className="sr">
             {person.first} {person.last}
           </h1>
-          <div className="hero-names" style={{ ['--em' as any]: emWidth(person.first.toUpperCase()) }}>
+          <div className="hero-names">
             <Letters text={person.first.toUpperCase()} style="kraft" depth={56} shy={0.8} decorative className="hero-first" onLetters={(l, s) => wire(l, s, 0)} />
           </div>
           <div className="hero-figure">

@@ -92,8 +92,8 @@ export function Contact() {
   return (
     <footer id="contact" data-sec ref={root} className="contact">
       <div className="ct-pin" data-pin style={{ height: '230vh' }}>
-        <div className="pin hero ct">
-          <div className="hero-names" style={{ ['--em' as any]: emWidth(title) }}>
+        <div className="pin hero ct" style={{ ['--em' as any]: emWidth(title) }}>
+          <div className="hero-names">
             <Letters as="h2" text={title} style="kraft" depth={56} shy={0.8} className="hero-first ct-first" onLetters={wire} />
           </div>
           <div className="hero-figure">

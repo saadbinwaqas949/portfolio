@@ -1,6 +1,11 @@
 /* ------------------------------------------------------------------ */
 /* Hero                                                                */
 /* ------------------------------------------------------------------ */
+/* --em: width of the big word in ems, --fs: its size, --top: where it starts */
+.hero {
+  --top: clamp(70px, 9.6vh, 116px);
+  --fs: min(calc((100vw - 2 * var(--gut)) / var(--em, 3.6)), 43vh);
+}
 .hero-shake {
   position: absolute;
   inset: 0;
@@ -9,10 +14,9 @@
   position: absolute;
   left: var(--gut);
   right: var(--gut);
-  top: clamp(70px, 9.6vh, 116px);
+  top: var(--top);
 }
 .hero-first {
-  --fs: min(calc((100vw - 2 * var(--gut)) / var(--em, 3.6)), 43vh);
   font-size: var(--fs);
   white-space: nowrap;
 }
@@ -201,10 +205,8 @@
 }
 
 @media (max-height: 800px) and (min-width: 821px) {
-  .hero-names {
-    top: 60px;
-  }
-  .hero-first {
+  .hero {
+    --top: 60px;
     --fs: min(calc((100vw - 2 * var(--gut)) / var(--em, 3.6)), 40vh);
   }
   .hero-last {
@@ -232,8 +234,8 @@
 }
 
 @media (max-width: 820px) {
-  .hero-names {
-    top: clamp(78px, 11svh, 118px);
+  .hero {
+    --top: clamp(78px, 11svh, 118px);
   }
   .hero-last {
     font-size: 10.4vw;
@@ -250,7 +252,7 @@
     width: auto;
     right: var(--gut);
     left: var(--gut);
-    top: calc(clamp(78px, 11svh, 118px) + (100vw - 2 * var(--gut)) / var(--em-first, 3.6) + 1.6svh);
+    top: calc(var(--top) + var(--fs) * 0.96 + 1.6svh);
     bottom: auto;
   }
   .hero-sub {
@@ -2102,7 +2104,7 @@
 /* ------------------------------------------------------------------ */
 /* Contact                                                             */
 /* ------------------------------------------------------------------ */
-.ct-first {
+.ct {
   --fs: min(calc((100vw - 2 * var(--gut)) / var(--em, 3.6)), 39vh);
 }
 .ct .ct-copy {
@@ -2221,7 +2223,7 @@
   .ct .ct-copy {
     width: auto;
     bottom: auto;
-    top: calc(clamp(78px, 11svh, 118px) + (100vw - 2 * var(--gut)) / 3.4 + 2svh);
+    top: calc(var(--top) + var(--fs) * 1.12 + 2svh);
   }
   .ct .hero-pad {
     bottom: 9svh;
@@ -2239,6 +2241,103 @@
   }
   .ct-foot > span {
     display: none;
+  }
+}
+
+/* small phones held upright */
+@media (max-width: 820px) and (max-height: 700px) {
+  .hero {
+    --top: clamp(64px, 10.4svh, 78px);
+  }
+  .hero-sub {
+    display: none;
+  }
+  .hero-last {
+    font-size: 9.4vw;
+  }
+  .ct .hero-line {
+    font-size: 1.16rem;
+  }
+  .ct-act {
+    gap: 10px 20px;
+    margin: 0.8em 0 0.6em 14px;
+  }
+  .ct-act .plug,
+  .ct-act .tlink {
+    font-size: 0.92rem;
+  }
+  .ct-links {
+    gap: 2px 18px;
+  }
+  .ct-links a {
+    font-size: 0.92rem;
+  }
+}
+
+/* phones on their side */
+@media (max-height: 520px) and (min-aspect-ratio: 5/4) {
+  .hero,
+  .ct {
+    --top: 46px;
+    --fs: min(calc((100vw - 2 * var(--gut)) / var(--em, 3.6)), 37svh);
+  }
+  .hero-copy,
+  .ct .ct-copy {
+    left: var(--gut);
+    right: auto;
+    top: calc(var(--top) + var(--fs) * 0.98 + 2svh);
+    bottom: auto;
+    width: 47vw;
+  }
+  .hero-last {
+    font-size: 9svh;
+    margin-bottom: 0.34em;
+  }
+  .hero-line,
+  .ct .hero-line {
+    font-size: clamp(1.05rem, 5.2svh, 1.5rem);
+  }
+  .hero-sub,
+  .hero-hint,
+  .ct-foot {
+    display: none;
+  }
+  .hero-badges {
+    max-width: none;
+    margin-top: 0.7em;
+  }
+  .hero-badges li:nth-child(n + 4) {
+    display: none;
+  }
+  .hero-badges .dymo {
+    font-size: 0.58rem;
+  }
+  .hero-figure {
+    --fh: 67svh;
+    left: 65%;
+    right: auto;
+    bottom: -3svh;
+    margin-left: calc(var(--fh) * -0.40385);
+  }
+  .hero-pad {
+    left: auto;
+    right: var(--gut);
+    bottom: 5svh;
+    width: 36svh;
+  }
+  .ct-act {
+    gap: 8px 20px;
+    margin: 0.6em 0 0.5em 14px;
+  }
+  .ct-links {
+    gap: 2px 18px;
+  }
+  .ct-links a {
+    font-size: 0.95rem;
+  }
+  .cat {
+    left: 50%;
+    width: 74px;
   }
 }
 

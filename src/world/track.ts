@@ -165,7 +165,7 @@ export class Track {
       const top = r.top + scrollY;
       let list: [number, number][];
       try {
-        list = JSON.parse((world.vw < 820 && el.dataset.trackS) || el.dataset.track!);
+        list = JSON.parse(((world.vw < 820 || world.vh < 520) && el.dataset.trackS) || el.dataset.track!);
       } catch {
         continue;
       }
@@ -178,7 +178,7 @@ export class Track {
       return;
     }
     this.group.visible = true;
-    const phone = world.vw < 820;
+    const phone = world.vw < 820 || world.vh < 520;
     this.pts = roundedPath(pts, phone ? 34 : 90, 8);
     const g = ribbon(this.pts, phone ? 14 : 22);
     this.tape.geometry.dispose();
