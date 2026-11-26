@@ -1,5 +1,7 @@
 # Saad Bin Waqas, portfolio
 
+Live at https://saadbinwaqas949.github.io/portfolio/
+
 One page, laid out as a workbench. Pull the cord to switch between two benches:
 at night everything is a line drawing that turns real where the lamp falls; by
 day it is a blue cutting mat with cardboard letters. One line runs down the whole
@@ -57,13 +59,13 @@ npm run studio    # the editor, http://localhost:5180/studio/
 npm run build     # production files in dist/
 ```
 
-## Put it online
+## Live
 
-The included GitHub Action builds on every push to `main`. To publish with
-GitHub Pages, open the repository's **Settings > Pages** and set **Source** to
-**GitHub Actions**. After that, the Studio's Publish button updates the live
-site. Put the live address in the Studio under *Search and sharing* so link
-previews work.
+**https://saadbinwaqas949.github.io/portfolio/**
+
+GitHub Pages hosts it for free. Every push to `main` builds and publishes the
+site in about two minutes, so the Studio's Publish button (or any `git push`)
+is all it takes to update it.
 
 ## How it is built
 
