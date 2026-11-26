@@ -47,6 +47,12 @@ file. `src/content.ts` has the types, defaults and blank entries.
 - New machines are in `src/world/models/extra.ts`; styles for the dark theme's
   newer sections are in `src/styles/night.css`.
 - One-shot entrances use `onceInView`, not ScrollTrigger (layout cost).
+- Phones scroll natively. Never add a non-passive touch or wheel listener (Lenis
+  gets no touch events; Draggable is registered only via `dragKit()`).
+- Per-frame code reads layout through `watchRect` / `rectOf` (measured once at
+  the top of the frame) and only writes after that. No 3D transforms on things
+  that repeat (print shadows): each one becomes a GPU layer on a phone.
+- Pinned section heights go through `pinH(vh)`; phones get a shorter hold.
 - Never toggle `castShadow` at runtime: it recompiles every shader.
 - Prints follow the photo's own shape (sizes come from `virtual:media-sizes`,
   `tools/media-plugin.ts`). `focus: "top" | "bottom"` picks what a crop keeps.

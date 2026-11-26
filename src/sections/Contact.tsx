@@ -5,7 +5,7 @@ import { Icon } from '../components/Icon';
 import { CatPilot, type PilotApi } from '../components/CatPilot';
 import { Kitty } from '../components/Kitty';
 import { useSite } from '../content';
-import { pinProgress, useGsap } from '../lib/hooks';
+import { pinProgress, useGsap, pinH } from '../lib/hooks';
 import { emit, gsap, isTouch, reduced, scrollToId } from '../lib/motion';
 import { reveals } from '../lib/reveal';
 import { Letters, useStage } from '../world/hooks';
@@ -91,7 +91,7 @@ export function Contact() {
   const title = contact.title.toUpperCase();
   return (
     <footer id="contact" data-sec ref={root} className="contact">
-      <div className="ct-pin" data-pin style={{ height: '230vh' }}>
+      <div className="ct-pin" data-pin style={{ height: pinH(230) }}>
         <div className="pin hero ct" style={{ ['--em' as any]: emWidth(title) }}>
           <div className="hero-names">
             <Letters as="h2" text={title} style="night" depth={56} shy={0.8} className="hero-first ct-first" onLetters={wire} />

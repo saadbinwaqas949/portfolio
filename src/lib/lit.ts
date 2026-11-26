@@ -2,9 +2,9 @@
 // from it and pick up a glossy highlight.
 import { useEffect, type RefObject } from 'react';
 import { getWorld } from '../world/World';
-import { gsap } from './motion';
+import { gsap, isTouch, rectOf, watchRect } from './motion';
 
-const visible = new Set<HTMLElement>();
+const visible = new Map<HTMLElement, () => void>();
 let io: IntersectionObserver | null = null;
 let running = false;
 
@@ -14,8 +14,9 @@ function tick() {
   const lx = w.lampPos.x * 100 + w.vw / 2;
   const ly = -w.lampPos.y * 100 + w.vh / 2;
   const soft = 1 - w.room.v * 0.6;
-  for (const el of visible) {
-    const r = el.getBoundingClientRect();
+  // rects were measured at the start of the frame, so these writes force nothing
+  for (const el of visible.keys()) {
+    const r = rectOf(el);
     const dx = r.left + r.width / 2 - lx;
     const dy = r.top + r.height / 2 - ly;
     const d = Math.hypot(dx, dy) || 1;
@@ -27,16 +28,35 @@ function tick() {
   }
 }
 
+/** Phones: the lamp wanders by itself, and repainting a blurred shadow and a
+ *  blended highlight on every photo every frame is what a phone can't afford.
+ *  Light them once, from above and a little to the left. */
+function still(el: HTMLElement) {
+  el.style.setProperty('--sx', '-3px');
+  el.style.setProperty('--sy', '11px');
+  el.style.setProperty('--gx', '30%');
+  el.style.setProperty('--gy', '12%');
+}
+
 export function useLit(ref: RefObject<HTMLElement | null>) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    if (isTouch()) {
+      still(el);
+      return;
+    }
     if (!io)
       io = new IntersectionObserver(
         (es) =>
-          es.forEach((e) =>
-            e.isIntersecting ? visible.add(e.target as HTMLElement) : visible.delete(e.target as HTMLElement),
-          ),
+          es.forEach((e) => {
+            const t = e.target as HTMLElement;
+            if (e.isIntersecting && !visible.has(t)) visible.set(t, watchRect(t));
+            else if (!e.isIntersecting) {
+              visible.get(t)?.();
+              visible.delete(t);
+            }
+          }),
         { rootMargin: '60px' },
       );
     io.observe(el);
@@ -46,6 +66,7 @@ export function useLit(ref: RefObject<HTMLElement | null>) {
     }
     return () => {
       io?.unobserve(el);
+      visible.get(el)?.();
       visible.delete(el);
     };
   }, [ref]);

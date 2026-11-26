@@ -64,6 +64,11 @@ function tracked(vars: ScrollTrigger.StaticVars, f: (p: number) => void): Handle
   };
 }
 
+/** Height of a pinned section: one screen plus the held stretch. Phones get a
+ *  shorter stretch (--pin in base.css): a thumb flick covers less, and a long
+ *  hold reads as the page refusing to scroll. */
+export const pinH = (vh: number) => `calc(100vh + ${vh - 100} * var(--pin))`;
+
 /** 0..1 progress of a tall pinned section. */
 export const pinProgress = (el: HTMLElement, f: (p: number) => void) =>
   tracked({ trigger: el, start: 'top top', end: 'bottom bottom' }, f);

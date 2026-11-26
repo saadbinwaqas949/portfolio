@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useSite } from '../content';
 import { CatPilot, type PilotApi } from '../components/CatPilot';
 import { Kitty } from '../components/Kitty';
-import { useGsap, pinProgress } from '../lib/hooks';
+import { useGsap, pinProgress, pinH } from '../lib/hooks';
 import { emit, gsap, introIsDone, isTouch, onIntro, reduced, scrollToId, SplitText } from '../lib/motion';
 import { Letters, useStage } from '../world/hooks';
 import type { Letter, LetterStage } from '../world/letters';
@@ -186,7 +186,7 @@ export function Hero() {
       data-sec
       data-pin
       ref={root}
-      style={{ height: '250vh' }}
+      style={{ height: pinH(250) }}
     >
       <div className="pin hero" style={{ ['--em' as any]: emWidth(person.first.toUpperCase()) }}>
         <div className="hero-shake">

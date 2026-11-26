@@ -2,7 +2,7 @@
 // spin up the goggles drop and show real flight footage.
 import { useEffect, useImperativeHandle, useRef, useState, type Ref } from 'react';
 import { media } from '../content';
-import { gsap, introIsDone, on, onIntro, reduced } from '../lib/motion';
+import { gsap, introIsDone, on, onIntro, reduced, rectOf, watchRect } from '../lib/motion';
 import { CatHead, COATS, headEdge, LINE, lookAt } from './Kitty';
 
 export interface PilotApi {
@@ -47,8 +47,11 @@ export function CatPilot({ api, start = 'up' }: { api?: Ref<PilotApi>; /** where
     const calm = reduced();
     const s = { x: 0, y: 0, g: want.current, gv: 0, blink: 0, next: 2, ear: 0, earAt: 3, jolt: 0 };
     let seen = true;
+    let unwatch = watchRect(el);
     const io = new IntersectionObserver(([e]) => {
       seen = e.isIntersecting;
+      unwatch();
+      unwatch = seen ? watchRect(el) : () => {};
       if (calm) return;
       if (seen) video.play().catch(() => undefined);
       else video.pause();
@@ -59,7 +62,7 @@ export function CatPilot({ api, start = 'up' }: { api?: Ref<PilotApi>; /** where
     const tick = (time: number, delta: number) => {
       if (!seen) return;
       const dt = Math.min(0.05, delta / 1000);
-      const r = el.getBoundingClientRect();
+      const r = rectOf(el);
       const p = lookAt();
       const dx = p.x - (r.left + r.width / 2);
       const dy = p.y - (r.top + r.height * 0.42);
@@ -125,6 +128,7 @@ export function CatPilot({ api, start = 'up' }: { api?: Ref<PilotApi>; /** where
     return () => {
       gsap.ticker.remove(tick);
       io.disconnect();
+      unwatch();
       off();
       tw?.kill();
       offs.forEach((f) => f());

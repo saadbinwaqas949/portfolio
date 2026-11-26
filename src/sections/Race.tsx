@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Kitty } from '../components/Kitty';
 import { Print } from '../components/Print';
 import { useSite } from '../content';
-import { pinProgress, useGsap } from '../lib/hooks';
+import { pinProgress, useGsap, pinH } from '../lib/hooks';
 import { onceInView } from '../lib/inview';
 import { gsap, reduced } from '../lib/motion';
 import { reveals } from '../lib/reveal';
@@ -138,7 +138,7 @@ export function Race() {
         </div>
       </div>
 
-      <div className="rc-pin" data-pin style={{ height: '300vh' }}>
+      <div className="rc-pin" data-pin style={{ height: pinH(300) }}>
         <div className="pin rc-stick">
           <div className="rc-tunnel" ref={tunnel} data-cursor="Smoke" />
           <div className={'rc-lights' + (go ? ' on' : '')} aria-hidden>

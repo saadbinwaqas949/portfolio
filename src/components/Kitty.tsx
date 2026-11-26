@@ -1,7 +1,7 @@
 // The cats. One head, several poses and coats. They watch the lamp, blink,
 // twitch an ear, purr when petted and say so when clicked.
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
-import { emit, gsap, reduced } from '../lib/motion';
+import { emit, gsap, reduced, rectOf, watchRect } from '../lib/motion';
 import { getWorld } from '../world/World';
 
 export type Coat = 'grey' | 'ginger' | 'black' | 'cream' | 'calico';
@@ -128,7 +128,7 @@ export function Kitty({ coat = 'grey', pose = 'sit', className = '', style, flip
     let on = false;
     const tick = (time: number, delta: number) => {
       const dt = Math.min(0.05, delta / 1000);
-      const r = el.getBoundingClientRect();
+      const r = rectOf(el);
       const p = lookAt();
       const dx = p.x - (r.left + r.width / 2);
       const dy = p.y - (r.top + r.height * 0.4);
@@ -166,14 +166,22 @@ export function Kitty({ coat = 'grey', pose = 'sit', className = '', style, flip
         bat.setAttribute('transform', `translate(0 ${(-b * 62).toFixed(1)}) rotate(${(-b * 26).toFixed(1)} 136 214)`);
       }
     };
+    let unwatch = () => {};
     const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !on) gsap.ticker.add(tick);
-      if (!e.isIntersecting && on) gsap.ticker.remove(tick);
+      if (e.isIntersecting && !on) {
+        unwatch = watchRect(el);
+        gsap.ticker.add(tick);
+      }
+      if (!e.isIntersecting && on) {
+        unwatch();
+        gsap.ticker.remove(tick);
+      }
       on = e.isIntersecting;
     });
     io.observe(el);
     return () => {
       io.disconnect();
+      unwatch();
       gsap.ticker.remove(tick);
     };
   }, [coat, pose, flip]);

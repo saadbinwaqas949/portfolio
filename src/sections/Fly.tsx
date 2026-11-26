@@ -1,12 +1,12 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Print } from '../components/Print';
 import { Sheet } from '../components/Sheet';
 import { Deck } from '../components/Deck';
 import { Kitty } from '../components/Kitty';
 import { useSite, type Aircraft } from '../content';
-import { pinProgress, useFrame, useGsap } from '../lib/hooks';
+import { pinProgress, useFrame, useGsap, pinH } from '../lib/hooks';
 import { whileInView } from '../lib/inview';
-import { gsap, reduced } from '../lib/motion';
+import { gsap, rectOf, reduced, watchRect } from '../lib/motion';
 import { reveals } from '../lib/reveal';
 import { Letters, useStage } from '../world/hooks';
 import { damp, smooth } from '../world/kit';
@@ -121,17 +121,27 @@ export function Fly() {
   // is drawn from the label to wherever that part is right now.
   const slots = useRef<{ left: boolean; y: number }[]>([]);
   const settled = useRef(false);
+  // everything this frame reads is measured at the top of the frame (see watchRect)
+  const watching = useRef(new Map<Element, () => void>());
+  const R = (el: Element) => {
+    if (!watching.current.has(el)) watching.current.set(el, watchRect(el));
+    return rectOf(el);
+  };
+  useEffect(() => () => watching.current.forEach((stop) => stop()), []);
+  const lastY = useRef<number[]>([]);
   useFrame(sheet, (dt) => {
     const st = stage.current;
     const sv = svg.current;
     if (!st || !sv || !root.current) return;
-    const box = sv.getBoundingClientRect();
+    const box = R(sv);
     const paths = sv.querySelectorAll<SVGPathElement>('path');
     const dots = sv.querySelectorAll<SVGCircleElement>('circle');
     const tags = Array.from(root.current.querySelectorAll<HTMLElement>('.fly-part'));
     const pts = tags.map((t) => st.points[t.dataset.anchor!]);
     if (pts.some((q) => !q)) return;
     const ks = tags.map((t) => parseFloat(t.style.getPropertyValue('--k') || '0'));
+    // where each label was at the top of the frame, before it moves again below
+    const was = tags.map((t) => R(t));
     const shown = Math.max(...ks) > 0.01;
 
     if (!shown || !settled.current) {
@@ -141,13 +151,18 @@ export function Fly() {
       slots.current = tags.map((_, i) => ({ left: order.indexOf(i) < nLeft, y: slots.current[i]?.y ?? 0 }));
       settled.current = true;
     }
+    const shift: number[] = [];
     for (const side of [true, false]) {
       const ids = tags.map((_, i) => i).filter((i) => slots.current[i].left === side);
       ids.sort((m, n) => pts[m].y - pts[n].y);
       // between the project text above and the buttons / title block below
       const slim = box.width < 700;
-      const under = (q: string) => (root.current?.querySelector(q)?.getBoundingClientRect().bottom ?? box.top) - box.top;
-      const over = (q: string) => (root.current?.querySelector(q)?.getBoundingClientRect().top ?? box.bottom) - box.top;
+      const at = (q: string) => {
+        const e = root.current?.querySelector(q);
+        return e ? R(e) : null;
+      };
+      const under = (q: string) => (at(q)?.bottom ?? box.top) - box.top;
+      const over = (q: string) => (at(q)?.top ?? box.bottom) - box.top;
       const top = slim ? under('.fly-info') + 26 : side ? under('.fly-info') + 34 : box.height * 0.1;
       const bot = slim ? over('.fly-tools') - 30 : side ? over('.fly-tools') - 62 : over('.tblock') - 74;
       ids.forEach((i, n) => {
@@ -156,7 +171,10 @@ export function Fly() {
         sl.y = shown ? damp(sl.y, want, 9, dt) : want;
         const tag = tags[i];
         tag.classList.toggle('lf', side);
-        tag.style.transform = `translateY(${(sl.y + (1 - ks[i]) * 16).toFixed(1)}px)`;
+        const ty = sl.y + (1 - ks[i]) * 16;
+        tag.style.transform = `translateY(${ty.toFixed(1)}px)`;
+        shift[i] = ty - (lastY.current[i] ?? ty);
+        lastY.current[i] = ty;
       });
     }
     tags.forEach((tag, i) => {
@@ -168,7 +186,7 @@ export function Fly() {
         path.style.opacity = dot.style.opacity = '0';
         return;
       }
-      const r = tag.getBoundingClientRect();
+      const r = { left: was[i].left, right: was[i].right, top: was[i].top + (shift[i] ?? 0) };
       const left = slots.current[i].left;
       const x0 = (left ? r.right + 9 : r.left - 9) - box.left;
       const y0 = r.top + 13 - box.top;
@@ -205,7 +223,7 @@ export function Fly() {
         </div>
       </div>
 
-      <div className="fly-pin" data-pin style={{ height: '440vh' }}>
+      <div className="fly-pin" data-pin style={{ height: pinH(440) }}>
         <div className="pin fly-stick" ref={sheet}>
           <Sheet kind="paper" tape radius={3} z={2} className="fly-sheet">
             <div

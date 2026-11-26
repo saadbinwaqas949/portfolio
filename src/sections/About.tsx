@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { Print } from '../components/Print';
 import { Sheet } from '../components/Sheet';
 import { useSite } from '../content';
-import { pinProgress, useGsap } from '../lib/hooks';
+import { pinProgress, useGsap, pinH } from '../lib/hooks';
 import { onceInView } from '../lib/inview';
 import { gsap, reduced, scrollToId } from '../lib/motion';
 import { reveals, scrubWords } from '../lib/reveal';
@@ -128,7 +128,7 @@ export function About() {
   return (
     <section id="about" data-sec ref={root} className="about">
       <h2 className="sr">{a.title}</h2>
-      <div className="ab-pin" data-pin style={{ height: '260vh' }}>
+      <div className="ab-pin" data-pin style={{ height: pinH(260) }}>
         <div className="pin">
           <div className="ab-track">
             <div className="ab-panel">

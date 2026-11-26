@@ -215,6 +215,14 @@ main {
 [data-pin] {
   position: relative;
 }
+:root {
+  --pin: 1vh;
+}
+@media (hover: none), (pointer: coarse) {
+  :root {
+    --pin: 0.66vh;
+  }
+}
 .pin {
   position: sticky;
   top: 0;
@@ -404,7 +412,15 @@ main {
   filter: blur(13px);
   z-index: -2;
   border-radius: 4px;
-  transform: translate3d(var(--sx), var(--sy), 0);
+  /* flat on phones: a 3D transform gives every shadow its own GPU layer, and
+     everything drawn over it another, a few hundred layers in all */
+  transform: translate(var(--sx), var(--sy));
+}
+@media (hover: hover) and (pointer: fine) {
+  /* the lamp moves these every frame on a computer: let the GPU do it */
+  .print > .sh {
+    transform: translate3d(var(--sx), var(--sy), 0);
+  }
 }
 .print > .pp {
   position: absolute;

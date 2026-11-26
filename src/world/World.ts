@@ -93,6 +93,9 @@ export class World {
   lock = { x: 0, y: 0, w: 0 };
 
   private pins: HTMLElement[] = [];
+  /** touch only: the canvas is fixed while a pinned section holds the page */
+  private held = false;
+  private tf = '';
   private pinInfo: { top: number; len: number }[] = [];
   private frameTimes: number[] = [];
   private frameNo = 0;
@@ -235,7 +238,7 @@ export class World {
     c.width = vw + 'px';
     c.height = H + 'px';
     if (this.touch) {
-      c.position = 'absolute';
+      c.position = this.held ? 'fixed' : 'absolute';
       c.top = -this.over + 'px';
     } else {
       c.position = 'fixed';
@@ -363,8 +366,10 @@ export class World {
         best = i;
       }
     }
-    const idle = now - this.quietSince > 1.2 && now > 5;
-    if (d < 1.4 || (idle && now - this.lastIdle > 0.45)) {
+    // phones scroll in flicks with pauses between: build ahead in the pauses,
+    // so less of it lands in the middle of a swipe
+    const idle = now - this.quietSince > (this.touch ? 0.7 : 1.2) && now > 5;
+    if (d < 1.4 || (idle && now - this.lastIdle > (this.touch ? 0.3 : 0.45))) {
       this.lastIdle = now;
       const [job] = this.pending.splice(best, 1);
       job.run();
@@ -408,7 +413,30 @@ export class World {
     this.scrollVel = damp(this.scrollVel, (y - this.scrollY) / Math.max(dt, 0.001), 8, dt);
     this.scrollY = y;
     this.worldScroll = ws;
-    if (this.touch) this.canvas.style.transform = `translate3d(0,${y}px,0)`;
+
+    // every layout read of the frame, before anything below writes a style
+    for (const s of this.stages) {
+      const r = s.el.getBoundingClientRect();
+      const m = s.margin ?? 160;
+      s.rect = r;
+      s.visible = s.ready !== false && r.bottom > -m && r.top < this.vh + m && r.width > 0;
+    }
+
+    // On phones the page scrolls on its own thread and this frame can arrive
+    // late. Outside pinned sections the canvas rides along with the page, so
+    // a late frame still lines up with the DOM. Inside one the page holds
+    // still, so the canvas has to hold still too, or it slides with the
+    // finger and snaps back every frame.
+    if (this.touch) {
+      const held = this.pinInfo.some((q) => y >= q.top && y <= q.top + q.len);
+      const c = this.canvas.style;
+      if (held !== this.held) {
+        this.held = held;
+        c.position = held ? 'fixed' : 'absolute';
+      }
+      const tf = held ? 'none' : `translate3d(0,${y}px,0)`;
+      if (tf !== this.tf) c.transform = this.tf = tf;
+    }
 
     // ---- lamp -------------------------------------------------------------
     let tx: number;
@@ -478,13 +506,15 @@ export class World {
 
     // ---- stages -------------------------------------------------------------
     for (const s of this.stages) {
-      const r = s.el.getBoundingClientRect();
-      const m = s.margin ?? 160;
-      const vis = s.ready !== false && r.bottom > -m && r.top < this.vh + m && r.width > 0;
-      s.visible = vis;
-      s.rect = r;
-      s.group.visible = vis;
-      if (!vis) continue;
+      const r = s.rect!;
+      s.group.visible = s.visible;
+      // three walks every object's matrix each frame, hidden or not: stages
+      // off screen leave the scene until they come back
+      if (s.visible !== (s.group.parent === this.scene)) {
+        if (s.visible) this.scene.add(s.group);
+        else this.scene.remove(s.group);
+      }
+      if (!s.visible) continue;
       const cx = (r.left + r.width / 2 - this.vw / 2) / U;
       const cy = -(r.top + r.height / 2 - this.vh / 2) / U;
       s.group.position.x = cx;
@@ -496,8 +526,14 @@ export class World {
     // coarser tiers refresh their shadows on alternate frames, never both at once
     const tier = TIERS[this.quality];
     this.frameNo++;
-    if (tier.lampEvery > 1) this.lamp.shadow.needsUpdate = this.frameNo % tier.lampEvery === 0;
-    if (tier.skyEvery > 1) this.sky.shadow.needsUpdate = this.frameNo % tier.skyEvery === 1;
+    // ...except while the page moves: then everything moves, and a shadow drawn
+    // for the frame before shakes against the thing that casts it
+    // (twice as often, at least every other frame)
+    const moving = Math.abs(this.scrollVel) > 40 && !this.held;
+    const lampEvery = moving ? Math.ceil(tier.lampEvery / 2) : tier.lampEvery;
+    const skyEvery = moving ? Math.ceil(tier.skyEvery / 2) : tier.skyEvery;
+    this.lamp.shadow.needsUpdate = lampEvery === 1 || this.frameNo % lampEvery === 0;
+    this.sky.shadow.needsUpdate = skyEvery === 1 || this.frameNo % skyEvery === 1;
 
     this.renderer.render(this.scene, this.camera);
     this.buildSome();

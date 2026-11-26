@@ -4,7 +4,7 @@ import { useGSAP } from '@gsap/react';
 import sizes from 'virtual:media-sizes';
 import { media, youtubeId, type Img } from '../content';
 import { useLit } from '../lib/lit';
-import { Draggable, emit, gsap, isTouch, reduced } from '../lib/motion';
+import { Draggable, dragKit, emit, gsap, isTouch, reduced } from '../lib/motion';
 
 let top = 10;
 
@@ -66,7 +66,7 @@ export function Print({
       gsap.set(el, { rotate: rot });
       if (!drag || isTouch()) return;
       const spin = gsap.quickTo(el, 'rotate', { duration: 0.5, ease: 'power3.out' });
-      Draggable.create(el, {
+      dragKit().create(el, {
         type: 'x,y',
         inertia: true,
         allowContextMenu: true,

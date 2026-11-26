@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { Kitty } from '../components/Kitty';
 import { Print } from '../components/Print';
 import { useSite } from '../content';
-import { pinProgress, useFrame, useGsap } from '../lib/hooks';
+import { pinProgress, useFrame, useGsap, pinH } from '../lib/hooks';
 import { onceInView } from '../lib/inview';
-import { gsap, reduced } from '../lib/motion';
+import { gsap, rectOf, reduced, watchRect } from '../lib/motion';
 import { reveals } from '../lib/reveal';
 import { Letters, useStage } from '../world/hooks';
 import { smooth } from '../world/kit';
@@ -121,11 +121,12 @@ export function Fight() {
     [site],
   );
 
+  useEffect(() => (pin.current ? watchRect(pin.current) : undefined), []);
   useFrame(pin, () => {
     const s = stage.current;
     const w = getWorld();
     if (!s || !w || !pin.current) return;
-    const box = pin.current.getBoundingClientRect();
+    const box = rectOf(pin.current);
     const put = (el: HTMLElement | null, q: { x: number; y: number }, on: number, text?: string) => {
       if (!el) return;
       el.style.transform = `translate3d(${q.x - box.left}px,${q.y - box.top - 92}px,0) translate(-50%,-50%) scale(${on ? 1 : 0})`;
@@ -162,7 +163,7 @@ export function Fight() {
         </div>
       </div>
 
-      <div className="fight-pin" data-pin style={{ height: '480vh' }}>
+      <div className="fight-pin" data-pin style={{ height: pinH(480) }}>
         <div className="pin" ref={pin}>
           <div className="fi-grid">
             <div className="fi-side">

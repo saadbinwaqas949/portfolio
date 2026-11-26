@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { Clothesline } from '../components/Clothesline';
 import { Print } from '../components/Print';
 import { useSite } from '../content';
-import { pinProgress, useGsap } from '../lib/hooks';
+import { pinProgress, useGsap, pinH } from '../lib/hooks';
 import { onceInView } from '../lib/inview';
 import { gsap, reduced } from '../lib/motion';
 import { reveals } from '../lib/reveal';
@@ -116,7 +116,7 @@ export function Ship() {
         </div>
       </div>
 
-      <div className="cod-pin" data-pin style={{ height: '520vh' }}>
+      <div className="cod-pin" data-pin style={{ height: pinH(520) }}>
         <div className="pin cod">
           <div className="cod-grid">
             <div className="phone" aria-label="Example chat with the shop assistant">

@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { Print } from '../components/Print';
 import { useSite } from '../content';
-import { pinProgress, useGsap } from '../lib/hooks';
+import { pinProgress, useGsap, pinH } from '../lib/hooks';
 import { onceInView } from '../lib/inview';
 import { gsap, reduced, scrollToY } from '../lib/motion';
 import { reveals } from '../lib/reveal';
@@ -126,7 +126,7 @@ export function Chimera() {
       </div>
 
       {closed || !c.modes.length ? null : (
-        <div className="chm-pin" data-pin ref={pin} style={{ height: `${c.modes.length * 90 + 60}vh` }}>
+        <div className="chm-pin" data-pin ref={pin} style={{ height: pinH(c.modes.length * 90 + 60) }}>
           <div className="pin chm">
             <div className="chm-stand" ref={stand} data-cursor="Look" />
             <div className="chm-side">
