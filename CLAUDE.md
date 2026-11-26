@@ -28,6 +28,8 @@ file. `src/content.ts` has the types, defaults and blank entries.
 ## Code
 
 - `npm run dev`, `npm run studio`, `npm run build` (typecheck + build).
+- Live at https://saadbinwaqas949.github.io/portfolio/ (GitHub Pages). Every push
+  to `main` publishes in about two minutes; `base: './'` keeps paths relative.
 - 100 px = 1 unit, mat at z = 0, so 3D lines up with the DOM. A "stage" is a
   Three.js group tied to a DOM element (`useStage`, `src/world/World.ts`).
   Stages are built lazily as they come near the viewport.
